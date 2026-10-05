@@ -5,6 +5,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { usePageTransition } from "./PageTransition";
+import { mountScramble, mountMagnetic } from "@/utils/textFx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -32,6 +33,9 @@ export default function Hero() {
   // GSAP Entrance & Scroll-Driven Parallax Disperse
   useGSAP(
     () => {
+      mountScramble(rootRef.current);
+      const unbindMagnetic = mountMagnetic(rootRef.current);
+
       // ── 1. CINEMATIC ENTRANCE SEQUENCE ──
       const entranceTl = gsap.timeline({ defaults: { ease: "power3.out" } });
 
@@ -80,6 +84,13 @@ export default function Hero() {
         "-=0.9"
       );
 
+      // Idle breathing float after landing — kills the "static decoration" feel
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        gsap.to(card1Ref.current, { y: "+=10", rotate: 0.8, duration: 3.4, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.2 });
+        gsap.to(card2Ref.current, { y: "-=9", rotate: -0.9, duration: 3.9, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.4 });
+        gsap.to(card3Ref.current, { y: "+=8", rotate: 0.6, duration: 4.3, ease: "sine.inOut", repeat: -1, yoyo: true, delay: 1.6 });
+      }
+
       // ── 2. SCROLL-DRIVEN PARALLAX DISPERSE (NO PIN, GUARANTEED VISIBLE AT SCROLL 0) ──
       // Stays 100% solid and fully visible from scroll 0 to 20%, then gracefully
       // disperses into the margins as the user scrolls into the Marquee and Disciplines.
@@ -124,6 +135,8 @@ export default function Hero() {
           { x: 130, y: 110, rotate: -10, opacity: 0, ease: "power1.in", duration: 0.8 },
           0.15
         );
+
+      return () => unbindMagnetic();
     },
     { scope: rootRef }
   );

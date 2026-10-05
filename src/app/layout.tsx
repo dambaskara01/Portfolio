@@ -1,10 +1,16 @@
-import type { Metadata } from "next";
-import { Inter, DM_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { Inter, Manrope, DM_Mono } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -40,13 +46,17 @@ export const metadata: Metadata = {
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: "#050505",
+};
+
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${inter.variable} ${manrope.variable} ${dmMono.variable}`}>
       <body>{children}</body>
     </html>
   );

@@ -5,6 +5,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { projects, Project } from "@/data/portfolioData";
+import SplitText from "./SplitText";
+import { mountScramble, mountWordReveal, mountMagnetic } from "@/utils/textFx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -44,25 +46,13 @@ export default function Work() {
 
   useGSAP(
     () => {
-      // 1. Header reveal
-      gsap.fromTo(
-        ".work__hdr > *",
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.75,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".work__hdr",
-            start: "top 88%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      // Signature motion mounts: word masks rise, mono labels scramble-decode,
+      // filter pills get magnetic pull
+      mountWordReveal(containerRef.current);
+      mountScramble(containerRef.current);
+      const unbindMagnetic = mountMagnetic(containerRef.current);
 
-      // 2. Filter bar reveal
+      // 1. Filter bar reveal
       gsap.fromTo(
         ".work__filter-pill",
         { opacity: 0, y: 14 },
@@ -80,7 +70,70 @@ export default function Work() {
         }
       );
 
-      // 3. Solid Layered Deck Stacked Scroll (100% Opaque, zero ghosting)
+      // 2. Diagonal curtain unmask + image parallax per card
+      gsap.utils.toArray<HTMLElement>(".work-card-stacked").forEach((card) => {
+        const curtain = card.querySelector(".work-item__curtain");
+        const img = card.querySelector(".work-item__img");
+
+        const cardTl = gsap.timeline({
+          scrollTrigger: {
+            trigger: card,
+            start: "top 82%",
+            toggleActions: "play none none reverse",
+          },
+        });
+
+        if (curtain) {
+          cardTl.fromTo(
+            curtain,
+            { clipPath: "inset(0% 0% 0% 0%)" },
+            {
+              clipPath: "inset(0% 0% 110% 0%)",
+              duration: 0.85,
+              ease: "power4.inOut",
+            }
+          );
+        }
+
+        if (img) {
+          cardTl.fromTo(
+            img,
+            { scale: 1.14 },
+            { scale: 1.0, duration: 1.1, ease: "power3.out" },
+            0.08
+          );
+        }
+
+        const content = card.querySelector(".work-item__content");
+        if (content) {
+          cardTl.fromTo(
+            content.children,
+            { x: -26, opacity: 0 },
+            { x: 0, opacity: 1, stagger: 0.07, duration: 0.65, ease: "power4.out" },
+            0.12
+          );
+        }
+      });
+
+      // 3. Image parallax drift while cards scroll (bidirectional scrub)
+      gsap.utils.toArray<HTMLElement>(".work-item__img").forEach((img) => {
+        gsap.fromTo(
+          img,
+          { y: -18 },
+          {
+            y: 18,
+            ease: "none",
+            scrollTrigger: {
+              trigger: img.closest(".work-card-stacked"),
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1,
+            },
+          }
+        );
+      });
+
+      // 4. Solid Layered Deck Stacked Scroll (100% Opaque, zero ghosting)
       if (window.innerWidth >= 860) {
         const cards = gsap.utils.toArray<HTMLElement>(".work-card-stacked");
         cards.forEach((card, i) => {
@@ -103,6 +156,8 @@ export default function Work() {
       }
 
       ScrollTrigger.refresh();
+
+      return () => unbindMagnetic();
     },
     { scope: containerRef, dependencies: [activeCategory] }
   );
@@ -117,9 +172,9 @@ export default function Work() {
       <div className="container">
         {/* Section Header */}
         <div className="section__header work__hdr">
-          <p className="section__index">Selected works</p>
+          <p className="section__index" data-scramble>Selected works</p>
           <h2 className="section__title" id="work-heading">
-            Featured projects
+            <SplitText text="Featured projects" accentWords={["projects"]} />
           </h2>
         </div>
 
@@ -132,6 +187,7 @@ export default function Work() {
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
+              data-magnetic
               onClick={() => setActiveCategory(cat)}
               aria-pressed={activeCategory === cat}
               className={`work__filter-pill${
@@ -172,6 +228,7 @@ export default function Work() {
                   >
                     <span className="work-item__badge">{project.category}</span>
                     <div className="work-item__img-clip">
+                      <div className="work-item__curtain" aria-hidden="true" />
                       <img
                         src={project.image}
                         alt={`Preview of ${project.title}`}
@@ -290,9 +347,10 @@ export default function Work() {
             <h2
               id="modal-title"
               style={{
+                fontFamily: "var(--font-display)",
                 fontSize: "clamp(22px, 3vw, 32px)",
-                fontWeight: 700,
-                letterSpacing: "-0.02em",
+                fontWeight: 600,
+                letterSpacing: "-0.012em",
                 marginBottom: "var(--s-16)",
               }}
             >

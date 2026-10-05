@@ -4,6 +4,8 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import SplitText from "./SplitText";
+import { mountScramble, mountWordReveal } from "@/utils/textFx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -60,45 +62,43 @@ export default function Disciplines() {
 
   useGSAP(
     () => {
-      // Header â€” clip-path + y slide
-      gsap.fromTo(
-        ".disc__label, .disc__heading",
-        { y: 32, opacity: 0, clipPath: "inset(0 0 100% 0)" },
-        {
-          y: 0,
-          opacity: 1,
-          clipPath: "inset(0 0 0% 0)",
-          stagger: 0.12,
-          duration: 0.9,
-          ease: "power4.out",
-          scrollTrigger: {
-            trigger: ".disc__hdr",
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      // Header — word rise + scramble-decode label
+      mountWordReveal(sectionRef.current);
+      mountScramble(sectionRef.current);
 
-      // Rows — separator draws in, then num+title slide up
+      // Rows — architectural line draw, number stamp, title slide & arrow pop
       gsap.utils.toArray<HTMLElement>(".disc-row").forEach((row, i) => {
         const tl = gsap.timeline({
           scrollTrigger: {
             trigger: row,
-            start: "top 92%",
+            start: "top 90%",
             toggleActions: "play none none reverse",
           },
         });
 
         tl.fromTo(
           row.querySelector(".disc-row__sep"),
-          { scaleX: 0 },
-          { scaleX: 1, duration: 0.55, ease: "power2.inOut", delay: i * 0.06 }
-        ).fromTo(
-          [row.querySelector(".disc-row__num"), row.querySelector(".disc-row__title")],
-          { y: 28, opacity: 0 },
-          { y: 0, opacity: 1, stagger: 0.07, duration: 0.55, ease: "power3.out" },
-          "-=0.3"
-        );
+          { scaleX: 0, transformOrigin: "left" },
+          { scaleX: 1, duration: 0.65, ease: "power3.inOut", delay: i * 0.04 }
+        )
+          .fromTo(
+            row.querySelector(".disc-row__num"),
+            { x: -35, opacity: 0 },
+            { x: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+            "-=0.4"
+          )
+          .fromTo(
+            row.querySelector(".disc-row__title"),
+            { y: 30, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.6, ease: "power4.out" },
+            "-=0.45"
+          )
+          .fromTo(
+            row.querySelector(".disc-row__arrow"),
+            { scale: 0, rotate: -45, opacity: 0 },
+            { scale: 1, rotate: 0, opacity: 1, duration: 0.5, ease: "back.out(2)" },
+            "-=0.35"
+          );
       });
     },
     { scope: sectionRef }
@@ -118,9 +118,9 @@ export default function Disciplines() {
       <div className="container">
         {/* Header */}
         <div className="disc__hdr section__header">
-          <p className="section__index disc__label">Core disciplines</p>
+          <p className="section__index disc__label" data-scramble>Core disciplines</p>
           <h2 className="section__title disc__heading" id="disc-heading">
-            What I work on
+            <SplitText text="What I work on" accentWords={["work"]} />
           </h2>
         </div>
 

@@ -5,6 +5,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { experiences } from "@/data/portfolioData";
+import SplitText from "./SplitText";
+import { mountScramble, mountWordReveal } from "@/utils/textFx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -14,23 +16,9 @@ export default function Experience() {
 
   useGSAP(
     () => {
-      // 1. Header bidirectional reveal
-      gsap.fromTo(
-        ".exp__hdr > *",
-        { y: 28, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.1,
-          duration: 0.75,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".exp__hdr",
-            start: "top 88%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      // 1. Header — word rise + scramble-decode label
+      mountWordReveal(containerRef.current);
+      mountScramble(containerRef.current);
 
       // 2. Timeline vertical SVG ruler scrub (bidirectional scrub down & up)
       if (progressLineRef.current) {
@@ -50,7 +38,7 @@ export default function Experience() {
         );
       }
 
-      // 3. Timeline nodes entrance
+      // 3. Timeline nodes entrance: marker pop + editorial content stagger
       gsap.utils.toArray<HTMLElement>(".timeline-node").forEach((node) => {
         const marker = node.querySelector(".timeline-node__marker");
         const content = node.querySelector(".timeline-node__content");
@@ -77,17 +65,49 @@ export default function Experience() {
         }
 
         if (content) {
-          tl.fromTo(
-            content,
-            { x: 30, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.65,
-              ease: "power3.out",
-            },
-            "-=0.25"
-          );
+          const period = content.querySelector(".timeline-node__period");
+          const headings = [
+            content.querySelector(".timeline-node__role"),
+            content.querySelector(".timeline-node__company"),
+          ].filter(Boolean);
+          const desc = content.querySelector(".timeline-node__desc");
+          const tags = content.querySelectorAll(".tag");
+
+          if (period) {
+            tl.fromTo(
+              period,
+              { opacity: 0, x: -16 },
+              { opacity: 1, x: 0, duration: 0.45, ease: "power3.out" },
+              "-=0.2"
+            );
+          }
+
+          if (headings.length > 0) {
+            tl.fromTo(
+              headings,
+              { opacity: 0, y: 16 },
+              { opacity: 1, y: 0, stagger: 0.07, duration: 0.5, ease: "power3.out" },
+              "-=0.3"
+            );
+          }
+
+          if (desc) {
+            tl.fromTo(
+              desc,
+              { opacity: 0, y: 12 },
+              { opacity: 1, y: 0, duration: 0.5, ease: "power3.out" },
+              "-=0.3"
+            );
+          }
+
+          if (tags.length > 0) {
+            tl.fromTo(
+              tags,
+              { opacity: 0, scale: 0.85 },
+              { opacity: 1, scale: 1, stagger: 0.035, duration: 0.35, ease: "back.out(1.5)" },
+              "-=0.25"
+            );
+          }
         }
       });
     },
@@ -104,9 +124,9 @@ export default function Experience() {
       <div className="container">
         {/* Section Header */}
         <div className="section__header exp__hdr">
-          <p className="section__index">Track record</p>
+          <p className="section__index" data-scramble>Track record</p>
           <h2 className="section__title" id="experience-heading">
-            Experience &amp; education
+            <SplitText text="Experience & education" accentWords={["education"]} />
           </h2>
         </div>
 

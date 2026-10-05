@@ -189,16 +189,6 @@ export const skillGroups: SkillGroup[] = [
     ],
   },
   {
-    category: "Motion & Interaction",
-    items: [
-      "GSAP",
-      "ScrollTrigger",
-      "CSS Animations",
-      "Micro-interactions",
-      "Framer Motion",
-    ],
-  },
-  {
     category: "Design & Workflow",
     items: [
       "Figma",

@@ -25,27 +25,39 @@ export default function Marquee() {
         repeat: -1,
       });
 
-      // Boost velocity based on scroll speed in either direction
+      // Velocity-boost + direction-aware flow: scrolling up runs the ticker
+      // backwards, which makes the strip feel physically connected to the page.
+      let currentScale = 1;
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top bottom",
         end: "bottom top",
         onUpdate: (self) => {
           const velocity = Math.abs(self.getVelocity());
+          const dir = self.direction === -1 ? -1 : 1;
           if (velocity > 100) {
-            // Temporarily accelerate speed smoothly
             const timeScaleBoost = Math.min(1 + velocity / 300, 4.5);
+            currentScale = dir * timeScaleBoost;
             gsap.to(loop, {
-              timeScale: timeScaleBoost,
-              duration: 0.3,
+              timeScale: currentScale,
+              duration: 0.25,
               overwrite: "auto",
               onComplete: () => {
+                currentScale = dir;
                 gsap.to(loop, {
-                  timeScale: 1,
+                  timeScale: currentScale,
                   duration: 1.2,
                   ease: "power2.out",
                 });
               },
+            });
+          } else if (dir !== (currentScale > 0 ? 1 : -1)) {
+            currentScale = dir;
+            gsap.to(loop, {
+              timeScale: dir,
+              duration: 0.5,
+              ease: "power2.out",
+              overwrite: "auto",
             });
           }
         },

@@ -12,7 +12,7 @@ export default function Footer() {
       <div className="container">
         <div className="footer__inner">
           <p className="footer__copy">
-            &copy; {year} {personal.name}. Crafted with care.
+            &copy; {year} <em>{personal.name}</em>. Built with Next.js, animated with GSAP.
           </p>
 
           <a

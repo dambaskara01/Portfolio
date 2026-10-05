@@ -5,6 +5,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { personal } from "@/data/portfolioData";
+import { mountScramble, mountMagnetic } from "@/utils/textFx";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
@@ -31,6 +32,9 @@ export default function Contact() {
 
   useGSAP(
     () => {
+      mountScramble(containerRef.current);
+      const unbindMagnetic = mountMagnetic(containerRef.current);
+
       // 1. Divider line scale
       gsap.fromTo(
         ".contact__line",
@@ -48,33 +52,44 @@ export default function Contact() {
         }
       );
 
-      // 2. Left side large type
-      gsap.fromTo(
-        ".contact__left > *",
-        { y: 40, opacity: 0 },
-        {
-          y: 0,
-          opacity: 1,
-          stagger: 0.12,
-          duration: 0.8,
-          ease: "power3.out",
-          scrollTrigger: {
-            trigger: ".contact__grid",
-            start: "top 85%",
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
+      // 2. Left side: split line-by-line masked typography reveal
+      const textTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".contact__grid",
+          start: "top 85%",
+          toggleActions: "play none none reverse",
+        },
+      });
 
-      // 3. Right side card & links
+      textTl
+        .fromTo(
+          ".contact__left .section__index",
+          { opacity: 0, x: -20 },
+          { opacity: 1, x: 0, duration: 0.5, ease: "power3.out" }
+        )
+        .fromTo(
+          ".contact__line-inner",
+          { yPercent: 110, opacity: 0 },
+          { yPercent: 0, opacity: 1, stagger: 0.12, duration: 0.85, ease: "power4.out" },
+          "-=0.3"
+        )
+        .fromTo(
+          ".contact__subtext",
+          { opacity: 0, y: 18 },
+          { opacity: 1, y: 0, duration: 0.65, ease: "power3.out" },
+          "-=0.4"
+        );
+
+      // 3. Right side: Email box & social pills stagger
       gsap.fromTo(
         ".contact__panel > *",
-        { y: 35, opacity: 0 },
+        { y: 35, opacity: 0, scale: 0.98 },
         {
           y: 0,
           opacity: 1,
-          stagger: 0.15,
-          duration: 0.85,
+          scale: 1,
+          stagger: 0.14,
+          duration: 0.8,
           ease: "power3.out",
           scrollTrigger: {
             trigger: ".contact__grid",
@@ -83,6 +98,7 @@ export default function Contact() {
           },
         }
       );
+      return () => unbindMagnetic();
     },
     { scope: containerRef }
   );
@@ -101,13 +117,16 @@ export default function Contact() {
         />
 
         <div className="contact__grid">
-          {/* Left Column: Big Editorial Statement */}
+          {/* Left Column: Big Editorial Statement with Line Masks */}
           <div className="contact__left">
-            <p className="section__index">Get in touch</p>
+            <p className="section__index" data-scramble>Get in touch</p>
             <h2 className="contact__big-type" id="contact-heading">
-              Have a project in mind?
-              <br />
-              Let&apos;s connect.
+              <span className="contact__line-mask">
+                <span className="contact__line-inner">Have a project in mind?</span>
+              </span>
+              <span className="contact__line-mask">
+                <span className="contact__line-inner">Let&apos;s connect.</span>
+              </span>
             </h2>
             <p className="contact__subtext">
               Always open to engineering opportunities, freelance collaborations, and
@@ -124,6 +143,7 @@ export default function Contact() {
               <div className="contact__email-buttons">
                 <button
                   type="button"
+                  data-magnetic
                   className="contact__copy-btn"
                   onClick={copyEmail}
                   aria-label="Copy email address to clipboard"

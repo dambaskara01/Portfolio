@@ -9,6 +9,7 @@ import Footer from "@/components/Footer";
 import SmoothScrollProvider from "@/components/SmoothScroll";
 import PageTransitionProvider from "@/components/PageTransition";
 import SectionIndicator from "@/components/SectionIndicator";
+import ContextualBadgeCursor from "@/components/ContextualBadgeCursor";
 
 export default function HomePage() {
   return (
@@ -16,6 +17,9 @@ export default function HomePage() {
       <PageTransitionProvider>
         {/* Subtle Floating Editorial Chapter HUD */}
         <SectionIndicator />
+
+        {/* Contextual Badge Cursor */}
+        <ContextualBadgeCursor />
 
         <main id="main-content" className="portfolio-main">
           <Hero />
