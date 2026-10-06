@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projects } from "@/data/portfolioData";
+import { projects, type Project } from "@/data/portfolioData";
 import ProjectCover from "./ProjectCover";
 import ProjectModal from "./ProjectModal";
 
@@ -19,20 +19,114 @@ const TONES = [
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
+const PROJECT_IMAGES: Record<string, string> = {
+  "msj-erp-finance": "/images/engineering/msj-erp.png",
+  "aura-creative-studio": "/images/engineering/aura-studio.png",
+  "devmetrics-api-platform": "/images/engineering/devmetrics.png",
+  "zenith-ecommerce": "/images/engineering/zenith-store.png",
+};
+
+interface LandscapeCard {
+  id: string;
+  projectId: string;
+  title: string;
+  badge: string;
+  image: string;
+  bgFallback: string;
+  colIndex: number;
+  isApex?: boolean;
+}
+
+// 7 Landscape System Screenshot Cards forming a curved crescent arc towards "Selected works"
+const LANDSCAPE_CARDS: LandscapeCard[] = [
+  // Column 1 (Outer Left curve)
+  {
+    id: "card-msj-ledger",
+    projectId: "msj-erp-finance",
+    title: "MSJ ERP Finance - Ledger",
+    badge: "MSJ ERP // Finance Analytics",
+    colIndex: 1,
+    image: PROJECT_IMAGES["msj-erp-finance"],
+    bgFallback: "linear-gradient(135deg, #18191c 0%, #0d0e10 100%)",
+  },
+  {
+    id: "card-zenith-catalog",
+    projectId: "zenith-ecommerce",
+    title: "Zenith E-Commerce - Store",
+    badge: "Zenith Store // Faceted Catalog",
+    colIndex: 1,
+    image: PROJECT_IMAGES["zenith-ecommerce"],
+    bgFallback: "linear-gradient(135deg, #1c1c20 0%, #0f1012 100%)",
+  },
+
+  // Column 2 (Mid-Left curve)
+  {
+    id: "card-aura-motion",
+    projectId: "aura-creative-studio",
+    title: "Aura Studio - Timelines",
+    badge: "Aura Studio // Motion Timelines",
+    colIndex: 2,
+    image: PROJECT_IMAGES["aura-creative-studio"],
+    bgFallback: "linear-gradient(135deg, #1e1b18 0%, #100f0d 100%)",
+  },
+  {
+    id: "card-devmetrics-auth",
+    projectId: "devmetrics-api-platform",
+    title: "DevMetrics - Gateway",
+    badge: "DevMetrics // JWT Security Gateway",
+    colIndex: 2,
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
+    bgFallback: "linear-gradient(135deg, #101620 0%, #0a0d14 100%)",
+  },
+
+  // Column 3 (Inner curve approaching apex)
+  {
+    id: "card-devmetrics-telemetry",
+    projectId: "devmetrics-api-platform",
+    title: "DevMetrics - Telemetry",
+    badge: "DevMetrics // Telemetry Stream",
+    colIndex: 3,
+    image: PROJECT_IMAGES["devmetrics-api-platform"],
+    bgFallback: "linear-gradient(135deg, #121822 0%, #0b0f16 100%)",
+  },
+  {
+    id: "card-msj-batch",
+    projectId: "msj-erp-finance",
+    title: "MSJ ERP Finance - Queue",
+    badge: "MSJ ERP // Batch Pipeline",
+    colIndex: 3,
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
+    bgFallback: "linear-gradient(135deg, #161b17 0%, #0c0f0d 100%)",
+  },
+
+  // Column 4 (Apex Hero Card, extending rightmost into the center)
+  {
+    id: "card-aura-apex",
+    projectId: "aura-creative-studio",
+    title: "Aura Creative Studio - Hero",
+    badge: "Aura Studio // Architecture Platform",
+    colIndex: 4,
+    isApex: true,
+    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
+    bgFallback: "linear-gradient(135deg, #242220 0%, #141311 100%)",
+  },
+];
+
 export default function Engineering() {
-  const items = projects.filter(
+  const engProjects = projects.filter(
     (p) => p.category === "Fullstack" || p.category === "Webdev"
   );
+
   const containerRef = useRef<HTMLElement>(null);
-  const [previewId, setPreviewId] = useState(items[0].id);
-  const [selectedId, setSelectedId] = useState(items[0].id);
+  const clusterRef = useRef<HTMLDivElement>(null);
+  const [selectedId, setSelectedId] = useState(engProjects[0]?.id ?? "");
   const [open, setOpen] = useState(false);
 
   const selectedIndex = Math.max(
-    items.findIndex((p) => p.id === selectedId),
+    engProjects.findIndex((p) => p.id === selectedId),
     0
   );
-  const selected = items[selectedIndex];
+  const selected: Project = engProjects[selectedIndex] ?? engProjects[0];
 
   const openProject = (id: string) => {
     setSelectedId(id);
@@ -41,28 +135,30 @@ export default function Engineering() {
 
   useGSAP(
     () => {
+      // Smooth entrance animation for the curved arc of columns
       gsap.fromTo(
-        ".pj-header",
-        { opacity: 0, y: 24 },
+        ".eng-col",
+        { opacity: 0, y: 36 },
         {
           opacity: 1,
           y: 0,
-          duration: 0.75,
+          stagger: 0.08,
+          duration: 0.85,
           ease: "power3.out",
-          scrollTrigger: { trigger: ".pj-header", start: "top 85%" },
+          scrollTrigger: { trigger: ".eng-layout", start: "top 80%" },
         }
       );
 
+      // Selected works title arrival
       gsap.fromTo(
-        ".eng-row",
-        { opacity: 0, y: 28 },
+        ".eng-title",
+        { opacity: 0, x: 24 },
         {
           opacity: 1,
-          y: 0,
-          stagger: 0.09,
-          duration: 0.7,
+          x: 0,
+          duration: 0.85,
           ease: "power3.out",
-          scrollTrigger: { trigger: ".eng-list", start: "top 85%" },
+          scrollTrigger: { trigger: ".eng-layout", start: "top 80%" },
         }
       );
     },
@@ -73,75 +169,59 @@ export default function Engineering() {
     <section
       id="engineering"
       ref={containerRef}
-      className="pj-section eng"
-      aria-label="Engineering projects"
+      className="eng-section"
+      aria-label="Engineering selected works"
     >
-      <div className="pj-container">
-        <header className="pj-header">
-          <p className="pj-header__meta">
-            <span className="pj-header__num">01 //</span> Engineering
-          </p>
-          <h2 className="pj-header__title">Fullstack systems</h2>
-          <p className="pj-header__desc">
-            Web platforms and enterprise software, from schema to deploy.
-          </p>
-        </header>
-
+      <div className="eng-container">
         <div className="eng-layout">
-          <ul className="eng-list">
-            {items.map((p, i) => {
-              const isPreview = p.id === previewId;
-              return (
-                <li key={p.id}>
-                  <button
-                    type="button"
-                    className="eng-row"
-                    data-active={isPreview}
-                    data-cursor="view"
-                    aria-haspopup="dialog"
-                    onMouseEnter={() => setPreviewId(p.id)}
-                    onFocus={() => setPreviewId(p.id)}
-                    onClick={() => openProject(p.id)}
-                  >
-                    <span className="eng-row__num">{pad(i + 1)}</span>
-                    <span className="eng-row__title">{p.title}</span>
-                    <span className="eng-row__meta">
-                      <span className="eng-row__role">{p.role ?? p.category}</span>
-                      {p.tags.slice(0, 3).map((t) => (
-                        <span key={t} className="eng-row__tag">
-                          {t}
-                        </span>
-                      ))}
-                    </span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          {/* Left: Curved Overlapping Arc of Landscape Cards */}
+          <div className="eng-arc-viewport">
+            <div ref={clusterRef} className="eng-arc-cluster" role="list">
+              {[1, 2, 3, 4].map((colNum) => {
+                const colCards = LANDSCAPE_CARDS.filter((c) => c.colIndex === colNum);
+                return (
+                  <div key={colNum} className={`eng-col eng-col--${colNum}`}>
+                    {colCards.map((c) => (
+                      <button
+                        key={c.id}
+                        type="button"
+                        className={`eng-card ${c.isApex ? "eng-card--apex" : ""}`}
+                        aria-label={`View ${c.title}`}
+                        onClick={() => openProject(c.projectId)}
+                      >
+                        <div
+                          className="eng-card__inner"
+                          style={{ background: c.bgFallback }}
+                        >
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img
+                            src={c.image}
+                            alt={c.title}
+                            loading="lazy"
+                            className="eng-card__img"
+                            onError={(e) => {
+                              // If image fails, keep rich dark gradient fallback
+                              (e.target as HTMLElement).style.display = "none";
+                            }}
+                          />
+                          <span className="eng-card__badge">{c.badge}</span>
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
 
-          <div
-            className="eng-stage"
-            aria-hidden="true"
-            data-cursor="view"
-            onClick={() => openProject(previewId)}
-          >
-            {items.map((p, i) => (
-              <div
-                key={p.id}
-                className="eng-stage__item"
-                data-active={p.id === previewId}
-              >
-                <ProjectCover
-                  title={p.title}
-                  kicker={p.category}
-                  {...TONES[i % TONES.length]}
-                />
-              </div>
-            ))}
+          {/* Right: Selected Works Heading in Swiss Pitch Black */}
+          <div className="eng-title-pane">
+            <h2 className="eng-title">Selected works</h2>
           </div>
         </div>
       </div>
 
+      {/* Project Detail Drawer Dialog */}
       <ProjectModal
         open={open}
         onClose={() => setOpen(false)}
@@ -150,11 +230,22 @@ export default function Engineering() {
       >
         <div className="eng-drawer">
           <div className="eng-drawer__cover">
-            <ProjectCover
-              title={selected.title}
-              kicker={selected.category}
-              {...TONES[selectedIndex % TONES.length]}
-            />
+            {selected && PROJECT_IMAGES[selected.id] ? (
+              <div className="eng-drawer__media">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={PROJECT_IMAGES[selected.id]}
+                  alt={selected.title}
+                  className="eng-drawer__img"
+                />
+              </div>
+            ) : (
+              <ProjectCover
+                title={selected?.title ?? ""}
+                kicker={selected?.category ?? ""}
+                {...TONES[selectedIndex % TONES.length]}
+              />
+            )}
           </div>
 
           <div className="eng-drawer__body">
