@@ -1,3 +1,5 @@
+import { Fragment } from "react";
+
 interface SplitTextProps {
   text: string;
   className?: string;
@@ -16,12 +18,16 @@ export default function SplitText({ text, className = "", accentWords = [] }: Sp
   return (
     <span className={`split ${className}`.trim()}>
       {words.map((word, i) => (
-        <span key={`${word}-${i}`} className="word-mask">
-          <span className="split-word">
-            {accentWords.includes(word) ? <span className="accent-word">{word}</span> : word}
+        /* The separating space must sit OUTSIDE the overflow-hidden mask —
+           a lone space inside an inline-block collapses and the words run together. */
+        <Fragment key={`${word}-${i}`}>
+          <span className="word-mask">
+            <span className="split-word">
+              {accentWords.includes(word) ? <span className="accent-word">{word}</span> : word}
+            </span>
           </span>
-          {i < words.length - 1 ? <span>{" "}</span> : null}
-        </span>
+          {i < words.length - 1 ? " " : null}
+        </Fragment>
       ))}
     </span>
   );

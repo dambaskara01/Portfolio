@@ -1,22 +1,20 @@
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
-import Disciplines from "@/components/Disciplines";
-import Work from "@/components/Work";
+import Engineering from "@/components/Engineering";
+import UiUx from "@/components/UiUx";
+import Branding from "@/components/Branding";
 import Skills from "@/components/Skills";
 import Experience from "@/components/Experience";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
 import SmoothScrollProvider from "@/components/SmoothScroll";
 import PageTransitionProvider from "@/components/PageTransition";
-import SectionIndicator from "@/components/SectionIndicator";
 import ContextualBadgeCursor from "@/components/ContextualBadgeCursor";
 
 export default function HomePage() {
   return (
     <SmoothScrollProvider>
       <PageTransitionProvider>
-        {/* Subtle Floating Editorial Chapter HUD */}
-        <SectionIndicator />
 
         {/* Contextual Badge Cursor */}
         <ContextualBadgeCursor />
@@ -24,8 +22,9 @@ export default function HomePage() {
         <main id="main-content" className="portfolio-main">
           <Hero />
           <Marquee />
-          <Disciplines />
-          <Work />
+          <Engineering />
+          <UiUx />
+          <Branding />
           <Skills />
           <Experience />
           <Contact />

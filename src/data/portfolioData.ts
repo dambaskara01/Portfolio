@@ -4,12 +4,19 @@ export interface Project {
   category: "Fullstack" | "Webdev" | "UI/UX" | "Graphic Design";
   description: string;
   tags: string[];
-  image: string;
   liveUrl?: string;
   githubUrl?: string;
   caseStudyUrl?: string;
   featured: boolean;
   index: number;
+  architecture?: string;
+  platform?: string;
+  role?: string;
+  problem?: string;
+  solution?: string;
+  flowSteps?: string[];
+  deliverables?: string[];
+  colors?: { hex: string; name: string }[];
 }
 
 export interface SkillGroup {
@@ -71,94 +78,142 @@ export const projects: Project[] = [
     title: "MSJ ERP Finance",
     category: "Fullstack",
     description:
-      "Enterprise ERP Finance system for PT. Multi Spunindo Jaya Tbk. Features financial analytics dashboards, transaction reconciliation, role-based access control, and automated reporting.",
-    tags: ["Laravel", "PHP", "MySQL", "Blade", "REST API", "Tailwind CSS"],
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      "Enterprise ERP Finance system for PT. Multi Spunindo Jaya Tbk. Engineered modules for financial analytics, automatic reconciliation, multi-tier approval workflows, and tax invoicing.",
+    tags: ["Laravel 11", "PHP 8.2", "MySQL", "Blade", "RESTful API", "Tailwind CSS"],
     caseStudyUrl: "https://example.com/msj-erp-finance",
+    liveUrl: "https://example.com/msj-demo",
     featured: true,
     index: 1,
+    architecture: "Layered MVC with Repository Pattern, queued jobs for batch reconciliations, and RBAC security gates.",
+    role: "Fullstack Developer Intern",
   },
   {
     id: "aura-creative-studio",
     title: "Aura Creative Studio",
     category: "Fullstack",
     description:
-      "Creative agency web platform featuring an integrated CMS, dynamic portfolio showcase, and page transitions built with GSAP Timelines.",
-    tags: ["Next.js", "TypeScript", "GSAP", "Prisma", "PostgreSQL"],
-    image:
-      "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+      "High-performance agency platform featuring a headless dynamic portfolio showcase, fluid GSAP layout timelines, and responsive media CDN pipelines.",
+    tags: ["Next.js 14", "TypeScript", "GSAP ScrollTrigger", "Prisma", "PostgreSQL"],
     liveUrl: "https://example.com/aura",
-    githubUrl: "https://github.com/example/aura-studio",
+    githubUrl: "https://github.com/adhambaskara/aura-studio",
     featured: true,
     index: 2,
-  },
-  {
-    id: "pulse-saas-analytics",
-    title: "Pulse SaaS Analytics",
-    category: "UI/UX",
-    description:
-      "Dashboard design system for financial analytics platforms. Includes 40+ custom components, dark mode tokens, and structured micro-interactions.",
-    tags: ["Figma", "Design System", "Prototyping", "User Research"],
-    image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
-    caseStudyUrl: "https://example.com/pulse-case-study",
-    featured: true,
-    index: 3,
-  },
-  {
-    id: "zenith-ecommerce",
-    title: "Zenith E-Commerce",
-    category: "Webdev",
-    description:
-      "Modern e-commerce storefront with instant catalog filtering, interactive cart state transitions, and high performance.",
-    tags: ["React", "Next.js", "Stripe API", "GSAP ScrollTrigger"],
-    image:
-      "https://images.unsplash.com/photo-1600132806370-bf17e65e942f?auto=format&fit=crop&w=1200&q=80",
-    liveUrl: "https://example.com/zenith",
-    githubUrl: "https://github.com/example/zenith-store",
-    featured: true,
-    index: 4,
-  },
-  {
-    id: "kroma-brand-identity",
-    title: "Kroma Brand Identity",
-    category: "Graphic Design",
-    description:
-      "Visual identity system for an indie game studio: vector logomark, custom typography, color palette tokens, and brand documentation.",
-    tags: ["Adobe Illustrator", "Brand Identity", "Typography", "Vector"],
-    image:
-      "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80",
-    caseStudyUrl: "https://example.com/kroma-brand",
-    featured: false,
-    index: 5,
-  },
-  {
-    id: "nova-mobile-banking",
-    title: "Nova Mobile Banking",
-    category: "UI/UX",
-    description:
-      "Digital banking interface concept focused on peer-to-peer transfers, intuitive spending breakdowns, and accessible interactions.",
-    tags: ["Figma", "Mobile UI", "User Research", "Interaction Design"],
-    image:
-      "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?auto=format&fit=crop&w=1200&q=80",
-    caseStudyUrl: "https://example.com/nova-banking",
-    featured: false,
-    index: 6,
+    architecture: "Next.js App Router with Server Components for static generation and client-side GSAP choreographies.",
+    role: "Lead Frontend & Motion Architect",
   },
   {
     id: "devmetrics-api-platform",
     title: "DevMetrics API Platform",
     category: "Fullstack",
     description:
-      "Developer portal for monitoring API performance, real-time latency logs, and team token management with data visualization charts.",
-    tags: ["Next.js", "Node.js", "Chart.js", "PostgreSQL"],
-    image:
-      "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+      "Developer portal for monitoring API latency metrics, managing JWT team access tokens, and inspecting live traffic logs with chart analytics.",
+    tags: ["Next.js", "Node.js", "PostgreSQL", "Chart.js", "Tailwind CSS"],
     liveUrl: "https://example.com/devmetrics",
-    githubUrl: "https://github.com/example/devmetrics",
+    githubUrl: "https://github.com/adhambaskara/devmetrics",
     featured: false,
+    index: 3,
+    architecture: "REST API telemetry collector with WebSocket log streams and automated token expiry cron handlers.",
+    role: "Fullstack Engineer",
+  },
+  {
+    id: "zenith-ecommerce",
+    title: "Zenith E-Commerce",
+    category: "Webdev",
+    description:
+      "Minimalist e-commerce interface with instant faceted filtering, persistent basket state, and integrated Stripe checkout webhooks.",
+    tags: ["React", "Next.js", "Stripe API", "Zustand", "Tailwind CSS"],
+    liveUrl: "https://example.com/zenith",
+    githubUrl: "https://github.com/adhambaskara/zenith-store",
+    featured: true,
+    index: 4,
+    architecture: "Optimistic cart mutations with Zustand, serverless edge route handlers for payment capture.",
+    role: "Frontend Developer",
+  },
+  {
+    id: "pulse-saas-analytics",
+    title: "Pulse SaaS Analytics",
+    category: "UI/UX",
+    description:
+      "Comprehensive design system for analytical dashboards. Authored 45+ atomic components, tokenized dark/light modes, and interactive data widgets.",
+    tags: ["Figma", "Design System", "WCAG AA", "User Research", "Prototyping"],
+    platform: "Web dashboard",
+    caseStudyUrl: "https://example.com/pulse-case-study",
+    featured: true,
+    index: 5,
+    problem: "Financial analysts were slowed down by fragmented tabular reports and lack of contrast in dense dashboards.",
+    solution: "Structured a high-contrast Swiss typography hierarchy, data density modes, and one-click export shortcuts.",
+    flowSteps: [
+      "User Context Mapping",
+      "Information Hierarchy Architecture",
+      "Tokenized Component Library in Figma",
+      "Interactive High-Fidelity Prototype",
+    ],
+  },
+  {
+    id: "nova-mobile-banking",
+    title: "Nova Mobile Banking",
+    category: "UI/UX",
+    description:
+      "iOS banking interface centered on peer-to-peer transfers, intuitive cashflow breakdowns, and accessible thumb-zone navigation.",
+    tags: ["Figma", "iOS HIG", "Micro-Interactions", "User Journey", "Wireframing"],
+    platform: "iOS app",
+    caseStudyUrl: "https://example.com/nova-banking",
+    featured: false,
+    index: 6,
+    problem: "Young users found traditional mobile banking apps cluttered, intimidating, and slow for rapid daily transfers.",
+    solution: "Designed a 2-tap quick transfer flow with contextual haptics, clear fee transparency, and visual budgeting rings.",
+    flowSteps: [
+      "Competitive Fintech Benchmarking",
+      "Thumb-Zone Architecture & Low-Fi Sketches",
+      "Design System Tokens & Accessibility Checks",
+      "Usability Testing with Target Users",
+    ],
+  },
+  {
+    id: "kroma-brand-identity",
+    title: "Kroma Brand Identity",
+    category: "Graphic Design",
+    description:
+      "Visual identity system for an indie game studio: custom geometric logomark, expressive display typography, color palettes, and stationery.",
+    tags: ["Adobe Illustrator", "Brand Identity", "Typography", "Vector Guidelines"],
+    caseStudyUrl: "https://example.com/kroma-brand",
+    featured: true,
     index: 7,
+    deliverables: [
+      "Primary Vector Logomark & Monogram",
+      "Swiss Grotesque Typography Standards",
+      "Color Spec System (Hex / CMYK / Pantone)",
+      "Stationery, Business Collateral & Merch",
+    ],
+    colors: [
+      { hex: "#0f0f0f", name: "Deep Ink" },
+      { hex: "#f5f5f5", name: "Canvas Mist" },
+      { hex: "#ff3b30", name: "Signal Vermilion" },
+      { hex: "#5c5c5c", name: "Graphite" },
+    ],
+  },
+  {
+    id: "atelier-editorial-type",
+    title: "Atelier Typographic Posters",
+    category: "Graphic Design",
+    description:
+      "Experimental Swiss typographic poster series exploring asymmetric grid systems, micro-typography, and high-contrast editorial hierarchy.",
+    tags: ["Adobe Illustrator", "Photoshop", "Swiss Graphic Design", "Print & Poster"],
+    caseStudyUrl: "https://example.com/atelier-posters",
+    featured: false,
+    index: 8,
+    deliverables: [
+      "Modular 12-Column Grid System Exploration",
+      "Experimental Kerning & Negative Space Study",
+      "Limited-Edition Silkscreen Print Format (A1)",
+      "Digital Editorial Showcase Assets",
+    ],
+    colors: [
+      { hex: "#121212", name: "Matte Black" },
+      { hex: "#f4f3ef", name: "Warm Parchment" },
+      { hex: "#d9381e", name: "Bauhaus Rust" },
+      { hex: "#8c8c8c", name: "Concrete Grey" },
+    ],
   },
 ];
 

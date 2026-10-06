@@ -5,11 +5,12 @@ import { usePageTransition } from "./PageTransition";
 
 const SECTIONS = [
   { id: "#hero", label: "00 COVER", short: "00" },
-  { id: "#disciplines", label: "01 DISCIPLINES", short: "01" },
-  { id: "#work", label: "02 WORK", short: "02" },
-  { id: "#skills", label: "03 SKILLS", short: "03" },
-  { id: "#experience", label: "04 EXPERIENCE", short: "04" },
-  { id: "#contact", label: "05 CONTACT", short: "05" },
+  { id: "#engineering", label: "01 ENGINEERING", short: "01" },
+  { id: "#uiux", label: "02 UI/UX DESIGN", short: "02" },
+  { id: "#branding", label: "03 GRAPHIC IDENTITY", short: "03" },
+  { id: "#skills", label: "04 SKILLS", short: "04" },
+  { id: "#experience", label: "05 EXPERIENCE", short: "05" },
+  { id: "#contact", label: "06 CONTACT", short: "06" },
 ];
 
 export default function SectionIndicator() {

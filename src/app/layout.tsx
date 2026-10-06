@@ -1,16 +1,58 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Manrope, DM_Mono } from "next/font/google";
+import { DM_Mono } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import "./projects.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
+const sfUiDisplay = localFont({
+  src: [
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-ultralight-58646b19bf205.otf",
+      weight: "100",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-thin-58646e9b26e8b.otf",
+      weight: "200",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-light-58646b33e0551.otf",
+      weight: "300",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-light-58646b33e0551.otf",
+      weight: "400",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-medium-58646be638f96.otf",
+      weight: "500",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-semibold-58646eddcae92.otf",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-bold-58646a511e3d9.otf",
+      weight: "700",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-heavy-586470160b9e5.otf",
+      weight: "800",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/sf-ui-display/sf-ui-display-black-58646a6b80d5a.otf",
+      weight: "900",
+      style: "normal",
+    },
+  ],
+  variable: "--font-sf-ui",
   display: "swap",
 });
 
@@ -47,7 +89,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#050505",
+  themeColor: "#fafafa",
 };
 
 export default function RootLayout({
@@ -56,7 +98,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${inter.variable} ${manrope.variable} ${dmMono.variable}`}>
+    <html lang="en" className={`${sfUiDisplay.variable} ${dmMono.variable}`}>
       <body>{children}</body>
     </html>
   );
