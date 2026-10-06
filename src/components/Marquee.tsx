@@ -108,46 +108,34 @@ export default function Marquee() {
       const track = trackRef.current;
       if (!track) return;
 
-      // Smooth horizontal endless ticker
+      // Seamless dual-group endless ticker
       const loop = gsap.to(track, {
         xPercent: -50,
         ease: "none",
-        duration: 28,
+        duration: 34,
         repeat: -1,
       });
 
-      // Velocity & direction reactive flow
-      let currentScale = 1;
+      // Velocity-reactive acceleration on user scroll
       ScrollTrigger.create({
         trigger: containerRef.current,
         start: "top bottom",
         end: "bottom top",
         onUpdate: (self) => {
           const velocity = Math.abs(self.getVelocity());
-          const dir = self.direction === -1 ? -1 : 1;
-          if (velocity > 100) {
-            const timeScaleBoost = Math.min(1 + velocity / 320, 4);
-            currentScale = dir * timeScaleBoost;
+          if (velocity > 80) {
+            const boost = Math.min(1 + velocity / 350, 3.5);
             gsap.to(loop, {
-              timeScale: currentScale,
-              duration: 0.25,
+              timeScale: boost,
+              duration: 0.3,
               overwrite: "auto",
               onComplete: () => {
-                currentScale = dir;
                 gsap.to(loop, {
-                  timeScale: currentScale,
-                  duration: 1.2,
+                  timeScale: 1,
+                  duration: 1.4,
                   ease: "power2.out",
                 });
               },
-            });
-          } else if (dir !== (currentScale > 0 ? 1 : -1)) {
-            currentScale = dir;
-            gsap.to(loop, {
-              timeScale: dir,
-              duration: 0.5,
-              ease: "power2.out",
-              overwrite: "auto",
             });
           }
         },
@@ -156,8 +144,8 @@ export default function Marquee() {
     { scope: containerRef }
   );
 
-  // Duplicate logos 3 times for a continuous seamless ribbon
-  const displayLogos = [...TECH_LOGOS, ...TECH_LOGOS, ...TECH_LOGOS];
+  // 2 sets of logos per group to guarantee high density across ultra-wide viewports
+  const groupLogos = [...TECH_LOGOS, ...TECH_LOGOS];
 
   return (
     <div
@@ -167,19 +155,36 @@ export default function Marquee() {
       role="region"
     >
       <div ref={trackRef} className="marquee-track">
-        {displayLogos.map((tech, i) => (
-          <div
-            key={`${tech.name}-${i}`}
-            className="marquee-item"
-            title={tech.name}
-            aria-label={tech.name}
-          >
-            {tech.render({
-              className: "marquee-logo",
-              "aria-hidden": "true",
-            })}
-          </div>
-        ))}
+        <div className="marquee-group">
+          {groupLogos.map((tech, i) => (
+            <div
+              key={`g1-${tech.name}-${i}`}
+              className="marquee-item"
+              title={tech.name}
+              aria-label={tech.name}
+            >
+              {tech.render({
+                className: "marquee-logo",
+                "aria-hidden": "true",
+              })}
+            </div>
+          ))}
+        </div>
+        <div className="marquee-group" aria-hidden="true">
+          {groupLogos.map((tech, i) => (
+            <div
+              key={`g2-${tech.name}-${i}`}
+              className="marquee-item"
+              title={tech.name}
+              tabIndex={-1}
+            >
+              {tech.render({
+                className: "marquee-logo",
+                "aria-hidden": "true",
+              })}
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
