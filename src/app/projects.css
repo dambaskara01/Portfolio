@@ -337,6 +337,10 @@
 /* ============================================================
    01 ENGINEERING: numbered title list, hover stage, drawer
    ============================================================ */
+.eng {
+  border-top: none;
+}
+
 .eng-layout {
   display: grid;
   gap: clamp(32px, 5vw, 64px);
