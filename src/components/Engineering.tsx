@@ -139,7 +139,7 @@ export default function Engineering() {
               rotateY: -14,
               rotateX: 10,
               scale: 0.93,
-              clipPath: "inset(100% 0% 0% 0% round 20px)",
+              clipPath: "inset(100% 0% 0% 0%)",
             },
             {
               opacity: 1,
@@ -147,10 +147,13 @@ export default function Engineering() {
               rotateY: 0,
               rotateX: 0,
               scale: 1,
-              clipPath: "inset(0% 0% 0% 0% round 20px)",
+              clipPath: "inset(0% 0% 0% 0%)",
               duration: 1.15,
               ease: "power4.out",
               overwrite: "auto",
+              onComplete: () => {
+                gsap.set(card, { clearProps: "clipPath" });
+              },
             }
           );
 
@@ -192,7 +195,7 @@ export default function Engineering() {
               rotateY: -14,
               rotateX: -10,
               scale: 0.93,
-              clipPath: "inset(0% 0% 100% 0% round 20px)",
+              clipPath: "inset(0% 0% 100% 0%)",
             },
             {
               opacity: 1,
@@ -200,10 +203,13 @@ export default function Engineering() {
               rotateY: 0,
               rotateX: 0,
               scale: 1,
-              clipPath: "inset(0% 0% 0% 0% round 20px)",
+              clipPath: "inset(0% 0% 0% 0%)",
               duration: 1.15,
               ease: "power4.out",
               overwrite: "auto",
+              onComplete: () => {
+                gsap.set(card, { clearProps: "clipPath" });
+              },
             }
           );
 
@@ -253,6 +259,38 @@ export default function Engineering() {
           });
         },
       });
+
+      // Smooth Scroll-Driven Background Color Scrub from top light canvas to deep charcoal
+      gsap.fromTo(
+        sectionRef.current,
+        { backgroundColor: "#fafafa" },
+        {
+          backgroundColor: "#121316",
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top 95%",
+            end: "top 35%",
+            scrub: 0.8,
+          },
+        }
+      );
+
+      // Smooth Scroll-Driven Background Color Scrub from deep charcoal back to light canvas
+      gsap.fromTo(
+        sectionRef.current,
+        { backgroundColor: "#121316" },
+        {
+          backgroundColor: "#fafafa",
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "bottom 65%",
+            end: "bottom 10%",
+            scrub: 0.8,
+          },
+        }
+      );
     },
     { scope: sectionRef }
   );
@@ -268,6 +306,14 @@ export default function Engineering() {
       aria-label="Engineering selected works"
     >
       <div className="eng-container">
+        {/* Editorial Section Header */}
+        <header className="eng-header">
+          <h2 className="eng-header__title">Code & Development</h2>
+          <p className="eng-header__sub">
+            Fullstack systems, web applications, and architectural works
+          </p>
+        </header>
+
         <div className="eng-stage">
           {/* Left: 4:3 Clean Minimal Placeholder Card */}
           <div className="eng-stage__visual-col">
