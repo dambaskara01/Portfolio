@@ -139,7 +139,7 @@ export default function Engineering() {
               rotateY: -14,
               rotateX: 10,
               scale: 0.93,
-              clipPath: "inset(100% 0% 0% 0%)",
+              clipPath: "inset(100% 0% 0% 0% round 20px)",
             },
             {
               opacity: 1,
@@ -147,13 +147,10 @@ export default function Engineering() {
               rotateY: 0,
               rotateX: 0,
               scale: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
+              clipPath: "inset(0% 0% 0% 0% round 20px)",
               duration: 1.15,
               ease: "power4.out",
               overwrite: "auto",
-              onComplete: () => {
-                gsap.set(card, { clearProps: "clipPath" });
-              },
             }
           );
 
@@ -195,7 +192,7 @@ export default function Engineering() {
               rotateY: -14,
               rotateX: -10,
               scale: 0.93,
-              clipPath: "inset(0% 0% 100% 0%)",
+              clipPath: "inset(0% 0% 100% 0% round 20px)",
             },
             {
               opacity: 1,
@@ -203,13 +200,10 @@ export default function Engineering() {
               rotateY: 0,
               rotateX: 0,
               scale: 1,
-              clipPath: "inset(0% 0% 0% 0%)",
+              clipPath: "inset(0% 0% 0% 0% round 20px)",
               duration: 1.15,
               ease: "power4.out",
               overwrite: "auto",
-              onComplete: () => {
-                gsap.set(card, { clearProps: "clipPath" });
-              },
             }
           );
 
