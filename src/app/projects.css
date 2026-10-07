@@ -339,283 +339,313 @@
    Adapted from reference into Swiss Minimalism (Light Editorial)
    ============================================================ */
 /* ============================================================
-   01 ENGINEERING: Swiss "Selected Works" Curved Landscape Gallery
-   Seamless light/cream background matching the portfolio canvas
+   01 ENGINEERING: Swiss Kinetic 3D Cylinder Wheel & Visual Card
+   Seamless light canvas with precision rotation, active cobalt dot,
+   and SF Pro typography adhering to DESIGN.md
+   ============================================================ */
+/* ============================================================
+   01 ENGINEERING: Swiss Kinetic 3D Circular Arc & Visual Card
+   Isolated wheel scroll with continuous infinite loop,
+   active cobalt dot, and tall portrait frame matching reference
    ============================================================ */
 .eng-section {
-  padding-block: clamp(72px, 8.5vw, 128px);
-  background-color: var(--base);
-  border-top: 1px solid var(--rule);
   position: relative;
+  background-color: var(--base);
+  border: none;
+  padding-block: clamp(72px, 8.5vw, 128px);
   overflow: hidden;
+  perspective: 1400px;
 }
 
 .eng-container {
   max-width: var(--max-w);
+  width: 100%;
   margin-inline: auto;
   padding-inline: clamp(16px, 3.5vw, 40px);
 }
 
-.eng-layout {
-  display: flex;
+/* Two-column stage: Integrated Visual Frame Left, Circular Arc Right */
+.eng-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
   align-items: center;
-  justify-content: space-between;
-  gap: clamp(32px, 4vw, 64px);
-  min-height: clamp(520px, 60vh, 680px);
+  gap: clamp(40px, 6vw, 104px);
+  min-height: 520px;
   position: relative;
+  transform-style: preserve-3d;
 }
 
-/* Left: Curved Overlapping Arc of Landscape Cards */
-.eng-arc-viewport {
-  flex: 1;
-  max-width: 64%;
-  position: relative;
-  overflow: visible;
-  /* Fade the leftmost edge so the arc doesn't feel hard-cropped */
-  -webkit-mask-image: linear-gradient(
-    to right,
-    transparent 0px,
-    rgba(0, 0, 0, 0.18) 28px,
-    black 88px
-  );
-  mask-image: linear-gradient(
-    to right,
-    transparent 0px,
-    rgba(0, 0, 0, 0.18) 28px,
-    black 88px
-  );
-}
-
-.eng-arc-cluster {
+/* Left: Clean Minimal Placeholder Card */
+.eng-stage__visual-col {
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  position: relative;
-  user-select: none;
+  width: 100%;
+  transform-style: preserve-3d;
 }
 
-/* Overlapping Columns */
-.eng-col {
-  display: flex;
-  flex-direction: column;
-  flex: 0 0 clamp(180px, 18.5vw, 250px);
-  margin-left: clamp(-72px, -6vw, -44px);
-  position: relative;
-  transition: transform var(--t-base);
-}
-
-.eng-col:first-child {
-  margin-left: 0;
-}
-
-/* Vertical offsets creating the curved crescent arc */
-.eng-col--1 {
-  z-index: 1;
-  gap: clamp(160px, 20vh, 260px);
-  transform: translateY(-10px);
-}
-
-.eng-col--2 {
-  z-index: 3;
-  gap: clamp(100px, 14vh, 180px);
-  transform: translateY(20px);
-}
-
-.eng-col--3 {
-  z-index: 5;
-  gap: clamp(60px, 9vh, 120px);
-  transform: translateY(48px);
-}
-
-.eng-col--4 {
-  z-index: 8;
-  display: flex;
-  justify-content: center;
-  transform: translateY(68px);
-}
-
-/* Landscape Cards — tight Swiss radius, editorial shadow */
-.eng-card {
+.eng-visual-card {
   position: relative;
   width: 100%;
-  aspect-ratio: 16 / 10.5;
-  border-radius: 6px;
+  max-width: 440px;
+  aspect-ratio: 4 / 3;
+  border-radius: 10px;
+  border: none;
+  background-color: var(--surface, #ffffff);
+  box-shadow: none;
   overflow: hidden;
-  background-color: var(--surface, #f5f4f0);
-  border: 1px solid rgba(0, 0, 0, 0.11);
-  /* Precise elevation: close shadow, no bloom */
-  box-shadow: 0 4px 14px -4px rgba(0, 0, 0, 0.13), 0 1px 3px rgba(0, 0, 0, 0.06);
-  cursor: pointer;
-  transition: transform 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.32s cubic-bezier(0.16, 1, 0.3, 1),
-              opacity 0.28s ease,
-              border-color 0.28s ease;
-  will-change: transform, opacity;
+  cursor: default;
   padding: 0;
   text-align: left;
-  display: block;
+  transform-style: preserve-3d;
+  will-change: transform, clip-path, opacity;
 }
 
-.eng-card:focus-visible {
-  outline: 2px solid var(--ink);
-  outline-offset: 3px;
-  z-index: 35;
-}
-
-/* Apex Hero Card — slightly larger, ink border, crisp */
-.eng-card--apex {
-  transform: scale(1.05);
-  z-index: 15;
-  box-shadow: 0 8px 24px -6px rgba(0, 0, 0, 0.16), 0 2px 6px rgba(0, 0, 0, 0.07);
-  border-color: rgba(0, 0, 0, 0.22);
-}
-
-/* Hover elevation — editorial lift, ink border, siblings dim */
-.eng-arc-cluster:hover .eng-card:not(:hover) {
-  opacity: 0.48;
-  transform: scale(0.985);
-}
-
-.eng-card:hover {
-  transform: translateY(-6px) scale(1.04) !important;
-  z-index: 40 !important;
-  /* Precise shadow + 1px ink border = Swiss hover signal */
-  box-shadow: 0 10px 28px -6px rgba(0, 0, 0, 0.18), 0 0 0 1.5px var(--ink) !important;
-  border-color: var(--ink) !important;
-  opacity: 1 !important;
-}
-
-/* Card Media */
-.eng-card__inner {
+.eng-visual-card__canvas {
   position: relative;
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background-color: #ebebeb;
+  background-color: #16171a;
 }
 
-.eng-card__img {
+.eng-visual-card__placeholder {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-  display: block;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  background: linear-gradient(135deg, #18191c 0%, #0e0f11 100%);
 }
 
-.eng-card:hover .eng-card__img {
-  transform: scale(1.05);
-}
-
-/* Subtle system HUD tag on card hover */
-.eng-card__badge {
-  position: absolute;
-  bottom: 8px;
-  left: 8px;
-  background: rgba(15, 15, 15, 0.85);
-  color: #fafafa;
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.04em;
-  padding: 3px 7px;
-  border-radius: 4px;
-  backdrop-filter: blur(4px);
-  opacity: 0;
-  transform: translateY(4px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-}
-
-.eng-card:hover .eng-card__badge {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* Right Side: Clean "Selected works" Heading in Black */
-.eng-title-pane {
+/* Right: Kinetic 3D Circular Arc with Isolated Wheel Scroll & Gradient Fade */
+.eng-stage__wheel-col {
+  position: relative;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding-left: clamp(16px, 3vw, 40px);
+  align-items: center;
+  padding-left: 25%;
+  justify-content: flex-start;
+  height: 420px;
+  min-height: 420px;
+  width: 100%;
+  overflow: hidden; /* Strict containment: no overflow into Marquee or other sections */
+  cursor: grab;
+  user-select: none;
+  touch-action: pan-x;
+  transform-style: preserve-3d;
+  will-change: transform, opacity;
+  /* Top & bottom subtle gradient dissolve ("samar-samar") */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 16%,
+    black 84%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    black 16%,
+    black 84%,
+    transparent 100%
+  );
+}
+
+.eng-stage__wheel-col::before,
+.eng-stage__wheel-col::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 52px;
+  pointer-events: none;
+  z-index: 20;
+}
+
+.eng-stage__wheel-col::before {
+  top: 0;
+  background: linear-gradient(to bottom, var(--base), transparent);
+}
+
+.eng-stage__wheel-col::after {
+  bottom: 0;
+  background: linear-gradient(to top, var(--base), transparent);
+}
+
+.eng-stage__wheel-col:active {
+  cursor: grabbing;
+}
+
+.eng-wheel {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.eng-wheel__item {
+  position: absolute;
+  left: 0;
+  display: inline-flex;
+  align-items: center;
+  text-align: left;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 5px 12px;
+  min-height: 44px;
+  font-family: var(--font-display);
+  font-size: clamp(20px, 2.2vw, 28px);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--muted, #8a8a8e);
+  transform-origin: 0% 50%;
+  white-space: nowrap;
+  will-change: transform, opacity;
+  transition: color 0.2s ease;
+}
+
+.eng-wheel__item:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+.eng-wheel__item--active {
+  color: var(--ink, #0d0d0d);
+  font-size: clamp(22px, 2.4vw, 30px);
+  font-weight: 600;
   z-index: 10;
 }
 
-.eng-title {
-  font-family: var(--font-display);
-  font-size: clamp(48px, 6.2vw, 84px);
-  font-weight: 500;
-  line-height: 0.98;
-  letter-spacing: -0.04em;
-  color: var(--ink, #0f0f0f);
-  text-wrap: balance;
+/* Inactive Hover */
+.eng-wheel__item:not(.eng-wheel__item--active):hover {
+  color: var(--ink);
+}
+
+/* Active Cobalt Blue Dot Indicator */
+.eng-wheel__dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background-color: #0066ff;
+  margin-right: 14px;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.2s ease;
+}
+
+.eng-wheel__text {
+  display: inline-block;
 }
 
 /* Mobile & Tablet Responsiveness */
 @media (max-width: 960px) {
-  .eng-layout {
-    flex-direction: column;
-    align-items: flex-start;
+  .eng-section {
+    padding-block: clamp(48px, 7vw, 84px);
+  }
+
+  .eng-stage {
+    grid-template-columns: 1fr;
+    gap: 40px;
     min-height: auto;
-    gap: 28px;
   }
 
-  .eng-title-pane {
-    order: -1;
-    padding-left: 0;
+  .eng-stage__visual-col {
+    justify-content: center;
   }
 
-  .eng-title {
-    font-size: clamp(38px, 8.5vw, 56px);
+  .eng-visual-card {
+    max-width: 320px;
+    aspect-ratio: 3 / 4;
+    margin-inline: auto;
   }
 
-  /* Smooth Horizontal Scroll Track */
-  .eng-arc-viewport {
-    max-width: 100%;
-    width: 100vw;
-    margin-inline: calc(-1 * clamp(16px, 3.5vw, 40px));
-    padding-inline: clamp(16px, 3.5vw, 40px);
-    overflow-x: auto;
-    overflow-y: hidden;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    /* Reset the desktop left-edge fade — would clip horizontal scroll */
-    -webkit-mask-image: none;
-    mask-image: none;
+  .eng-stage__wheel-col {
+    height: 380px;
+    min-height: 380px;
   }
 
-  .eng-arc-viewport::-webkit-scrollbar {
-    display: none;
+  .eng-wheel {
+    justify-content: center;
   }
 
-  .eng-arc-cluster {
-    display: flex;
-    flex-wrap: nowrap;
-    gap: 16px;
-    padding-block: 8px 24px;
-    width: max-content;
-  }
-
-  .eng-col {
-    display: contents; /* Flattens columns into a clean horizontal row on mobile */
-  }
-
-  .eng-card {
-    flex: 0 0 clamp(220px, 65vw, 300px);
-    scroll-snap-align: start;
-    transform: none !important;
-    margin: 0 !important;
-  }
-
-  .eng-arc-cluster:hover .eng-card:not(:hover) {
-    opacity: 1;
-    transform: none;
-  }
-
-  .eng-card:hover {
-    transform: none !important;
-    box-shadow: 0 14px 34px -8px rgba(0, 0, 0, 0.12) !important;
-    border-color: rgba(0, 0, 0, 0.09) !important;
+  .eng-wheel__item {
+    font-size: clamp(22px, 5.5vw, 36px);
+    left: 50%;
+    transform-origin: 50% 50%;
+    margin-left: -130px;
   }
 }
+
+
+.eng-wheel__dot--active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.eng-wheel__text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+/* Mobile & Tablet Responsiveness */
+@media (max-width: 960px) {
+  .eng-pin-wrapper {
+    min-height: auto;
+    padding-block: clamp(40px, 6vw, 64px);
+  }
+
+  .eng-stage {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    min-height: auto;
+  }
+
+  .eng-visual-card {
+    max-width: 100%;
+    aspect-ratio: 16 / 10;
+  }
+
+  .eng-stage__wheel-col {
+    min-height: auto;
+    align-items: center;
+  }
+
+  .eng-wheel {
+    align-items: center;
+    width: 100%;
+  }
+
+  .eng-wheel__item {
+    justify-content: center;
+    padding: 6px 10px;
+  }
+
+  .eng-wheel__text {
+    white-space: normal;
+    text-align: center;
+  }
+
+  /* Softer tilt in mobile to avoid edge clipping */
+  .eng-wheel__item--slot--2 {
+    transform: translate3d(0, 0, 0) rotateZ(-20deg) scale(0.82);
+  }
+
+  .eng-wheel__item--slot--1 {
+    transform: translate3d(0, 0, 0) rotateZ(-10deg) scale(0.91);
+  }
+
+  .eng-wheel__item--slot-1 {
+    transform: translate3d(0, 0, 0) rotateZ(10deg) scale(0.91);
+  }
+
+  .eng-wheel__item--slot-2 {
+    transform: translate3d(0, 0, 0) rotateZ(20deg) scale(0.82);
+  }
+}
+
 
 .eng-drawer {
   display: flex;

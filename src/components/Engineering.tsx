@@ -1,322 +1,360 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { projects, type Project } from "@/data/portfolioData";
-import ProjectCover from "./ProjectCover";
-import ProjectModal from "./ProjectModal";
+import { projects } from "@/data/portfolioData";
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-const TONES = [
-  { background: "#0f0f0f", foreground: "#fafafa" },
-  { background: "#e6e6e6", foreground: "#0f0f0f" },
-  { background: "#2b2b2b", foreground: "#fafafa" },
-  { background: "#bdbdbd", foreground: "#0f0f0f" },
-];
-
-const pad = (n: number) => String(n).padStart(2, "0");
-
-const PROJECT_IMAGES: Record<string, string> = {
-  "msj-erp-finance": "/images/engineering/msj-erp.png",
-  "aura-creative-studio": "/images/engineering/aura-studio.png",
-  "devmetrics-api-platform": "/images/engineering/devmetrics.png",
-  "zenith-ecommerce": "/images/engineering/zenith-store.png",
-};
-
-interface LandscapeCard {
-  id: string;
-  projectId: string;
-  title: string;
-  badge: string;
-  image: string;
-  bgFallback: string;
-  colIndex: number;
-  isApex?: boolean;
-}
-
-// 7 Landscape System Screenshot Cards forming a curved crescent arc towards "Selected works"
-const LANDSCAPE_CARDS: LandscapeCard[] = [
-  // Column 1 (Outer Left curve)
-  {
-    id: "card-msj-ledger",
-    projectId: "msj-erp-finance",
-    title: "MSJ ERP Finance - Ledger",
-    badge: "MSJ ERP // Finance Analytics",
-    colIndex: 1,
-    image: PROJECT_IMAGES["msj-erp-finance"],
-    bgFallback: "linear-gradient(135deg, #18191c 0%, #0d0e10 100%)",
-  },
-  {
-    id: "card-zenith-catalog",
-    projectId: "zenith-ecommerce",
-    title: "Zenith E-Commerce - Store",
-    badge: "Zenith Store // Faceted Catalog",
-    colIndex: 1,
-    image: PROJECT_IMAGES["zenith-ecommerce"],
-    bgFallback: "linear-gradient(135deg, #1c1c20 0%, #0f1012 100%)",
-  },
-
-  // Column 2 (Mid-Left curve)
-  {
-    id: "card-aura-motion",
-    projectId: "aura-creative-studio",
-    title: "Aura Studio - Timelines",
-    badge: "Aura Studio // Motion Timelines",
-    colIndex: 2,
-    image: PROJECT_IMAGES["aura-creative-studio"],
-    bgFallback: "linear-gradient(135deg, #1e1b18 0%, #100f0d 100%)",
-  },
-  {
-    id: "card-devmetrics-auth",
-    projectId: "devmetrics-api-platform",
-    title: "DevMetrics - Gateway",
-    badge: "DevMetrics // JWT Security Gateway",
-    colIndex: 2,
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80",
-    bgFallback: "linear-gradient(135deg, #101620 0%, #0a0d14 100%)",
-  },
-
-  // Column 3 (Inner curve approaching apex)
-  {
-    id: "card-devmetrics-telemetry",
-    projectId: "devmetrics-api-platform",
-    title: "DevMetrics - Telemetry",
-    badge: "DevMetrics // Telemetry Stream",
-    colIndex: 3,
-    image: PROJECT_IMAGES["devmetrics-api-platform"],
-    bgFallback: "linear-gradient(135deg, #121822 0%, #0b0f16 100%)",
-  },
-  {
-    id: "card-msj-batch",
-    projectId: "msj-erp-finance",
-    title: "MSJ ERP Finance - Queue",
-    badge: "MSJ ERP // Batch Pipeline",
-    colIndex: 3,
-    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80",
-    bgFallback: "linear-gradient(135deg, #161b17 0%, #0c0f0d 100%)",
-  },
-
-  // Column 4 (Apex Hero Card, extending rightmost into the center)
-  {
-    id: "card-aura-apex",
-    projectId: "aura-creative-studio",
-    title: "Aura Creative Studio - Hero",
-    badge: "Aura Studio // Architecture Platform",
-    colIndex: 4,
-    isApex: true,
-    image: "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=800&q=80",
-    bgFallback: "linear-gradient(135deg, #242220 0%, #141311 100%)",
-  },
-];
+const ANGLE_STEP = 20; // Compact angle step for refined typography
 
 export default function Engineering() {
   const engProjects = projects.filter(
     (p) => p.category === "Fullstack" || p.category === "Webdev"
   );
+  const total = engProjects.length;
 
-  const containerRef = useRef<HTMLElement>(null);
-  const clusterRef = useRef<HTMLDivElement>(null);
-  const [selectedId, setSelectedId] = useState(engProjects[0]?.id ?? "");
-  const [open, setOpen] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
+  const wheelStageRef = useRef<HTMLDivElement>(null);
 
-  const selectedIndex = Math.max(
-    engProjects.findIndex((p) => p.id === selectedId),
-    0
-  );
-  const selected: Project = engProjects[selectedIndex] ?? engProjects[0];
+  // Rotation physics refs for 60fps momentum
+  const targetRotRef = useRef(0);
+  const currentRotRef = useRef(0);
+  const isDraggingRef = useRef(false);
+  const startYRef = useRef(0);
+  const startRotRef = useRef(0);
 
-  const openProject = (id: string) => {
-    setSelectedId(id);
-    setOpen(true);
+  const [rotState, setRotState] = useState(0);
+
+  // Active project calculation from continuous angular position
+  const rawIndex = Math.round(rotState / ANGLE_STEP);
+  const activeIndex = ((rawIndex % total) + total) % total;
+
+  // Smooth inertial RAF animation loop
+  useEffect(() => {
+    let rafId: number;
+    const loop = () => {
+      const diff = targetRotRef.current - currentRotRef.current;
+      if (Math.abs(diff) > 0.004) {
+        currentRotRef.current += diff * 0.14;
+        setRotState(currentRotRef.current);
+      }
+      rafId = requestAnimationFrame(loop);
+    };
+    rafId = requestAnimationFrame(loop);
+    return () => cancelAnimationFrame(rafId);
+  }, []);
+
+  // Isolated mouse-wheel listener: spins wheel only, prevents web page scroll
+  useEffect(() => {
+    const el = wheelStageRef.current;
+    if (!el) return;
+
+    let wheelTimeout: ReturnType<typeof setTimeout>;
+
+    const handleWheel = (e: WheelEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      const delta = Math.sign(e.deltaY) * Math.min(Math.abs(e.deltaY), 80);
+      targetRotRef.current += delta * 0.16;
+
+      clearTimeout(wheelTimeout);
+      wheelTimeout = setTimeout(() => {
+        // Gently snap to nearest project slot once scrolling pauses
+        targetRotRef.current =
+          Math.round(targetRotRef.current / ANGLE_STEP) * ANGLE_STEP;
+      }, 150);
+    };
+
+    el.addEventListener("wheel", handleWheel, { passive: false });
+    return () => {
+      el.removeEventListener("wheel", handleWheel);
+      clearTimeout(wheelTimeout);
+    };
+  }, []);
+
+  // Keyboard accessibility
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        targetRotRef.current += ANGLE_STEP;
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        targetRotRef.current -= ANGLE_STEP;
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  // Touch and pointer drag handlers for wheel container
+  const handlePointerDown = (e: React.PointerEvent) => {
+    isDraggingRef.current = true;
+    startYRef.current = e.clientY;
+    startRotRef.current = targetRotRef.current;
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
   };
 
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    const diff = startYRef.current - e.clientY;
+    targetRotRef.current = startRotRef.current + diff * 0.32;
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDraggingRef.current) return;
+    isDraggingRef.current = false;
+    try {
+      (e.currentTarget as HTMLElement).releasePointerCapture(e.pointerId);
+    } catch {}
+    targetRotRef.current =
+      Math.round(targetRotRef.current / ANGLE_STEP) * ANGLE_STEP;
+  };
+
+  // High-End Direction-Aware Architectural Shutter & Kinetic Horology Unfurl
   useGSAP(
     () => {
-      // Smooth entrance animation for the curved arc of columns
-      gsap.fromTo(
-        ".eng-col",
-        { opacity: 0, y: 36 },
-        {
-          opacity: 1,
-          y: 0,
-          stagger: 0.08,
-          duration: 0.85,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".eng-layout", start: "top 80%" },
-        }
-      );
+      const card = ".eng-visual-card";
+      const wheel = ".eng-stage__wheel-col";
 
-      // Selected works title arrival
-      gsap.fromTo(
-        ".eng-title",
-        { opacity: 0, x: 24 },
-        {
-          opacity: 1,
-          x: 0,
-          duration: 0.85,
-          ease: "power3.out",
-          scrollTrigger: { trigger: ".eng-layout", start: "top 80%" },
-        }
-      );
+      ScrollTrigger.create({
+        trigger: sectionRef.current,
+        start: "top 78%",
+        end: "bottom 22%",
+        onEnter: () => {
+          // Entering while scrolling DOWN (from top)
+          gsap.killTweensOf([card, wheel]);
+
+          // Architectural Shutter reveal with 3D perspective tilt
+          gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              y: 72,
+              rotateY: -14,
+              rotateX: 10,
+              scale: 0.93,
+              clipPath: "inset(100% 0% 0% 0%)",
+            },
+            {
+              opacity: 1,
+              y: 0,
+              rotateY: 0,
+              rotateX: 0,
+              scale: 1,
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: 1.15,
+              ease: "power4.out",
+              overwrite: "auto",
+              onComplete: () => {
+                gsap.set(card, { clearProps: "clipPath" });
+              },
+            }
+          );
+
+          // Kinetic Horology Unfurl for circular wheel
+          gsap.fromTo(
+            wheel,
+            {
+              opacity: 0,
+              x: 80,
+              rotateY: 20,
+              rotateX: -10,
+              scale: 0.92,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              rotateY: 0,
+              rotateX: 0,
+              scale: 1,
+              duration: 1.25,
+              ease: "power4.out",
+              overwrite: "auto",
+            }
+          );
+
+          // Precision mechanical spin impulse into active position
+          targetRotRef.current += ANGLE_STEP * 1.5;
+        },
+        onEnterBack: () => {
+          // Entering while scrolling UP (from bottom)
+          gsap.killTweensOf([card, wheel]);
+
+          // Architectural Shutter reveal with inverted 3D perspective tilt
+          gsap.fromTo(
+            card,
+            {
+              opacity: 0,
+              y: -72,
+              rotateY: -14,
+              rotateX: -10,
+              scale: 0.93,
+              clipPath: "inset(0% 0% 100% 0%)",
+            },
+            {
+              opacity: 1,
+              y: 0,
+              rotateY: 0,
+              rotateX: 0,
+              scale: 1,
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: 1.15,
+              ease: "power4.out",
+              overwrite: "auto",
+              onComplete: () => {
+                gsap.set(card, { clearProps: "clipPath" });
+              },
+            }
+          );
+
+          // Kinetic Horology Unfurl from bottom
+          gsap.fromTo(
+            wheel,
+            {
+              opacity: 0,
+              x: 80,
+              rotateY: 20,
+              rotateX: 10,
+              scale: 0.92,
+            },
+            {
+              opacity: 1,
+              x: 0,
+              rotateY: 0,
+              rotateX: 0,
+              scale: 1,
+              duration: 1.25,
+              ease: "power4.out",
+              overwrite: "auto",
+            }
+          );
+
+          // Precision mechanical spin impulse reverse
+          targetRotRef.current -= ANGLE_STEP * 1.5;
+        },
+        onLeave: () => {
+          // Softly recess when leaving downwards
+          gsap.to([card, wheel], {
+            opacity: 0.2,
+            scale: 0.96,
+            duration: 0.65,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        },
+        onLeaveBack: () => {
+          // Softly recess when leaving upwards
+          gsap.to([card, wheel], {
+            opacity: 0.2,
+            scale: 0.96,
+            duration: 0.65,
+            ease: "power2.out",
+            overwrite: "auto",
+          });
+        },
+      });
     },
-    { scope: containerRef }
+    { scope: sectionRef }
   );
+
+  // Visible slots around active index: -3 to +3 for smooth continuous curvature
+  const slotOffsets = [-3, -2, -1, 0, 1, 2, 3];
 
   return (
     <section
       id="engineering"
-      ref={containerRef}
+      ref={sectionRef}
       className="eng-section"
       aria-label="Engineering selected works"
     >
       <div className="eng-container">
-        <div className="eng-layout">
-          {/* Left: Curved Overlapping Arc of Landscape Cards */}
-          <div className="eng-arc-viewport">
-            <div ref={clusterRef} className="eng-arc-cluster" role="list">
-              {[1, 2, 3, 4].map((colNum) => {
-                const colCards = LANDSCAPE_CARDS.filter((c) => c.colIndex === colNum);
+        <div className="eng-stage">
+          {/* Left: 4:3 Clean Minimal Placeholder Card */}
+          <div className="eng-stage__visual-col">
+            <div className="eng-visual-card">
+              <div className="eng-visual-card__canvas">
+                <div className="eng-visual-card__placeholder" />
+              </div>
+            </div>
+          </div>
+
+          {/* Right: Kinetic 3D Circular Arc with Isolated Wheel Scroll & Fade */}
+          <div
+            ref={wheelStageRef}
+            className="eng-stage__wheel-col"
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerUp}
+            onPointerCancel={handlePointerUp}
+          >
+            <div
+              className="eng-wheel"
+              role="listbox"
+              aria-label="Project circular arc selector"
+            >
+              {slotOffsets.map((offset) => {
+                const itemRawIndex = rawIndex + offset;
+                const projIndex = ((itemRawIndex % total) + total) % total;
+                const proj = engProjects[projIndex];
+
+                // Continuous angle offset from the active center
+                const phi = itemRawIndex * ANGLE_STEP - rotState;
+                const dist = Math.abs(phi) / ANGLE_STEP;
+
+                // Deep circular arc mathematics
+                const translateY = phi * 2.3;
+                const translateX = Math.pow(dist, 1.8) * 22;
+                const rotateZ = phi;
+                const scale = Math.max(0.8, 1 - dist * 0.06);
+                const opacity = Math.max(0, 1 - dist * 0.36);
+                const isCentered = dist < 0.45;
+
+                // Skip items rotated beyond visible range
+                if (opacity <= 0.01) return null;
+
                 return (
-                  <div key={colNum} className={`eng-col eng-col--${colNum}`}>
-                    {colCards.map((c) => (
-                      <button
-                        key={c.id}
-                        type="button"
-                        className={`eng-card ${c.isApex ? "eng-card--apex" : ""}`}
-                        aria-label={`View ${c.title}`}
-                        onClick={() => openProject(c.projectId)}
-                      >
-                        <div
-                          className="eng-card__inner"
-                          style={{ background: c.bgFallback }}
-                        >
-                          {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img
-                            src={c.image}
-                            alt={c.title}
-                            loading="lazy"
-                            className="eng-card__img"
-                            onError={(e) => {
-                              // If image fails, keep rich dark gradient fallback
-                              (e.target as HTMLElement).style.display = "none";
-                            }}
-                          />
-                          <span className="eng-card__badge">{c.badge}</span>
-                        </div>
-                      </button>
-                    ))}
-                  </div>
+                  <button
+                    key={`${offset}-${proj.id}`}
+                    type="button"
+                    role="option"
+                    aria-selected={isCentered}
+                    className={`eng-wheel__item ${
+                      isCentered ? "eng-wheel__item--active" : ""
+                    }`}
+                    style={{
+                      transform: `translate3d(${translateX}px, ${translateY}px, 0) rotateZ(${rotateZ}deg) scale(${scale})`,
+                      opacity,
+                    }}
+                    onClick={() => {
+                      targetRotRef.current = itemRawIndex * ANGLE_STEP;
+                    }}
+                    tabIndex={isCentered ? 0 : -1}
+                  >
+                    {/* Active Cobalt Blue Dot Indicator */}
+                    <span
+                      className={`eng-wheel__dot ${
+                        isCentered ? "eng-wheel__dot--active" : ""
+                      }`}
+                      style={{
+                        transform: `scale(${isCentered ? 1 : Math.max(0, 1 - dist / 0.45)})`,
+                        opacity: isCentered ? 1 : Math.max(0, 1 - dist / 0.45),
+                      }}
+                      aria-hidden="true"
+                    />
+                    <span className="eng-wheel__text">{proj.title}</span>
+                  </button>
                 );
               })}
             </div>
           </div>
-
-          {/* Right: Selected Works Heading in Swiss Pitch Black */}
-          <div className="eng-title-pane">
-            <h2 className="eng-title">Selected works</h2>
-          </div>
         </div>
       </div>
-
-      {/* Project Detail Drawer Dialog */}
-      <ProjectModal
-        open={open}
-        onClose={() => setOpen(false)}
-        variant="drawer"
-        labelledBy="eng-modal-title"
-      >
-        <div className="eng-drawer">
-          <div className="eng-drawer__cover">
-            {selected && PROJECT_IMAGES[selected.id] ? (
-              <div className="eng-drawer__media">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={PROJECT_IMAGES[selected.id]}
-                  alt={selected.title}
-                  className="eng-drawer__img"
-                />
-              </div>
-            ) : (
-              <ProjectCover
-                title={selected?.title ?? ""}
-                kicker={selected?.category ?? ""}
-                {...TONES[selectedIndex % TONES.length]}
-              />
-            )}
-          </div>
-
-          <div className="eng-drawer__body">
-            <p className="pj-mono">
-              {pad(selectedIndex + 1)} // {selected.category}
-            </p>
-            <h3 id="eng-modal-title" className="eng-drawer__title">
-              {selected.title}
-            </h3>
-            <p className="eng-drawer__desc">{selected.description}</p>
-
-            <dl className="pj-facts">
-              {selected.role && (
-                <div className="pj-facts__row">
-                  <dt>Role</dt>
-                  <dd>{selected.role}</dd>
-                </div>
-              )}
-              {selected.architecture && (
-                <div className="pj-facts__row">
-                  <dt>Architecture</dt>
-                  <dd>{selected.architecture}</dd>
-                </div>
-              )}
-              <div className="pj-facts__row">
-                <dt>Stack</dt>
-                <dd>
-                  <ul className="pj-chips">
-                    {selected.tags.map((t) => (
-                      <li key={t}>{t}</li>
-                    ))}
-                  </ul>
-                </dd>
-              </div>
-            </dl>
-
-            <div className="pj-actions">
-              {selected.liveUrl && (
-                <a
-                  href={selected.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pj-btn pj-btn--solid"
-                >
-                  Open live site
-                </a>
-              )}
-              {selected.githubUrl && (
-                <a
-                  href={selected.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pj-btn"
-                >
-                  View source
-                </a>
-              )}
-              {selected.caseStudyUrl && (
-                <a
-                  href={selected.caseStudyUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="pj-btn"
-                >
-                  Read documentation
-                </a>
-              )}
-            </div>
-          </div>
-        </div>
-      </ProjectModal>
     </section>
   );
 }

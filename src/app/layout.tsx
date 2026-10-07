@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from "next";
-import { DM_Mono } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import "./projects.css";
@@ -56,13 +55,6 @@ const sfUiDisplay = localFont({
   display: "swap",
 });
 
-const dmMono = DM_Mono({
-  weight: ["300", "400", "500"],
-  subsets: ["latin"],
-  variable: "--font-dm-mono",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Adham Baskara : Fullstack Developer & UI/UX Designer",
   description:
@@ -98,7 +90,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${sfUiDisplay.variable} ${dmMono.variable}`}>
+    <html lang="en" className={sfUiDisplay.variable}>
       <body>{children}</body>
     </html>
   );

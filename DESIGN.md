@@ -1,56 +1,76 @@
-# DESIGN.md — Portfolio Design Direction
+# DESIGN SYSTEM & ENGINEERING SPECIFICATION
+**Style Archetype:** Swiss Minimalism / International Typographic Style (Editorial & High-Precision Digital Edition)
 
-## Identity
+---
 
-**Product:** Personal portfolio of Adham Baskara, Fullstack Engineering & UI/UX Designer (7th-semester student at Polinema, Fullstack Developer Intern at PT. Multi Spunindo Jaya Tbk).
-**Audience:** Recruiters, engineering leads, tech startup founders, and design-minded collaborators assessing technical craftsmanship and aesthetic precision.
-**Character:** Pitch Black & Pure Silver/Chrome. Modern Neo-Grotesque Swiss aesthetic. Crisp, ultra-sleek, disciplined monochrome palette engineered for high contrast and modern digital depth.
+## 1. Core Visual Principles
+- **Grid Discipline:** Struktur layout berakar kuat pada grid asimetris yang tegas, modul bento/card ber-radius presisi, atau list-based accordion layout.
+- **Negative Space:** Berikan ruang bernapas (whitespace) lapang. Ruang kosong diperlakukan sebagai elemen desain aktif, bukan kekosongan.
+- **Typography as Primary UI:** Tipografi memimpin hierarki informasi. Gunakan kontras skala ekstrem (misal headline masif berdampingan dengan subtext micro-typography 11–13px).
+- **Clean Aesthetic:** Hindari drop shadow berlebihan, bevel, atau gradien norak. Kedalaman visual hanya didapat dari *layering stack* (tumpukan card) dan garis pemisah tipis (*1px subtle borders*).
 
-## Personality
+---
 
-- **Monochromatic Discipline** — Pure pitch black void (#050505), crisp stark white typography (#FFFFFF), and precision titanium/silver accents (#9E9EA7, #D1D1D6). No distracting neon or warm colors.
-- **Inverted Contrast & White Glow** — Key actions, active filters, and interactive focal points utilize solid stark white surfaces with pitch-black typography, surrounded by soft white ambient luminescence.
-- **Grayscale Default, Color Reveal** — Project media and screenshots rest in calm, elegant grayscale, smoothly blooming into full vibrancy on hover and inspection.
-- **Neo-Grotesque Typographic Hierarchy** — Bold Swiss sans-serif (Inter / Manrope) with tight letter-tracking, paired with DM Mono for architectural metadata and technical telemetry.
-- **Tactile Depth** — Subtle ambient silver radial lighting and hairline borders (1px) create structural dimensionality without visual clutter.
+## 2. Typography Rules
+- **Font Family:** Wajib eksklusif menggunakan **SF Pro / SF UI** (`SF Pro Display`, `SF Pro Text`). Dilarang menggunakan font lain seperti Inter, Roboto, atau font generic web. Gunakan mode tabular figures (`font-mono` atau `tnum`) untuk timer, index nomor, dan data statistik.
+- **Hierarchy & Tracking:**
+  - **Mega/Display Headlines:** `text-5xl` s/d `text-8xl`, tracking rapat khas Swiss (`tracking-tight` atau `-0.03em`), font weight `font-normal` atau `font-medium`.
+  - **Section Titles & Subheads:** `text-2xl` s/d `text-4xl`, tracking `-0.02em`.
+  - **Body Copy:** `text-base` s/d `text-lg`, font weight `font-normal`, line-height lapang (`leading-relaxed`), warna teks redup agar headline tetap dominan.
+  - **Micro Label / Meta:** `text-xs` (10px–12px), uppercase atau structured text, tracking sedikit renggang (`tracking-wider`), dipadukan dengan bullet, bracket `[PHOTO]`, atau format indeks editorial `(01)`.
 
-## Palette
+---
 
-- **Base:** `#050505` (void — deep pitch black)
-- **Surface:** `#0E0E11` (elevated cards, matrix containers) · **Highlight:** `#15151A` (hover fills, tag chips)
-- **Ink:** `#FFFFFF` (primary text — crisp pure white)
-- **Muted:** `#9E9EA7` (secondary text, technical metadata, labels — refined zinc/silver)
-- **Rule:** `#222226` (dividers, hairline borders) · **Border-strong:** `#33333A`
-- **Accent:** `#FFFFFF` (inverted high-contrast actions, active states, progress, cursor) · **Silver:** `#D1D1D6` (hover links, metadata highlights) · **Accent-deep:** `#E5E5EA`
-- **Card Foil:** `#121216` with `#FFFFFF` ink (frosted titanium wireframe cards, floating HUD)
-- **Ambient Glow:** `rgba(255, 255, 255, 0.08)` to `rgba(255, 255, 255, 0.22)`
+## 3. Color Palette & Theming
+Pertahankan palet minimalis high-contrast yang terbukti di Hero Section:
+- **Base Canvas:** Pure Light `#FFFFFF` atau off-white super lembut `#F8F9FA` / `#F4F4F6`.
+- **Card Background:** `#FFFFFF` murni di atas canvas off-white, atau sebaliknya container putih bergaris subtle.
+- **Primary Text:** Pitch Black `#0D0D0D` / `#111111`.
+- **Secondary / Muted Text:** Slate / Cool Gray `#6B7280` atau `#8A8A8E`.
+- **Divider & Borders:** `1px solid rgba(0, 0, 0, 0.08)` (hairline borders).
+- **Dark Mode / Inverted Sections (Optional):** Jika section berlatar gelap, gunakan deep black `#0A0A0A` dengan teks `#EDEDED` dan aksen pill kapsul terang.
 
-> Rationale: Pitch black (#050505) provides infinite contrast for pure white text and metallic chrome accents; grayscale-by-default media keeps the portfolio visually cohesive while allowing the original work to shine dynamically upon user engagement.
+---
 
-## Typography
+## 4. Component Layout Patterns (Derived from References)
+Setiap kali membangun section baru, prioritaskan salah satu pola editorial berikut:
+1. **Interactive Editorial List / Accordion:**
+   - Baris item list horizontal dengan garis batas hairline tipis.
+   - Angka seri di sisi kiri `(01, 02, 03)`, judul tebal di tengah, tombol panah trigger `→` di kanan.
+   - State aktif atau hover membuka preview visual / media secara mulus di tengah list.
+2. **Layered Card Stack (Fanned-out / Floating Cards):**
+   - Kartu-kartu sudut membulat (`rounded-2xl` atau `rounded-3xl`) yang disusun bertumpuk secara vertikal/perspektif (*cascading stack*).
+3. **Pill Navigation & Floating Badges:**
+   - Navigasi kapsul ringkas (`rounded-full`) dengan status badge atau icon switcher.
+4. **Ticker & Marquee:**
+   - Jajaran logo tech stack atau klien monokromatik (`grayscale`, opasitas 60% default, 100% hover).
 
-- **Display / Headings / Large Titles:** `Inter` / `Manrope` (bold neo-grotesque, letter-spacing -0.025em to -0.04em).
-- **Body / UI / Buttons:** `Manrope` (400–700) — clean humanist grotesque, crisp on all screens.
-- **Mono (tech tags, indexes, timestamps, HUD):** `DM Mono` (300–500).
-- **Scale:** Hero title (clamp 46px to 104px), section titles (clamp 32px to 54px), row headers (clamp 22px to 42px), body (15px to 17px), metadata (10px to 13px).
+---
 
-## Dials
+## 5. Motion Engineering & High-End Interactions
+Pilih tech stack animasi yang paling optimal per kebutuhan: **Framer Motion**, **GSAP + ScrollTrigger**, atau **Lenis Smooth Scroll**. Animasi dilarang terlihat generik atau monoton (no basic fade-in-up template).
 
-- **ENERGY 3** — Bold modern confidence, stark high-contrast scale, high-end engineering & design studio feel.
-- **RHYTHM 3** — Distinct section identities: Hero kinetic floating deck, Disciplines architectural accordion, Work stacked cards with clip-path curtains, Skills technical specification matrix, Experience vertical ruler timeline, Contact bold typographic statement.
-- **MOTION 3** — Fully bidirectional GSAP ScrollTrigger animations, word-rise masks, scramble-decode mono headers, direction-aware marquee, magnetic interaction pills, and dark shutter page navigation.
+### A. Allowed Animation Libraries
+- **Framer Motion:** Untuk layout transitions (`layoutId`), physics springs, hover states, drag/tilt 3D, dan UI morphing.
+- **GSAP + ScrollTrigger / Flip:** Untuk multi-stage pinning, complex scrubbed timeline, parallax stacking, dan sequence teks terpisah.
+- **Lenis:** Wajib aktif sebagai smooth scroll wrapper agar momentum scroll selaras dengan timing animasi.
 
-## Identity Motif
+### B. High-End Motion Patterns (Non-Boring & Complex)
+1. **Interactive Magnetic & Cursor Tilt:**
+   - Gunakan physics spring (`stiffness: 150`, `damping: 15`) untuk elemen interaktif (button pill, badge, gambar).
+   - Pada card hover, hitung offset koordinat mouse (`e.clientX`, `e.clientY`) untuk memicu rotasi 3D mikro (`rotateX`, `rotateY` maks 4deg–6deg) ditambah refleksi highlight subtle.
+2. **Scroll-Driven Deck/Stack Fan-Out (Cascade Physics):**
+   - Saat container discroll, elemen tumpukan (seperti kartu foto/proyek) menyebar ke posisi grid asimetris secara scrubbed.
+   - Variasikan parameter `z-index`, `rotate`, `scale`, dan `translate` tiap layer kartu secara matematis agar tidak bergerak serempak.
+3. **Clip-Path & Mask Morphing:**
+   - Transisi buka-tutup gambar menggunakan animasi `clip-path: polygon(...)` atau `clip-path: inset(...)` berbobot tinggi.
+   - Text reveal menggunakan split character/line masking (`overflow-hidden` wrapper) dengan stagger rapat (`stagger: 0.03s`, curve `[0.16, 1, 0.3, 1]`).
+4. **Layout Morphing via Shared Layout (`layoutId`):**
+   - Saat list item atau pill dipilih, highlight background aktif harus bertransisi mengalir (*liquid layout jump*) antar target tanpa re-render patah.
+   - Item accordion membesar secara fluid dengan kalkulasi bounding rect otomatis.
 
-Adham Baskara®, mono chapter indexing (`00 //` through `05 //`), hairline silver rules (`#222226`), and a pure white luminous progress indicator.
-
-## Sections
-
-1. **Nav** — Floating fixed navigation bar with frosted glass blur, scroll progress indicator, active section tracking, and high-contrast CTA.
-2. **Hero** — Centered composition: top header navigation, bold 2-line title with trailing ®, subtitle, and 3 kinetic floating titanium cards.
-3. **Disciplines** — 3 core disciplines (Fullstack Engineering, UI/UX Design, Graphic Identity) in an architectural expandable drawer list.
-4. **Work** — Stacked magazine showcase of selected projects with grayscale-to-color reveal on hover and comprehensive specs modal.
-5. **Skills** — Technical specification matrix grouped by discipline with tier markers.
-6. **Experience** — Kinetic vertical timeline with continuous drawing SVG ruler.
-7. **Contact** — Large masked headline, quick-copy email box with interactive toast, and verified social links.
-8. **Footer** — Single-line copyright and smooth back-to-top trigger.
+### C. Motion Physics Rules
+- **No Cartoon Bouncing:** Dilarang menggunakan bounce berlebihan. Karakter motion harus terasa mekanikal, padat, dan cepat bereaksi (*viscous damping*).
+- **Curated Bezier Curves:**
+  - Fast-out smooth-settle: `cubic-bezier(0.16, 1, 0.3, 1)` (Quart Out)
+  - Cinematic precision: `cubic-bezier(0.25, 0.1, 0.25, 1)`
