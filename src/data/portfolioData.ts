@@ -1,304 +1,252 @@
-export interface Project {
+export interface DevProject {
   id: string;
+  index: string;
   title: string;
-  category: "Fullstack" | "Webdev" | "UI/UX" | "Graphic Design";
-  description: string;
-  tags: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-  caseStudyUrl?: string;
-  featured: boolean;
-  index: number;
-  architecture?: string;
-  platform?: string;
-  role?: string;
-  problem?: string;
-  solution?: string;
-  flowSteps?: string[];
-  deliverables?: string[];
-  colors?: { hex: string; name: string }[];
+  tag: string;
+  client: string;
+  year: string;
+  image: string;
+  previewColor: string;
+  stack: string[];
+  links: {
+    live?: string;
+    github?: string;
+  };
+  overview: {
+    en: string;
+    id: string;
+  };
+  architecture: {
+    en: string;
+    id: string;
+  };
+  metrics: {
+    en: string;
+    id: string;
+  };
 }
 
-export interface SkillGroup {
-  category: string;
-  items: string[];
-}
-
-export interface ExperienceItem {
-  period: string;
-  role: string;
-  company: string;
-  description: string;
-  tags: string[];
-}
-
-export const personal = {
-  name: "Adham Baskara",
-  initials: "AB",
-  title: "Fullstack Developer & UI/UX Designer",
-  summary:
-    "7th-semester Informatics Engineering student at Polinema and Fullstack Developer Intern at PT. Multi Spunindo Jaya Tbk. Building web applications and enterprise systems with engineering precision and visual clarity.",
-  availability: "Fullstack Intern @ PT. Multi Spunindo Jaya Tbk (through Dec 2026)",
-  location: "Indonesia",
-  email: "adhambaskara.dev@gmail.com",
-  github: "https://github.com/adhambaskara",
-  linkedin: "https://linkedin.com/in/adhambaskara",
-  dribbble: "https://dribbble.com/adhambaskara",
-  behance: "https://behance.net/adhambaskara",
-};
-
-export const disciplines: {
-  number: string;
-  title: string;
-  description: string;
-}[] = [
+export const developmentProjects: DevProject[] = [
   {
-    number: "01",
-    title: "Fullstack Engineering",
-    description:
-      "Modern web architecture and enterprise systems using Next.js, Laravel, TypeScript, PHP, and relational databases. From schema design to deployment.",
-  },
-  {
-    number: "02",
-    title: "UI/UX & Product Design",
-    description:
-      "Wireframes, user flows, and interactive prototypes in Figma. Structured design systems for analytical dashboards and operational platforms.",
-  },
-  {
-    number: "03",
-    title: "Graphic & Brand Identity",
-    description:
-      "Visual identity systems: vector logos, typography guidelines, and coherent asset libraries crafted for lasting impact.",
-  },
-];
-
-export const projects: Project[] = [
-  {
-    id: "msj-erp-finance",
+    id: "msj-erp",
+    index: "01",
     title: "MSJ ERP Finance",
-    category: "Fullstack",
-    description:
-      "Enterprise ERP Finance system for PT. Multi Spunindo Jaya Tbk. Engineered modules for financial analytics, automatic reconciliation, multi-tier approval workflows, and tax invoicing.",
-    tags: ["Laravel 11", "PHP 8.2", "MySQL", "Blade", "RESTful API", "Tailwind CSS"],
-    caseStudyUrl: "https://example.com/msj-erp-finance",
-    liveUrl: "https://example.com/msj-demo",
-    featured: true,
-    index: 1,
-    architecture: "Layered MVC with Repository Pattern, queued jobs for batch reconciliations, and RBAC security gates.",
-    role: "Fullstack Developer Intern",
+    tag: "[CLIENT WORK]",
+    client: "PT. Multi Spunindo Jaya Tbk",
+    year: "2024",
+    image: "/images/engineering/msj-erp.jpg",
+    previewColor: "#1c1d20",
+    stack: ["Laravel 11", "PHP 8.2", "MySQL", "RESTful API"],
+    links: {
+      live: "https://multispunindo.com",
+      github: "https://github.com/adhambaskara/msj-erp-finance",
+    },
+    overview: {
+      en: "Enterprise financial ledger, automated bank reconciliation, and multi-tier approval system for manufacturing.",
+      id: "Sistem buku besar finansial menyeluruh, rekonsiliasi otomatis, dan approval berjenjang untuk manufaktur industri.",
+    },
+    architecture: {
+      en: "Optimized indexing for high-volume transactions, automated reconciliation batching, and granular RBAC security.",
+      id: "Optimalisasi indeks database untuk jutaan transaksi, rekonsiliasi batch otomatis, serta hak akses RBAC.",
+    },
+    metrics: {
+      en: "99.82% reconciliation match · 42ms query latency",
+      id: "99.82% kecocokan rekonsiliasi · Latensi query 42ms",
+    },
   },
   {
-    id: "aura-creative-studio",
+    id: "aura-studio",
+    index: "02",
     title: "Aura Creative Studio",
-    category: "Fullstack",
-    description:
-      "High-performance agency platform featuring a headless dynamic portfolio showcase, fluid GSAP layout timelines, and responsive media CDN pipelines.",
-    tags: ["Next.js 14", "TypeScript", "GSAP ScrollTrigger", "Prisma", "PostgreSQL"],
-    liveUrl: "https://example.com/aura",
-    githubUrl: "https://github.com/adhambaskara/aura-studio",
-    featured: true,
-    index: 2,
-    architecture: "Next.js App Router with Server Components for static generation and client-side GSAP choreographies.",
-    role: "Lead Frontend & Motion Architect",
+    tag: "[CLIENT WORK]",
+    client: "Aura Design Network",
+    year: "2025",
+    image: "/images/engineering/aura-studio.jpg",
+    previewColor: "#273b33",
+    stack: ["Next.js 14", "TypeScript", "GSAP ScrollTrigger"],
+    links: {
+      live: "https://aura-studio-demo.vercel.app",
+      github: "https://github.com/adhambaskara/aura-studio",
+    },
+    overview: {
+      en: "High-performance agency portfolio with buttery smooth choreographies and spatial layout transitions.",
+      id: "Showcase agensi digital dengan koreografi motion fluid dan transisi tata letak spasial.",
+    },
+    architecture: {
+      en: "Headless Next.js App Router with GPU-accelerated motion choreography and zero-CLS image pipeline.",
+      id: "Next.js App Router dengan akselerasi GPU, pipeline responsif zero-CLS, dan transisi instan.",
+    },
+    metrics: {
+      en: "100 Lighthouse Performance · 60fps GPU frame rate",
+      id: "100 Lighthouse Performance · 60fps frame rate GPU",
+    },
   },
   {
-    id: "devmetrics-api-platform",
-    title: "DevMetrics API Platform",
-    category: "Fullstack",
-    description:
-      "Developer portal for monitoring API latency metrics, managing JWT team access tokens, and inspecting live traffic logs with chart analytics.",
-    tags: ["Next.js", "Node.js", "PostgreSQL", "Chart.js", "Tailwind CSS"],
-    liveUrl: "https://example.com/devmetrics",
-    githubUrl: "https://github.com/adhambaskara/devmetrics",
-    featured: false,
-    index: 3,
-    architecture: "REST API telemetry collector with WebSocket log streams and automated token expiry cron handlers.",
-    role: "Fullstack Engineer",
+    id: "devmetrics",
+    index: "03",
+    title: "DevMetrics Platform",
+    tag: "[OPEN SOURCE]",
+    client: "Developer Tooling",
+    year: "2024",
+    image: "/images/engineering/devmetrics.jpg",
+    previewColor: "#c8c8c6",
+    stack: ["Next.js", "Node.js", "PostgreSQL", "WebSockets"],
+    links: {
+      live: "https://devmetrics-telemetry.vercel.app",
+      github: "https://github.com/adhambaskara/devmetrics-platform",
+    },
+    overview: {
+      en: "Developer telemetry suite providing real-time endpoint latency observability and error tracing.",
+      id: "Platform telemetri pengembang untuk pemantauan latensi API real-time dan pelacakan galat.",
+    },
+    architecture: {
+      en: "Real-time WebSocket streaming with PostgreSQL read-replicas and rate-limiting circuit breakers.",
+      id: "Streaming WebSocket real-time dengan replika baca PostgreSQL dan circuit breaker rate-limit.",
+    },
+    metrics: {
+      en: "14M+ events ingested · 18.4ms P95 latency",
+      id: "14Jt+ event terproses · Latensi 18.4ms P95",
+    },
   },
   {
-    id: "zenith-ecommerce",
-    title: "Zenith E-Commerce",
-    category: "Webdev",
-    description:
-      "Minimalist e-commerce interface with instant faceted filtering, persistent basket state, and integrated Stripe checkout webhooks.",
-    tags: ["React", "Next.js", "Stripe API", "Zustand", "Tailwind CSS"],
-    liveUrl: "https://example.com/zenith",
-    githubUrl: "https://github.com/adhambaskara/zenith-store",
-    featured: true,
-    index: 4,
-    architecture: "Optimistic cart mutations with Zustand, serverless edge route handlers for payment capture.",
-    role: "Frontend Developer",
+    id: "zenith-store",
+    index: "04",
+    title: "Zenith Minimal Apparel",
+    tag: "[CLIENT WORK]",
+    client: "Independent Brand",
+    year: "2024",
+    image: "/images/engineering/zenith-store.png",
+    previewColor: "#d34b26",
+    stack: ["React 19", "Next.js", "Zustand", "Stripe API"],
+    links: {
+      live: "https://zenith-store-minimal.vercel.app",
+      github: "https://github.com/adhambaskara/zenith-commerce",
+    },
+    overview: {
+      en: "Editorial e-commerce platform built around Swiss typographic principles with instant filtering.",
+      id: "Platform e-commerce bergaya editorial Swiss dengan prinsip tipografi dan filter produk instan.",
+    },
+    architecture: {
+      en: "Stateless cart state management via Zustand and Stripe webhook event pipelines.",
+      id: "Manajemen keranjang via Zustand, integrasi Stripe webhook, dan katalog teroptimasi.",
+    },
+    metrics: {
+      en: "Sub-50ms faceted filter · 100% strict TypeScript",
+      id: "Filter produk sub-50ms · 100% strict TypeScript",
+    },
   },
   {
-    id: "pulse-saas-analytics",
-    title: "Pulse SaaS Analytics",
-    category: "UI/UX",
-    description:
-      "Comprehensive design system for analytical dashboards. Authored 45+ atomic components, tokenized dark/light modes, and interactive data widgets.",
-    tags: ["Figma", "Design System", "WCAG AA", "User Research", "Prototyping"],
-    platform: "Web dashboard",
-    caseStudyUrl: "https://example.com/pulse-case-study",
-    featured: true,
-    index: 5,
-    problem: "Financial analysts were slowed down by fragmented tabular reports and lack of contrast in dense dashboards.",
-    solution: "Structured a high-contrast Swiss typography hierarchy, data density modes, and one-click export shortcuts.",
-    flowSteps: [
-      "User Context Mapping",
-      "Information Hierarchy Architecture",
-      "Tokenized Component Library in Figma",
-      "Interactive High-Fidelity Prototype",
-    ],
+    id: "polinema-portal",
+    index: "05",
+    title: "Polinema Academic Hub",
+    tag: "[ACADEMIC]",
+    client: "Politeknik Negeri Malang",
+    year: "2023",
+    image: "/images/engineering/msj-erp.png",
+    previewColor: "#e5c2c0",
+    stack: ["Laravel", "Vue.js", "MySQL", "Tailwind CSS"],
+    links: {
+      live: "https://polinema.ac.id",
+      github: "https://github.com/adhambaskara/academic-hub",
+    },
+    overview: {
+      en: "Integrated academic scheduling and curriculum tracking system for university departments.",
+      id: "Sistem penjadwalan akademik terpadu dan pelacakan kurikulum jurusan teknik informatika.",
+    },
+    architecture: {
+      en: "Role-based academic workflow automation with conflict-detection scheduling algorithms.",
+      id: "Otomasi alur kerja akademik berbasis peran dengan algoritma pendeteksi konflik jadwal.",
+    },
+    metrics: {
+      en: "2,400+ active students · Zero scheduling conflicts",
+      id: "2.400+ mahasiswa aktif · Nol konflik penjadwalan",
+    },
   },
   {
-    id: "nova-mobile-banking",
-    title: "Nova Mobile Banking",
-    category: "UI/UX",
-    description:
-      "iOS banking interface centered on peer-to-peer transfers, intuitive cashflow breakdowns, and accessible thumb-zone navigation.",
-    tags: ["Figma", "iOS HIG", "Micro-Interactions", "User Journey", "Wireframing"],
-    platform: "iOS app",
-    caseStudyUrl: "https://example.com/nova-banking",
-    featured: false,
-    index: 6,
-    problem: "Young users found traditional mobile banking apps cluttered, intimidating, and slow for rapid daily transfers.",
-    solution: "Designed a 2-tap quick transfer flow with contextual haptics, clear fee transparency, and visual budgeting rings.",
-    flowSteps: [
-      "Competitive Fintech Benchmarking",
-      "Thumb-Zone Architecture & Low-Fi Sketches",
-      "Design System Tokens & Accessibility Checks",
-      "Usability Testing with Target Users",
-    ],
+    id: "motion-lab",
+    index: "06",
+    title: "Kinetic Motion Lab",
+    tag: "[EXPERIMENT]",
+    client: "Research & Development",
+    year: "2025",
+    image: "/images/engineering/aura-studio.png",
+    previewColor: "#223b82",
+    stack: ["WebGL", "Three.js", "GSAP", "TypeScript"],
+    links: {
+      live: "https://motion-lab.vercel.app",
+      github: "https://github.com/adhambaskara/motion-lab",
+    },
+    overview: {
+      en: "Interactive laboratory exploring kinetic physics, SVG warp effects, and GPU spring animations.",
+      id: "Laboratorium eksplorasi fisika kinetik, efek distorsi SVG, dan animasi spring GPU.",
+    },
+    architecture: {
+      en: "Custom GLSL fragment shaders combined with variable font axis morphing.",
+      id: "Custom GLSL fragment shader yang dipadukan dengan modulasi aksis font variabel.",
+    },
+    metrics: {
+      en: "60fps steady WebGL · Lightweight 24kb bundle",
+      id: "60fps WebGL stabil · Bundle ringan 24kb",
+    },
   },
   {
-    id: "kroma-brand-identity",
-    title: "Kroma Brand Identity",
-    category: "Graphic Design",
-    description:
-      "Visual identity system for an indie game studio: custom geometric logomark, expressive display typography, color palettes, and stationery.",
-    tags: ["Adobe Illustrator", "Brand Identity", "Typography", "Vector Guidelines"],
-    caseStudyUrl: "https://example.com/kroma-brand",
-    featured: true,
-    index: 7,
-    deliverables: [
-      "Primary Vector Logomark & Monogram",
-      "Swiss Grotesque Typography Standards",
-      "Color Spec System (Hex / CMYK / Pantone)",
-      "Stationery, Business Collateral & Merch",
-    ],
-    colors: [
-      { hex: "#0f0f0f", name: "Deep Ink" },
-      { hex: "#f5f5f5", name: "Canvas Mist" },
-      { hex: "#ff3b30", name: "Signal Vermilion" },
-      { hex: "#5c5c5c", name: "Graphite" },
-    ],
-  },
-  {
-    id: "atelier-editorial-type",
-    title: "Atelier Typographic Posters",
-    category: "Graphic Design",
-    description:
-      "Experimental Swiss typographic poster series exploring asymmetric grid systems, micro-typography, and high-contrast editorial hierarchy.",
-    tags: ["Adobe Illustrator", "Photoshop", "Swiss Graphic Design", "Print & Poster"],
-    caseStudyUrl: "https://example.com/atelier-posters",
-    featured: false,
-    index: 8,
-    deliverables: [
-      "Modular 12-Column Grid System Exploration",
-      "Experimental Kerning & Negative Space Study",
-      "Limited-Edition Silkscreen Print Format (A1)",
-      "Digital Editorial Showcase Assets",
-    ],
-    colors: [
-      { hex: "#121212", name: "Matte Black" },
-      { hex: "#f4f3ef", name: "Warm Parchment" },
-      { hex: "#d9381e", name: "Bauhaus Rust" },
-      { hex: "#8c8c8c", name: "Concrete Grey" },
-    ],
+    id: "kinetix-audio",
+    index: "07",
+    title: "Kinetix Sound Engine",
+    tag: "[PERSONAL]",
+    client: "Audio Tooling",
+    year: "2024",
+    image: "/images/engineering/devmetrics.png",
+    previewColor: "#b87e42",
+    stack: ["Web Audio API", "Canvas", "React"],
+    links: {
+      live: "https://kinetix-audio.vercel.app",
+      github: "https://github.com/adhambaskara/kinetix-audio",
+    },
+    overview: {
+      en: "Browser-based parametric synthesizer and visual spectrum analyzer with real-time audio routing.",
+      id: "Synthesizer parametrik dan penganalisis spektrum audio berbasis browser secara real-time.",
+    },
+    architecture: {
+      en: "Low-latency Web Audio buffer scheduling and dual-channel oscilloscope canvas rendering.",
+      id: "Penjadwalan buffer audio latensi rendah dan rendering visualizer osiloskop canvas.",
+    },
+    metrics: {
+      en: "<12ms audio buffer latency · 128-band FFT",
+      id: "Latensi audio <12ms · Analisis FFT 128-band",
+    },
   },
 ];
 
-export const skillGroups: SkillGroup[] = [
-  {
-    category: "Frontend",
-    items: [
-      "React",
-      "Next.js",
-      "TypeScript",
-      "Tailwind CSS",
-      "Blade Template",
-      "HTML5 / Modern CSS",
-      "Responsive Design",
-    ],
+export const portfolioData = {
+  bio: {
+    name: "Adham Baskara",
+    role: "Fullstack Developer & UI/UX Designer",
+    location: "Malang, Indonesia",
+    status: "Available for Projects",
   },
-  {
-    category: "Backend & Systems",
-    items: [
-      "Laravel",
-      "PHP",
-      "MySQL",
-      "PostgreSQL",
-      "Node.js",
-      "REST API",
-      "Prisma",
-      "Supabase",
-    ],
+  skills: [
+    "Next.js",
+    "React 19",
+    "TypeScript",
+    "GSAP",
+    "Node.js",
+    "Laravel",
+    "MySQL",
+    "PostgreSQL",
+    "Figma",
+  ],
+  projects: developmentProjects,
+  experience: [
+    {
+      company: "PT. Multi Spunindo Jaya Tbk",
+      role: "Fullstack Web Developer",
+      period: "2024 — Present",
+    },
+  ],
+  contact: {
+    email: "adhambaskara@gmail.com",
+    github: "https://github.com/adhambaskara",
+    linkedin: "https://linkedin.com/in/adhambaskara",
   },
-  {
-    category: "Design & Workflow",
-    items: [
-      "Figma",
-      "Adobe Illustrator",
-      "Adobe Photoshop",
-      "Design Systems",
-      "Git & GitHub",
-      "ERP Architecture",
-      "CI/CD",
-    ],
-  },
-];
-
-export const experiences: ExperienceItem[] = [
-  {
-    period: "Jul 2026 : Dec 2026",
-    role: "Fullstack Developer Intern",
-    company: "PT. Multi Spunindo Jaya Tbk",
-    description:
-      "Six-month compulsory university internship as a Fullstack Developer. Responsible for engineering internal enterprise ERP Finance modules, designing database schemas, integrating REST APIs, and building secure financial analytics dashboards.",
-    tags: ["Laravel", "PHP", "MySQL", "Blade", "ERP Systems", "REST API"],
-  },
-  {
-    period: "2023 : Present",
-    role: "B.A.Sc. in Informatics Engineering (7th Semester)",
-    company: "State Polytechnic of Malang (Polinema)",
-    description:
-      "Studying software engineering at the Department of Information Technology, Informatics Engineering program. Focused on software development, relational database systems, algorithms, and production-grade web interfaces.",
-    tags: ["Informatics Engineering", "Software Engineering", "Fullstack", "UI/UX"],
-  },
-  {
-    period: "2024 : 2026",
-    role: "Freelance Web Developer & UI Designer",
-    company: "Independent",
-    description:
-      "Designed and developed web applications for clients, created interactive landing pages with Next.js and GSAP animations, and authored structured design systems in Figma.",
-    tags: ["Next.js", "TypeScript", "GSAP", "Figma", "Design Systems"],
-  },
-];
-
-/* Marquee ticker content : duplicated in Marquee.tsx for seamless loop */
-export const marqueeItems = [
-  "Laravel",
-  "PHP",
-  "MySQL",
-  "Next.js",
-  "React",
-  "TypeScript",
-  "GSAP & ScrollTrigger",
-  "Figma",
-  "UI/UX Design",
-  "Design Systems",
-  "Node.js",
-  "PostgreSQL",
-  "Tailwind CSS",
-  "ERP Systems",
-  "Fullstack Development",
-];
+} as const;

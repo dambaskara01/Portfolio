@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import "./projects.css";
 
 const sfUiDisplay = localFont({
   src: [
@@ -55,6 +54,28 @@ const sfUiDisplay = localFont({
   display: "swap",
 });
 
+const nevanta = localFont({
+  src: [
+    {
+      path: "../../public/fonts/nevanta/NevantaOblique-Regular.otf",
+      weight: "400",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/nevanta/NevantaOblique-Medium.otf",
+      weight: "500",
+      style: "italic",
+    },
+    {
+      path: "../../public/fonts/nevanta/NevantaOblique-Bold.otf",
+      weight: "700",
+      style: "italic",
+    },
+  ],
+  variable: "--font-nevanta",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Adham Baskara : Fullstack Developer & UI/UX Designer",
   description:
@@ -90,7 +111,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={sfUiDisplay.variable}>
+    <html lang="en" className={`${sfUiDisplay.variable} ${nevanta.variable}`}>
       <body>{children}</body>
     </html>
   );

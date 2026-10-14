@@ -30,7 +30,7 @@ const COPY: Record<
     bioRaw:
       "I'm a 7th-semester Informatics Engineering student at Polinema and a fullstack developer intern at PT. Multi Spunindo Jaya Tbk. I build web applications with Next.js, Laravel, and React, and design the interfaces they run on.",
     nav: {
-      "#engineering": "Engineering",
+      "#development": "Development",
       "#uiux": "UI/UX Design",
       "#branding": "Graphic Identity",
       "#skills": "Skills",
@@ -45,7 +45,7 @@ const COPY: Record<
     bioRaw:
       "Saya mahasiswa semester 7 Teknik Informatika di Polinema dan magang sebagai fullstack developer di PT. Multi Spunindo Jaya Tbk. Saya membangun aplikasi web dengan Next.js, Laravel, dan React, lalu merancang antarmuka yang dipakainya.",
     nav: {
-      "#engineering": "Engineering",
+      "#development": "Development",
       "#uiux": "Desain UI/UX",
       "#branding": "Identitas Grafis",
       "#skills": "Keahlian",
@@ -58,12 +58,12 @@ const COPY: Record<
 };
 
 const NAV_TITLES: Record<string, string> = {
-  "#engineering": "01 // FULLSTACK ENGINEERING",
-  "#uiux": "02 // UI/UX & PRODUCT DESIGN",
-  "#branding": "03 // GRAPHIC & BRAND IDENTITY",
-  "#skills": "04 // TECHNICAL STACK",
-  "#experience": "05 // WORK HISTORY",
-  "#contact": "06 // INQUIRIES & CONTACT",
+  "#development": "Development",
+  "#uiux": "UI/UX Design",
+  "#branding": "Graphic Identity",
+  "#skills": "Skills & Technologies",
+  "#experience": "Experience",
+  "#contact": "Contact",
 };
 
 const clockFormat = new Intl.DateTimeFormat("en-GB", {

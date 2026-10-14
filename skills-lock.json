@@ -1,175 +1,161 @@
 {
   "version": 1,
   "skills": {
-    "api-and-interface-design": {
-      "source": "addyosmani/agent-skills",
+    "12-principles-of-animation": {
+      "source": "raphaelsalaja/skill",
       "sourceType": "github",
-      "skillPath": "skills/api-and-interface-design/SKILL.md",
-      "computedHash": "26f5a9e7abfd332d7a2e5887cf19bddd3393f47514c379b36bf227c1f15cdec4"
+      "skillPath": "skills/12-principles-of-animation/SKILL.md",
+      "computedHash": "028c3bad9e7417460e0d2094fc0c1b9d601e56317d38c4f5d124666b06a9405b"
     },
-    "browser-testing-with-devtools": {
-      "source": "addyosmani/agent-skills",
+    "apple-design": {
+      "source": "dickwu/apple-design-skill",
       "sourceType": "github",
-      "skillPath": "skills/browser-testing-with-devtools/SKILL.md",
-      "computedHash": "639950ea71851d9c4919608cba8b6276cd1ba30cd82acdc4949c701537eed661"
+      "skillPath": "SKILL.md",
+      "computedHash": "e86d69af5d909f3bb877e51b51693c2d3cb4fc0fcf1401c67c49eedcb57462cc"
     },
-    "ci-cd-and-automation": {
-      "source": "addyosmani/agent-skills",
+    "baseline-ui": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/ci-cd-and-automation/SKILL.md",
-      "computedHash": "578b098a7d2352ccdac8b8abdc40eb6803538e81cf8382f138da6188a655087c"
+      "skillPath": "skills/baseline-ui/SKILL.md",
+      "computedHash": "016ad266e4e3bfd058096bb032ae890b09973267a547048414a371f5b1b266de"
     },
-    "code-review-and-quality": {
-      "source": "addyosmani/agent-skills",
+    "better-ui": {
+      "source": "jakubkrehel/skills",
       "sourceType": "github",
-      "skillPath": "skills/code-review-and-quality/SKILL.md",
-      "computedHash": "03790162b6550eddca4dc66b24ba70df417479499972abe7ccd451d191d2b0fe"
+      "skillPath": "skills/better-ui/SKILL.md",
+      "computedHash": "74573763ba1906eb6cd2b35dc3747cb2a2afc940b398203672195f0509ce9bde"
     },
-    "code-simplification": {
-      "source": "addyosmani/agent-skills",
+    "component-canvas": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/code-simplification/SKILL.md",
-      "computedHash": "7973e746e8e2ea5004d520da970c15a106824b8d6be1bcff48908aec021f3677"
+      "skillPath": "skills/component-canvas/SKILL.md",
+      "computedHash": "cf9589f0b82135b17a6ca0952b6247f949654bb029a01185fe7c95ed1c73a47a"
     },
-    "constraint-driven-development": {
-      "source": "addyosmani/agent-skills",
+    "create-design-md": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/constraint-driven-development/SKILL.md",
-      "computedHash": "b4180cd9c4ed2af6c8310c4f4e9bb5003ef8eccfe65a7f288ba7f9842dbd19a5"
+      "skillPath": "skills/create-design-md/SKILL.md",
+      "computedHash": "67691b3fe0bea438415652a8743c60ae77f41a70cdaff893fb50cc2da43e2a59"
     },
-    "context-engineering": {
-      "source": "addyosmani/agent-skills",
+    "design-lab": {
+      "source": "0xdesign/design-plugin",
       "sourceType": "github",
-      "skillPath": "skills/context-engineering/SKILL.md",
-      "computedHash": "807434a4b178635a5539a1da241815ba7228f00b71f8e3ccd529472ce3bcaf80"
+      "skillPath": "design-and-refine/skills/design-lab/SKILL.md",
+      "computedHash": "8879d318fcedccbae872a06b3d9a4ed3c5e75340a96d9c6baf765a4b19593c25"
     },
-    "debugging-and-error-recovery": {
-      "source": "addyosmani/agent-skills",
+    "figma-design-to-code": {
+      "source": "figma/mcp-server-guide",
       "sourceType": "github",
-      "skillPath": "skills/debugging-and-error-recovery/SKILL.md",
-      "computedHash": "6f437bc609eb8d0dc7f4768c17c9aeb85c9c7632bc36703af9f1367ffb47237a"
+      "skillPath": "skills/figma-design-to-code/SKILL.md",
+      "computedHash": "67cd02cda36813f140e625d7abb24115df84423ddeeb1eb2afe0906a8f6a15f1"
     },
-    "deprecation-and-migration": {
-      "source": "addyosmani/agent-skills",
+    "fixing-accessibility": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/deprecation-and-migration/SKILL.md",
-      "computedHash": "0d7b2002e250c02a260f6bc502d7a798ab8e8ca0c020c54d7b0f16053935c72c"
+      "skillPath": "skills/fixing-accessibility/SKILL.md",
+      "computedHash": "f8ddcb0a8c7b8728105eab18e17223e41d74fb8649becba58a6deb90c6a5ce8d"
     },
-    "documentation-and-adrs": {
-      "source": "addyosmani/agent-skills",
+    "fixing-metadata": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/documentation-and-adrs/SKILL.md",
-      "computedHash": "f13054e8bd32a432df3e0e68240758cf61a9e8817aa8540f9d9831f427c47e0e"
+      "skillPath": "skills/fixing-metadata/SKILL.md",
+      "computedHash": "10047222b01c2c9b6e904ef90079880d9dbc09de3241df7f311b238dbcb7869a"
     },
-    "doubt-driven-development": {
-      "source": "addyosmani/agent-skills",
+    "fixing-motion-performance": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/doubt-driven-development/SKILL.md",
-      "computedHash": "b13f18a68abf2a1fd0c30adeac9bec0ee551adec9f2a1dc2700f1a6e3eb48092"
+      "skillPath": "skills/fixing-motion-performance/SKILL.md",
+      "computedHash": "c1aca76fe18e8594f401cf78e5e76be24f182ce63167a398bdd4458f2a07639f"
     },
-    "find-skills": {
-      "source": "vercel-labs/skills",
+    "frontend-design": {
+      "source": "anthropics/skills",
       "sourceType": "github",
-      "skillPath": "skills/find-skills/SKILL.md",
-      "computedHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+      "skillPath": "skills/frontend-design/SKILL.md",
+      "computedHash": "106acf230014cbb43ca34e6410371321b56ca742f9ee0442e8ec05bf02eb0384"
     },
-    "frontend-ui-engineering": {
-      "source": "addyosmani/agent-skills",
+    "gpt-taste": {
+      "source": "Leonxlnx/taste-skill",
       "sourceType": "github",
-      "skillPath": "skills/frontend-ui-engineering/SKILL.md",
-      "computedHash": "caada020b47fb51c68ba91f9bf390745e18f9d6c17e4c251b046ba74e43343d7"
+      "skillPath": "skills/gpt-tasteskill/SKILL.md",
+      "computedHash": "11bf97d9ddfc5b946e46d650e9a81237f1765c32f465ad4a5befa39e74ff1662"
     },
-    "git-workflow-and-versioning": {
-      "source": "addyosmani/agent-skills",
+    "image-to-code": {
+      "source": "leonxlnx/taste-skill",
       "sourceType": "github",
-      "skillPath": "skills/git-workflow-and-versioning/SKILL.md",
-      "computedHash": "e8e0d1cc98c0a6b81d2979442ae92addae32cd5194fb5c4eac4ac5228b408770"
+      "skillPath": "skills/image-to-code-skill/SKILL.md",
+      "computedHash": "3d2ac14d956fdafc5500d2108b90895e134d847f9f199e7f1d18bf1f814cf7c8"
     },
-    "idea-refine": {
-      "source": "addyosmani/agent-skills",
+    "impeccable": {
+      "source": "pbakaus/impeccable",
       "sourceType": "github",
-      "skillPath": "skills/idea-refine/SKILL.md",
-      "computedHash": "9fc0ae5d8a074872a636d22f9c6fe71e041b86cddc9fe5af90ef654f5032ec5d"
+      "skillPath": ".agents/skills/impeccable/SKILL.md",
+      "computedHash": "de0ad62df4a20451e6f9715b6861b068ac8f558b1829a5c7b947c58ae94f0c6f"
     },
-    "incremental-implementation": {
-      "source": "addyosmani/agent-skills",
+    "improve": {
+      "source": "shadcn/improve",
       "sourceType": "github",
-      "skillPath": "skills/incremental-implementation/SKILL.md",
-      "computedHash": "bb1198705f46dc9ff75fb5685a7a872de5924d743b44eb202135f5046750ab7e"
+      "skillPath": "skills/improve/SKILL.md",
+      "computedHash": "553713a1b9af40ec50c4018f75b8974bf728fe5abc8e125b748e2d718d5c31ea"
     },
-    "interview-me": {
-      "source": "addyosmani/agent-skills",
+    "improve-animations": {
+      "source": "emilkowalski/skills",
       "sourceType": "github",
-      "skillPath": "skills/interview-me/SKILL.md",
-      "computedHash": "4229002dd862e6e037c8a01c3e31d9af097465c58b2c3611912edb2af005f303"
+      "skillPath": "skills/improve-animations/SKILL.md",
+      "computedHash": "b913ec7ef2b1aa900060eb6e5dbdccc94b6ea631059ec3474c4b61e2ffefeeb4"
     },
-    "ios-design": {
-      "source": "uizze.sh",
-      "sourceUrl": "https://uizze.sh/",
-      "sourceType": "well-known",
-      "computedHash": "6b92ffbe225bdd877e1245e843c5b79f1e37f7ab40d3f802937044f6aee29d20",
-      "wellKnownDigest": "sha256:b117db775a77c436d7e46c2eeb1602de40f5f0256214cf6a9dc2bb056ddffd9d"
-    },
-    "observability-and-instrumentation": {
-      "source": "addyosmani/agent-skills",
+    "improve-ui": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/observability-and-instrumentation/SKILL.md",
-      "computedHash": "e5eba32f952a29d20c0383728a9505d0ca2a90f1d8d075603e53804b441b2dd2"
+      "skillPath": "skills/improve-ui/SKILL.md",
+      "computedHash": "31c09b79a1c196adccb1637a225cef54f537da87430fda0ba309ef83e78f10e5"
     },
-    "performance-optimization": {
-      "source": "addyosmani/agent-skills",
+    "interaction-design": {
+      "source": "wshobson/agents",
       "sourceType": "github",
-      "skillPath": "skills/performance-optimization/SKILL.md",
-      "computedHash": "f0a8e3bdb9b7d199434c2a5dd7cbb7d3cf69d802029cde1ef5daa07bffa27efc"
+      "skillPath": "plugins/ui-design/skills/interaction-design/SKILL.md",
+      "computedHash": "d2e2127b91c76b2ed6706ce78bfc7eddcb6b340333f94d3d53d9f65e3253dea2"
     },
-    "planning-and-task-breakdown": {
-      "source": "addyosmani/agent-skills",
+    "interface-design": {
+      "source": "Dammyjay93/interface-design",
       "sourceType": "github",
-      "skillPath": "skills/planning-and-task-breakdown/SKILL.md",
-      "computedHash": "0dc14a1402cdabd376f2d81d2225fcb4a18ee63d58b945ff83affeb024285b8f"
+      "skillPath": ".claude/skills/interface-design/SKILL.md",
+      "computedHash": "55a83a96d1e3d161b8c3630dab8ae2dd4547d92636d3d9b4b447d7d59163e084"
     },
-    "security-and-hardening": {
-      "source": "addyosmani/agent-skills",
+    "open-design": {
+      "source": "sugarforever/open-design-skill",
       "sourceType": "github",
-      "skillPath": "skills/security-and-hardening/SKILL.md",
-      "computedHash": "1e0cd727cccd3c8c0834ce7722a8a2851e2e849f1352ee972f39311437b021d3"
+      "skillPath": "SKILL.md",
+      "computedHash": "5a736383765ca335454f89c4baf256996afe85bd9459828bc29f05905172b039"
     },
-    "shipping-and-launch": {
-      "source": "addyosmani/agent-skills",
+    "pixel-perfect-ui": {
+      "source": "corlab-tech/skills",
       "sourceType": "github",
-      "skillPath": "skills/shipping-and-launch/SKILL.md",
-      "computedHash": "65a2be8a52839ec029b779eaf2b59d981fb0956e1228a87c9897f5af8b672f1a"
+      "skillPath": "pixel-perfect-ui/SKILL.md",
+      "computedHash": "c71df0bf727826d41a0ad812ada79b07913d6ad5fc5cf97c29177cdcb9aeed53"
     },
-    "source-driven-development": {
-      "source": "addyosmani/agent-skills",
+    "screenshot-to-code": {
+      "source": "onewave-ai/claude-skills",
       "sourceType": "github",
-      "skillPath": "skills/source-driven-development/SKILL.md",
-      "computedHash": "d1923bb807f7db157a794f07a590ca639b3789b2f1a5eabef993f8df24791e2a"
+      "skillPath": "screenshot-to-code/SKILL.md",
+      "computedHash": "ae26e37ad45ff99385537f249ca1fa74380f160d343af2f364cf6a3c2b0f5281"
     },
-    "spec-driven-development": {
-      "source": "addyosmani/agent-skills",
+    "ui-skills-root": {
+      "source": "ibelick/ui-skills",
       "sourceType": "github",
-      "skillPath": "skills/spec-driven-development/SKILL.md",
-      "computedHash": "d4dc15caa8d97749267da68676aeadff3fb5b8d9a4462664937137ac09610e4f"
+      "skillPath": "skills/ui-skills-root/SKILL.md",
+      "computedHash": "76a520772c9532b141562d2b2e659f4e6636cf04d2f2c9b9cf5828702f0ad048"
     },
-    "test-driven-development": {
-      "source": "addyosmani/agent-skills",
+    "ui-ux-pro-max": {
+      "source": "nextlevelbuilder/ui-ux-pro-max-skill",
       "sourceType": "github",
-      "skillPath": "skills/test-driven-development/SKILL.md",
-      "computedHash": "efb654aa37612ab1e7470e547b06a322c5e1837b6879525e32aa432d1281692b"
+      "skillPath": ".claude/skills/ui-ux-pro-max/SKILL.md",
+      "computedHash": "7ac62d931e52dbc7c309ed8ee067101969db2454709339b02daa583e80e98d5f"
     },
-    "ui-taste": {
-      "source": "uizze.sh",
-      "sourceUrl": "https://uizze.sh/",
-      "sourceType": "well-known",
-      "computedHash": "9b73951ae54b7d1eb81e69bb2f47d1622b3813bbefbd6c0aaa36dfcf938f1f27",
-      "wellKnownDigest": "sha256:3b88468608bc7ceec66b8333fab1729590e7af62487fcdbdf79ef60ff626def7"
-    },
-    "using-agent-skills": {
-      "source": "addyosmani/agent-skills",
+    "web-design-guidelines": {
+      "source": "vercel-labs/agent-skills",
       "sourceType": "github",
-      "skillPath": "skills/using-agent-skills/SKILL.md",
-      "computedHash": "4221dc84c943696829025a42c7961b257afdb8f1ba20af42463434a0d9c03812"
+      "skillPath": "skills/web-design-guidelines/SKILL.md",
+      "computedHash": "d8e7d3afe37dcc8a97b99ffb5afdb4d0919ae0092ea8b68f44eb201f035e33ac"
     }
   }
 }

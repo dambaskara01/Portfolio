@@ -20,12 +20,16 @@ const SECTION_METAS: Record<
   string,
   { title: string; tag: string; type: "top-down" | "split-horizontal" | "bottom-up" | "horizontal-sweep" | "vertical-gauge" }
 > = {
-  "#hero": { title: "00 // COVER & IDENTITY", tag: "CHAPTER 00 · COVER", type: "top-down" },
-  "#disciplines": { title: "01 // CORE DISCIPLINES", tag: "CHAPTER 01 · ARCHITECTURE", type: "split-horizontal" },
-  "#work": { title: "02 // SELECTED PROJECTS", tag: "CHAPTER 02 · GALLERY DECK", type: "bottom-up" },
-  "#skills": { title: "03 // TECHNICAL STACK", tag: "CHAPTER 03 · SPECIFICATION", type: "horizontal-sweep" },
-  "#experience": { title: "04 // WORK HISTORY", tag: "CHAPTER 04 · TRACK RECORD", type: "vertical-gauge" },
-  "#contact": { title: "05 // INQUIRIES & CONTACT", tag: "CHAPTER 05 · COLLABORATION", type: "top-down" },
+  "#hero": { title: "Cover", tag: "Identity", type: "top-down" },
+  "#development": { title: "Development", tag: "Selected Projects", type: "split-horizontal" },
+  "#engineering": { title: "Development", tag: "Selected Projects", type: "split-horizontal" },
+  "#disciplines": { title: "Disciplines", tag: "Architecture", type: "split-horizontal" },
+  "#uiux": { title: "UI/UX Design", tag: "Product Design", type: "split-horizontal" },
+  "#branding": { title: "Graphic Identity", tag: "Brand Identity", type: "split-horizontal" },
+  "#work": { title: "Selected Projects", tag: "Gallery", type: "bottom-up" },
+  "#skills": { title: "Skills & Technologies", tag: "Technical Stack", type: "horizontal-sweep" },
+  "#experience": { title: "Work History", tag: "Track Record", type: "vertical-gauge" },
+  "#contact": { title: "Contact", tag: "Collaboration", type: "top-down" },
 };
 
 export default function PageTransitionProvider({
@@ -49,8 +53,8 @@ export default function PageTransitionProvider({
     if (isTransitioning) return;
 
     const meta = SECTION_METAS[targetSelector] || {
-      title: customTitle || targetSelector.replace("#", "").toUpperCase(),
-      tag: "SECTION NAVIGATION",
+      title: customTitle || targetSelector.replace("#", ""),
+      tag: "Navigation",
       type: "bottom-up",
     };
 

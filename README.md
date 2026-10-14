@@ -1,34 +1,80 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portfolio — Adham Baskara
 
-## Getting Started
+Portofolio pribadi satu halaman untuk menampilkan karya **Fullstack Development**, **UI/UX Design**, dan **Graphic Identity**.
 
-First, run the development server:
+> ⚠️ **Status: restruktur besar sedang berjalan.** Sebagian besar section component
+> (`UiUx`, `Branding`, `Skills`, `Experience`, `Contact`, `Footer`,
+> `Nav`, dan modal detail) sengaja dihapus dari working tree dan
+> akan dibangun ulang. Yang aktif sekarang: **Hero** + **Marquee** + **Development**.
+> Arsitektur lengkap terakhir ada di commit `HEAD`.
+
+## Tech Stack
+
+| Layer      | Teknologi                                              |
+| ---------- | ------------------------------------------------------ |
+| Framework  | Next.js 16 (App Router) + React 19 + TypeScript strict |
+| Styling    | CSS murni dengan design tokens (`src/app/globals.css`) — **tanpa Tailwind** |
+| Animasi    | GSAP 3 (`@gsap/react` + ScrollTrigger), Motion (`motion`), animejs, Lenis (smooth scroll) |
+| Ikon       | lucide-react, simple-icons (logo SVG inline di `Marquee`) |
+| Font       | SF UI Display (local font, weight 100–900)             |
+
+## Menjalankan Project
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+| Script           | Fungsi                    |
+| ---------------- | ------------------------- |
+| `npm run dev`    | Development server        |
+| `npm run build`  | Production build          |
+| `npm run start`  | Jalankan hasil build      |
+| `npm run lint`   | ESLint (next core-web-vitals + TS) |
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Sebelum push, selalu jalankan:
 
-## Learn More
+```bash
+npm run lint && npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Struktur Folder
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+src/
+├── app/
+│   ├── layout.tsx          # Root layout, metadata SEO, loading SF UI Display
+│   ├── page.tsx            # Composition section + provider chain
+│   └── globals.css         # Design tokens + semua styling (2.000+ baris)
+├── components/
+│   ├── SmoothScroll.tsx          # Lenis provider + context scrollTo
+│   ├── PageTransition.tsx        # Overlay transisi antar section (GSAP)
+│   ├── ContextualBadgeCursor.tsx # Kursor custom berbadge (VIEW/LINK/...)
+│   ├── Hero.tsx                  # Section utama + bilingual copy (EN/ID)
+│   ├── Marquee.tsx               # Marquee logo tech (GSAP ScrollTrigger)
+│   └── Development.tsx           # Section karya Development (Swiss dynamic ribbon)
+├── data/
+│   └── portfolioData.ts          # Central data source bilingual
+├── hooks/
+│   └── useCurrentLang.ts         # Hook pendeteksi bahasa reaktif
+public/
+├── fonts/                  # sf-ui-display (aktif), cabinet-grotesk, nevanta
+└── images/
+    └── development/        # Visual wireframe assets development projects
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Dokumentasi
 
-## Deploy on Vercel
+- [`DESIGN.md`](./DESIGN.md) — design system "Swiss Editorial Light": palette, typography, spacing, motion.
+- [`docs/architecture.md`](./docs/architecture.md) — arsitektur, alur component & data flow.
+- [`AGENTS.md`](./AGENTS.md) — konvensi coding untuk agent/AI.
+- [`CONTRIBUTING.md`](./CONTRIBUTING.md) — kontribusi & gaya commit.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Deploy
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Target deploy **belum ditentukan**. Riwayat commit sempat memakai static export
+untuk Cloudflare Pages; konfigurasi sekarang adalah Next.js default.
+
+## Kontak
+
+**Adham Baskara** — [adhambaskara.dev@gmail.com](mailto:adhambaskara.dev@gmail.com) · [GitHub](https://github.com/adhambaskara) · [LinkedIn](https://linkedin.com/in/adhambaskara)

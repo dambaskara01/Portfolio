@@ -1,76 +1,120 @@
-# DESIGN SYSTEM & ENGINEERING SPECIFICATION
-**Style Archetype:** Swiss Minimalism / International Typographic Style (Editorial & High-Precision Digital Edition)
+# Design System — Swiss Editorial Light
 
----
+Portofolio Adham Baskara memakai sistem visual **Swiss Editorial Light**: kanvas
+putih, panel abu muda, tinta hitam, dengan tekstur noise halus untuk kedalaman
+taktil ala media cetak. Semua token didefinisikan sebagai CSS custom properties di
+`src/app/globals.css` bagian `:root`.
 
-## 1. Core Visual Principles
-- **Grid Discipline:** Struktur layout berakar kuat pada grid asimetris yang tegas, modul bento/card ber-radius presisi, atau list-based accordion layout.
-- **Negative Space:** Berikan ruang bernapas (whitespace) lapang. Ruang kosong diperlakukan sebagai elemen desain aktif, bukan kekosongan.
-- **Typography as Primary UI:** Tipografi memimpin hierarki informasi. Gunakan kontras skala ekstrem (misal headline masif berdampingan dengan subtext micro-typography 11–13px).
-- **Clean Aesthetic:** Hindari drop shadow berlebihan, bevel, atau gradien norak. Kedalaman visual hanya didapat dari *layering stack* (tumpukan card) dan garis pemisah tipis (*1px subtle borders*).
+> **Aturan keras: tidak ada Tailwind.** Seluruh styling mengandalkan CSS variables
+> + vanilla CSS. Untuk class utility `clsx` dan `tailwind-merge` dipakai hanya
+> untuk penggabungan className, bukan utility framework.
 
----
+## Palet Warna
 
-## 2. Typography Rules
-- **Font Family:** Wajib eksklusif menggunakan **SF Pro / SF UI** (`SF Pro Display`, `SF Pro Text`). Dilarang menggunakan font lain seperti Inter, Roboto, atau font generic web. Gunakan mode tabular figures (`font-mono` atau `tnum`) untuk timer, index nomor, dan data statistik.
-- **Hierarchy & Tracking:**
-  - **Mega/Display Headlines:** `text-5xl` s/d `text-8xl`, tracking rapat khas Swiss (`tracking-tight` atau `-0.03em`), font weight `font-normal` atau `font-medium`.
-  - **Section Titles & Subheads:** `text-2xl` s/d `text-4xl`, tracking `-0.02em`.
-  - **Body Copy:** `text-base` s/d `text-lg`, font weight `font-normal`, line-height lapang (`leading-relaxed`), warna teks redup agar headline tetap dominan.
-  - **Micro Label / Meta:** `text-xs` (10px–12px), uppercase atau structured text, tracking sedikit renggang (`tracking-wider`), dipadukan dengan bullet, bracket `[PHOTO]`, atau format indeks editorial `(01)`.
+| Token              | Nilai     | Penggunaan                              |
+| ------------------ | --------- | --------------------------------------- |
+| `--base`           | `#fafafa` | Background kanvas utama                 |
+| `--surface`        | `#ffffff` | Panel / kartu                           |
+| `--highlight`      | `#efefef` | Latar hover / pemisah lembut            |
+| `--ink`            | `#0f0f0f` | Teks utama, tint akcent                 |
+| `--muted`          | `#5c5c5c` | Teks sekunder / keterangan              |
+| `--rule`           | `#dddddd` | Garis tipis                             |
+| `--border-strong`  | `#bdbdbd` | Border tegas                            |
+| `--accent`         | `#0f0f0f` | Aksen utama ( sama dengan ink )         |
+| `--accent-deep`    | `#2b2b2b` | Aksen pada permukaan gelap              |
+| `--accent-silver`  | `#b5b5b5` | Aksen perak                             |
+| `--paper`          | `#0f0f0f` | Mode kertas gelap ( balik )             |
+| `--paper-ink`      | `#fafafa` | Tinta di atas paper                     |
 
----
+Palet **monokromatik**: tidak ada warna brand sekunder. Hierarki dibangun lewat
+kontras nilai abu, bukan hue.
 
-## 3. Color Palette & Theming
-Pertahankan palet minimalis high-contrast yang terbukti di Hero Section:
-- **Base Canvas:** Pure Light `#FFFFFF` atau off-white super lembut `#F8F9FA` / `#F4F4F6`.
-- **Card Background:** `#FFFFFF` murni di atas canvas off-white, atau sebaliknya container putih bergaris subtle.
-- **Primary Text:** Pitch Black `#0D0D0D` / `#111111`.
-- **Secondary / Muted Text:** Slate / Cool Gray `#6B7280` atau `#8A8A8E`.
-- **Divider & Borders:** `1px solid rgba(0, 0, 0, 0.08)` (hairline borders).
-- **Dark Mode / Inverted Sections (Optional):** Jika section berlatar gelap, gunakan deep black `#0A0A0A` dengan teks `#EDEDED` dan aksen pill kapsul terang.
+## Typography
 
----
+**Font tunggal:** SF UI Display (`localFont` Next.js, `--font-sf-ui`), weight 100 (Ultra Light) → 900 (Black).
 
-## 4. Component Layout Patterns (Derived from References)
-Setiap kali membangun section baru, prioritaskan salah satu pola editorial berikut:
-1. **Interactive Editorial List / Accordion:**
-   - Baris item list horizontal dengan garis batas hairline tipis.
-   - Angka seri di sisi kiri `(01, 02, 03)`, judul tebal di tengah, tombol panah trigger `→` di kanan.
-   - State aktif atau hover membuka preview visual / media secara mulus di tengah list.
-2. **Layered Card Stack (Fanned-out / Floating Cards):**
-   - Kartu-kartu sudut membulat (`rounded-2xl` atau `rounded-3xl`) yang disusun bertumpuk secara vertikal/perspektif (*cascading stack*).
-3. **Pill Navigation & Floating Badges:**
-   - Navigasi kapsul ringkas (`rounded-full`) dengan status badge atau icon switcher.
-4. **Ticker & Marquee:**
-   - Jajaran logo tech stack atau klien monokromatik (`grayscale`, opasitas 60% default, 100% hover).
+```ts
+// src/app/layout.tsx
+const sfUiDisplay = localFont({
+  src: [ /* 9 file .otf weight 100-900 */ ],
+  variable: "--font-sf-ui",
+  display: "swap",
+});
+```
 
----
+Tiga alias font di `:root` (saat ini semua menyanding ke SF UI Display):
 
-## 5. Motion Engineering & High-End Interactions
-Pilih tech stack animasi yang paling optimal per kebutuhan: **Framer Motion**, **GSAP + ScrollTrigger**, atau **Lenis Smooth Scroll**. Animasi dilarang terlihat generik atau monoton (no basic fade-in-up template).
+| Alias          | Peran                         |
+| -------------- | ----------------------------- |
+| `--font-sans`  | Body text                     |
+| `--font-display` | Heading / display           |
+| `--font-mono`  | Data / label teknis (`.t-mono`) |
 
-### A. Allowed Animation Libraries
-- **Framer Motion:** Untuk layout transitions (`layoutId`), physics springs, hover states, drag/tilt 3D, dan UI morphing.
-- **GSAP + ScrollTrigger / Flip:** Untuk multi-stage pinning, complex scrubbed timeline, parallax stacking, dan sequence teks terpisah.
-- **Lenis:** Wajib aktif sebagai smooth scroll wrapper agar momentum scroll selaras dengan timing animasi.
+Font alternatif yang tersedia di `public/fonts` namun belum dipakai di layout:
+`cabinet-grotesk`, `nevanta`. Saat dibutuhkan, daftarkan via `localFont` dan tukar alias.
 
-### B. High-End Motion Patterns (Non-Boring & Complex)
-1. **Interactive Magnetic & Cursor Tilt:**
-   - Gunakan physics spring (`stiffness: 150`, `damping: 15`) untuk elemen interaktif (button pill, badge, gambar).
-   - Pada card hover, hitung offset koordinat mouse (`e.clientX`, `e.clientY`) untuk memicu rotasi 3D mikro (`rotateX`, `rotateY` maks 4deg–6deg) ditambah refleksi highlight subtle.
-2. **Scroll-Driven Deck/Stack Fan-Out (Cascade Physics):**
-   - Saat container discroll, elemen tumpukan (seperti kartu foto/proyek) menyebar ke posisi grid asimetris secara scrubbed.
-   - Variasikan parameter `z-index`, `rotate`, `scale`, dan `translate` tiap layer kartu secara matematis agar tidak bergerak serempak.
-3. **Clip-Path & Mask Morphing:**
-   - Transisi buka-tutup gambar menggunakan animasi `clip-path: polygon(...)` atau `clip-path: inset(...)` berbobot tinggi.
-   - Text reveal menggunakan split character/line masking (`overflow-hidden` wrapper) dengan stagger rapat (`stagger: 0.03s`, curve `[0.16, 1, 0.3, 1]`).
-4. **Layout Morphing via Shared Layout (`layoutId`):**
-   - Saat list item atau pill dipilih, highlight background aktif harus bertransisi mengalir (*liquid layout jump*) antar target tanpa re-render patah.
-   - Item accordion membesar secara fluid dengan kalkulasi bounding rect otomatis.
+Utility:
+- `.t-mono` — `font-family: var(--font-mono); font-size: 13px;`
+- `.t-muted` — `color: var(--muted);`
 
-### C. Motion Physics Rules
-- **No Cartoon Bouncing:** Dilarang menggunakan bounce berlebihan. Karakter motion harus terasa mekanikal, padat, dan cepat bereaksi (*viscous damping*).
-- **Curated Bezier Curves:**
-  - Fast-out smooth-settle: `cubic-bezier(0.16, 1, 0.3, 1)` (Quart Out)
-  - Cinematic precision: `cubic-bezier(0.25, 0.1, 0.25, 1)`
+## Radius
+
+| Token            | Nilai    | Skala                    |
+| ---------------- | -------- | ------------------------ |
+| `--radius-xs`    | `2px`    | Detail micro             |
+| `--radius-sm`    | `4px`    | Default kecil            |
+| `--radius-md`    | `4px`    | Default                  |
+| `--radius-lg`    | `6px`    | Kartu / panel            |
+| `--radius-xl`    | `10px`   | Kontainer besar          |
+| `--radius-full`  | `9999px` | Pill / badge             |
+
+## Spacing
+
+Skala spacing seragam, basis 4px:
+
+```
+--s-4 · --s-8 · --s-12 · --s-16 · --s-20 · --s-24 ·
+--s-32 · --s-40 · --s-48 · --s-64 · --s-80 · --s-96 · --s-128
+```
+
+Layout constraint:
+- `--max-w: 1280px` — lebar kontainer maksimum
+- `--nav-h: 68px` — tinggi navigasi
+
+## Motion
+
+Semua easing memakai kurva `cubic-bezier(0.16, 1, 0.3, 1)` (kurva "expo out" yang
+lembut untuk motion editorial).
+
+| Token       | Durasi   | Penggunaan                        |
+| ----------- | -------- | --------------------------------- |
+| `--t-fast`  | `160ms`  | Hover, micro-interaction          |
+| `--t-base`  | `280ms`  | Transisi standar                  |
+| `--t-slow`  | `480ms`  | Transisi section / reveal besar   |
+
+**Implementasi animasi kompleks WAJIB pakai GSAP** (`@gsap/react` `useGSAP`,
+`ScrollTrigger`). Motion (`motion`, prev. Framer Motion) dan `animejs` boleh untuk animasi level komponen React / SVG micro-interactions. Hindari
+CSS transition untuk hal yang lebih kompleks dari sekadar opacity/transform sederhana.
+
+Lihat `AGENTS.md` untuk convention GSAP.
+
+## Efek Khas
+
+### Tekstur noise
+`body::after` overlay fixed, `opacity: 0.03`, SVG `feTurbulence` fractalNoise.
+Tujuan: memberi kedalaman taktil ala cetakan, bukan gradasi warna. Jangan dihapus.
+
+### Radial gradient
+`body` background: `radial-gradient(ellipse 90% 50% at 50% -20%, rgba(31,29,26,0.05), transparent 75%)`.
+Memberi vignette halus dari atas.
+
+## Aksesibilitas Motion
+
+Setiap komponen yang beranimasi WAJIB menghormati preferensi pengguna:
+
+```ts
+const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+if (prefersReducedMotion) return; // skip init animasi
+```
+
+Lihat pola ini di `SmoothScroll.tsx` dan `ContextualBadgeCursor.tsx` sebagai referensi.
