@@ -699,7 +699,7 @@ ul, ol {
   display: flex;
   align-items: center;
   width: max-content;
-  will-change: transform;
+  will-change: transform, filter, opacity;
 }
 .marquee-group {
   display: flex;
@@ -727,12 +727,469 @@ ul, ol {
   display: block;
 }
 
+/* ============================================================
+   SECTION: ENGINEERING / SILENT HOUSE SHOWCASE CARD
+   Full-Bleed 1:1 Pixel-Accurate Implementation
+   Kinetic Multi-Slide Deck Scrub
+   ============================================================ */
+.silent-showcase-pin-container {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.silent-showcase-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  box-sizing: border-box;
+  background-color: var(--base, #0a0a0a);
+}
+
+.silent-slides-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.silent-slide-item {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  pointer-events: none;
+  visibility: hidden;
+  will-change: transform, filter, opacity;
+}
+
+.silent-slide-item.is-active {
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.silent-gradient-wrapper {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.silent-mesh-gradient {
+  position: absolute;
+  inset: -15%;
+  width: 130%;
+  height: 130%;
+  filter: blur(52px);
+  transform: translate3d(0, 0, 0);
+  will-change: transform;
+}
+
+.silent-panel {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  border-radius: 0;
+  box-shadow: 0 -8px 30px rgba(0, 0, 0, 0.04);
+}
+
+.silent-panel-inner {
+  width: 100%;
+  max-width: 1360px;
+  margin: 0 auto;
+  box-sizing: border-box;
+  padding: clamp(36px, 4.2vw, 56px) clamp(24px, 4.5vw, 64px) clamp(24px, 2.8vw, 36px);
+  min-height: 48vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.silent-panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 2rem;
+  padding-bottom: clamp(32px, 4.5vw, 52px);
+}
+
+.silent-header-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+}
+
+.silent-project-badge {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: #8e8e93;
+}
+
+.silent-headline {
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: clamp(2rem, 3.5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  color: #111111;
+  margin: 0;
+}
+
+.silent-tagline {
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: clamp(0.9375rem, 1.25vw, 1.125rem);
+  font-weight: 400;
+  line-height: 1.5;
+  color: #636366;
+  margin: 0;
+  max-width: 680px;
+  letter-spacing: -0.015em;
+}
+
+.silent-action-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0px;
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #ffffff;
+  background-color: #111111;
+  border: 1px solid #111111;
+  border-radius: 9999px;
+  padding: 10px 22px;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  box-shadow: none;
+  transition: background-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              color 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              padding-right 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              gap 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.silent-action-link:hover {
+  background-color: #ffffff;
+  border-color: #111111;
+  color: #111111;
+  gap: 8px;
+  padding-right: 20px;
+}
+
+.silent-action-text {
+  display: inline-block;
+  line-height: 1;
+}
+
+.silent-action-arrow-track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 0px;
+  height: 14px;
+  overflow: hidden;
+  opacity: 0;
+  transform: translate(-6px, 6px);
+  transition: width 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              opacity 0.28s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.silent-action-link:hover .silent-action-arrow-track {
+  width: 14px;
+  opacity: 1;
+  transform: translate(0, 0);
+}
+
+.silent-action-arrow {
+  display: inline-block;
+  line-height: 1;
+  font-size: 0.9375rem;
+}
+
+.silent-bottom-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #111111;
+  gap: 1.5rem;
+  padding-top: clamp(20px, 2.5vw, 28px);
+}
+
+.silent-quick-links {
+  display: flex;
+  align-items: center;
+  gap: clamp(16px, 2.5vw, 32px);
+}
+
+.silent-quick-link {
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: #111111;
+  text-decoration: none;
+  letter-spacing: -0.01em;
+  transition: opacity 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+}
+
+.silent-quick-link:hover {
+  opacity: 0.55;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.silent-credits {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--font-display, "SF UI Display", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif);
+  font-size: 0.8125rem;
+  letter-spacing: -0.01em;
+}
+
+.silent-meta-year {
+  color: #111111;
+  font-weight: 500;
+}
+
+.silent-meta-status {
+  color: #8e8e93;
+  font-weight: 400;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 860px) {
+  .silent-showcase-section {
+    min-height: 100vh;
+  }
+
+  .silent-panel-inner {
+    padding: 28px 20px 20px;
+    min-height: auto;
+  }
+
+  .silent-panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding-bottom: 24px;
+  }
+
+  .silent-bottom-bar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+    padding-top: 18px;
+  }
+
+  .silent-quick-links {
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+}
+
 
 /* ============================================================
-   SECTION 02: UI/UX & PRODUCT DESIGN
-   Editorial side-by-side product frames with interactive tabbed
-   problem/solution breakdowns and user flow pipelines.
+   SECTION 02: UI/UX & PRODUCT DESIGN (WORKS WHEEL INTEGRATION)
+   Spatial rotating 3D wheel index with Swiss minimal layout
    ============================================================ */
+/* ============================================================
+   WORKS WHEEL COMPONENT STYLES (1:1 Port)
+   ============================================================ */
+.works-wheel-demo-container {
+  width: 100%;
+  min-height: 130vh;
+  padding-top: clamp(120px, 18vh, 220px);
+  padding-bottom: clamp(80px, 12vh, 160px);
+  box-sizing: border-box;
+  position: relative;
+  background-color: var(--base);
+  color: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.works-wheel-root {
+  background-color: var(--base);
+  color: var(--ink);
+  position: relative;
+  height: 100vh;
+  min-height: 620px;
+  width: 100%;
+  overflow: hidden;
+  user-select: none;
+}
+
+.works-wheel-stage {
+  position: absolute;
+  inset: 0;
+  cursor: grab;
+  touch-action: pan-x;
+  outline: none;
+}
+
+.works-wheel-stage:focus-visible {
+  outline: 2px solid var(--ink);
+  outline-offset: -4px;
+}
+
+.works-wheel-stage:active {
+  cursor: grabbing;
+}
+
+.works-wheel-drum {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform-style: preserve-3d;
+}
+
+.works-wheel-card {
+  position: absolute;
+  backface-visibility: hidden;
+  display: block;
+  text-decoration: none;
+}
+
+.works-wheel-card-frame {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 0.5rem;
+  background-color: var(--layer-1, #f4f4f5);
+  box-shadow: 0 18px 40px -18px rgba(0, 0, 0, 0.12);
+  transition: box-shadow 0.2s ease;
+}
+
+.works-wheel-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.works-wheel-card-action {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #09090b;
+  padding: 0.25rem 0.625rem;
+  font-size: 0.7rem;
+  line-height: 1rem;
+  opacity: 0;
+  transform: translateY(0.25rem);
+  backdrop-filter: blur(4px);
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 5;
+}
+
+.works-wheel-card:hover .works-wheel-card-action {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.works-wheel-action-icon {
+  width: 0.625rem;
+  height: 0.625rem;
+}
+
+.works-wheel-label {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  letter-spacing: -0.025em;
+  font-family: var(--font-display, inherit);
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1;
+}
+
+.works-wheel-title {
+  pointer-events: none;
+  position: absolute;
+  top: 50%;
+  left: 8%;
+  transform: translateY(-50%);
+  letter-spacing: -0.025em;
+  font-family: var(--font-display, inherit);
+  font-weight: 500;
+  color: var(--ink);
+  opacity: 0;
+  line-height: 1;
+}
+
+.works-wheel-index {
+  position: absolute;
+  top: 7.5%;
+  right: 2.5%;
+  text-align: right;
+  line-height: 1.75;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  color: var(--muted, #71717a);
+}
+
+.works-wheel-index-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.15s ease;
+}
+
+.works-wheel-index-btn:focus-visible {
+  outline: 1px solid var(--ink);
+}
+
+.works-wheel-index-btn:hover {
+  color: var(--ink);
+}
+
+.works-wheel-index-btn.is-active {
+  color: var(--ink);
+  font-weight: 500;
+}
 .uiux-section {
   padding-block: clamp(64px, 8vw, 112px);
   background-color: #f5f5f5;
@@ -2087,337 +2544,5 @@ ul, ol {
   .work-item__img {
     filter: none;
     transition: none;
-  }
-  .dev-card,
-  .dev-card__media,
-  .dev-card__body,
-  .dev-card__img {
-    transition: none !important;
-  }
-}
-
-/* ============================================================
-   DEVELOPMENT SECTION (Ross Mason 1:1 Editorial Architecture)
-   ============================================================ */
-.ross-portfolio-container {
-  position: relative;
-  width: 100%;
-  height: 100vh;
-  min-height: 760px;
-  background-color: #ffffff;
-  color: #0a0a0a;
-  overflow: hidden;
-  user-select: none;
-  font-family: var(--font-editorial-sans);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  box-sizing: border-box;
-}
-
-/* 1. TOP NAVIGATION BAR */
-.ross-topbar {
-  width: 100%;
-  padding: 2.6% 3.8% 0 3.8%;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  font-size: 13.5px;
-  line-height: 1;
-  letter-spacing: -0.015em;
-  font-family: var(--font-editorial-sans);
-  position: relative;
-  z-index: 30;
-  box-sizing: border-box;
-}
-
-.ross-topbar__discipline {
-  font-weight: 500;
-  color: #111111;
-}
-
-.ross-topbar__nav {
-  color: #b8b8b8;
-  font-weight: 400;
-  letter-spacing: -0.01em;
-  transform: translateX(-1.5%);
-  display: flex;
-  align-items: center;
-  gap: 0;
-}
-
-.ross-topbar__link {
-  color: #b8b8b8;
-  text-decoration: none;
-  transition: color 0.15s ease;
-}
-
-.ross-topbar__link:hover {
-  color: #111111;
-}
-
-.ross-topbar__sep {
-  color: #b8b8b8;
-  margin-right: 6px;
-}
-
-.ross-topbar__contact {
-  font-weight: 500;
-  color: #111111;
-  padding-bottom: 5px;
-  border-bottom: 1.5px solid #111111;
-  text-decoration: none;
-  transition: opacity 0.15s ease;
-}
-
-.ross-topbar__contact:hover {
-  opacity: 0.75;
-}
-
-/* 2. MIDDLE CAROUSEL SECTION */
-.ross-main {
-  position: relative;
-  width: 100%;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-bottom: 7vw;
-  z-index: 40;
-}
-
-/* Metadata Labels Row (02 - 07) */
-.ross-meta-row {
-  width: 100%;
-  display: flex;
-  align-items: flex-end;
-  margin-bottom: 14px;
-  font-family: var(--font-editorial-sans);
-  font-size: 12.5px;
-  line-height: 1.32;
-  letter-spacing: -0.015em;
-  font-weight: 500;
-  color: #111111;
-  box-sizing: border-box;
-}
-
-.ross-meta-spacer {
-  width: 7.2%;
-  flex-shrink: 0;
-}
-
-.ross-meta-col {
-  flex-shrink: 0;
-  box-sizing: border-box;
-  padding-right: 10px;
-  overflow: hidden;
-  cursor: pointer;
-}
-
-.ross-meta-col--interactive {
-  width: 17.04%;
-  will-change: width;
-}
-
-.ross-meta-col--07 {
-  width: 7.6%;
-  white-space: nowrap;
-  overflow: hidden;
-  padding-right: 0;
-  cursor: default;
-}
-
-.ross-meta-num {
-  margin-bottom: 18px;
-}
-
-.ross-meta-title {
-  color: #111111;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.ross-meta-tag {
-  color: #111111;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-/* Visual Strip Row + Featured Center Breakout Card */
-.ross-cards-row {
-  position: relative;
-  width: 100%;
-  height: 17.04vw;
-  display: flex;
-  align-items: flex-start;
-  gap: 0;
-  z-index: 40;
-}
-
-.ross-card-slot {
-  flex-shrink: 0;
-  border-radius: 0;
-  margin: 0;
-  padding: 0;
-  cursor: pointer;
-  outline: none;
-  position: relative;
-  height: 17.04vw;
-  z-index: 10;
-}
-
-.ross-card-slot.is-active {
-  z-index: 50;
-}
-
-.ross-card-slot--01 {
-  width: 7.2%;
-  height: 17.04vw;
-  background-color: #1c1c1c;
-  cursor: default;
-}
-
-.ross-card-slot--interactive {
-  width: 17.04%;
-  height: 17.04vw;
-  will-change: width;
-}
-
-.ross-card-inner {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  display: block;
-  transform-origin: top center;
-  will-change: transform;
-}
-
-.ross-card-slot--07 {
-  width: 7.6%;
-  height: 17.04vw;
-  background-color: #7e876c;
-  cursor: default;
-}
-
-/* 3. BOTTOM FOOTER & GIANT DISPLAY TYPOGRAPHY */
-.ross-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1;
-  pointer-events: none;
-}
-
-.ross-subbar {
-  width: 100%;
-  padding: 0 3.8%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 13px;
-  letter-spacing: -0.015em;
-  font-family: var(--font-editorial-sans);
-  margin-bottom: -1.6vw;
-  box-sizing: border-box;
-  pointer-events: auto;
-  position: relative;
-  z-index: 1;
-}
-
-.ross-subbar__views {
-  color: #c4c4c4;
-  font-weight: 400;
-  display: flex;
-  align-items: center;
-}
-
-.ross-subbar__btn {
-  background: none;
-  border: none;
-  padding: 0;
-  font-family: inherit;
-  font-size: inherit;
-  color: #c4c4c4;
-  cursor: pointer;
-  transition: color 0.15s ease;
-}
-
-.ross-subbar__btn.is-active {
-  color: #111111;
-  font-weight: 500;
-}
-
-.ross-subbar__sep {
-  color: #c4c4c4;
-  margin-right: 4px;
-}
-
-.ross-subbar__time {
-  color: #111111;
-  font-weight: 500;
-  font-variant-numeric: tabular-nums;
-}
-
-/* Giant Bottom Typography ("ROSS" Sans + "mason" Italic Serif) */
-.ross-masthead {
-  width: 100%;
-  padding: 0 3.1%;
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  line-height: 0.78;
-  transform: translateY(8%);
-  box-sizing: border-box;
-  user-select: none;
-}
-
-.ross-masthead__sans {
-  font-family: var(--font-editorial-sans);
-  font-weight: 400;
-  font-size: 19.4vw;
-  letter-spacing: -0.055em;
-  color: #050505;
-}
-
-.ross-masthead__serif {
-  font-family: var(--font-editorial-serif);
-  font-style: italic;
-  font-weight: 400;
-  font-size: 23.5vw;
-  letter-spacing: -0.03em;
-  color: #050505;
-  padding-right: 0.5%;
-}
-
-/* Responsive adjustment for small screens */
-@media (max-width: 900px) {
-  .ross-portfolio-container {
-    min-height: auto;
-    padding-bottom: 24px;
-    height: auto;
-  }
-  .ross-topbar {
-    padding: 16px 20px;
-    font-size: 12px;
-  }
-  .ross-meta-row, .ross-cards-row {
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-  .ross-meta-row::-webkit-scrollbar, .ross-cards-row::-webkit-scrollbar {
-    display: none;
-  }
-  .ross-subbar {
-    padding: 16px 20px 0;
-    margin-bottom: 0;
-  }
-  .ross-masthead {
-    transform: translateY(0);
-    padding: 16px 20px 0;
   }
 }

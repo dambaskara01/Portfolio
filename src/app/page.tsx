@@ -1,6 +1,7 @@
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
-import Development from "@/components/Development";
+import Engineering from "@/components/Engineering";
+import UIUXSection from "@/components/UIUXSection";
 import SmoothScrollProvider from "@/components/SmoothScroll";
 import PageTransitionProvider from "@/components/PageTransition";
 import ContextualBadgeCursor from "@/components/ContextualBadgeCursor";
@@ -15,7 +16,8 @@ export default function HomePage() {
         <main id="main-content" className="portfolio-main">
           <Hero />
           <Marquee />
-          <Development />
+          <Engineering />
+          <UIUXSection />
         </main>
       </PageTransitionProvider>
     </SmoothScrollProvider>

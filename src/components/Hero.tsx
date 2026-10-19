@@ -30,7 +30,7 @@ const COPY: Record<
     bioRaw:
       "I'm a 7th-semester Informatics Engineering student at Polinema and a fullstack developer intern at PT. Multi Spunindo Jaya Tbk. I build web applications with Next.js, Laravel, and React, and design the interfaces they run on.",
     nav: {
-      "#development": "Development",
+      "#engineering": "Engineering",
       "#uiux": "UI/UX Design",
       "#branding": "Graphic Identity",
       "#skills": "Skills",
@@ -45,7 +45,7 @@ const COPY: Record<
     bioRaw:
       "Saya mahasiswa semester 7 Teknik Informatika di Polinema dan magang sebagai fullstack developer di PT. Multi Spunindo Jaya Tbk. Saya membangun aplikasi web dengan Next.js, Laravel, dan React, lalu merancang antarmuka yang dipakainya.",
     nav: {
-      "#development": "Development",
+      "#engineering": "Engineering",
       "#uiux": "Desain UI/UX",
       "#branding": "Identitas Grafis",
       "#skills": "Keahlian",
@@ -58,7 +58,7 @@ const COPY: Record<
 };
 
 const NAV_TITLES: Record<string, string> = {
-  "#development": "Development",
+  "#engineering": "Engineering",
   "#uiux": "UI/UX Design",
   "#branding": "Graphic Identity",
   "#skills": "Skills & Technologies",
@@ -74,10 +74,22 @@ const clockFormat = new Intl.DateTimeFormat("en-GB", {
   hourCycle: "h23",
 });
 
+function JakartaClock() {
+  const [time, setTime] = useState<string | null>(null);
+
+  useEffect(() => {
+    const update = () => setTime(clockFormat.format(new Date()));
+    update();
+    const id = setInterval(update, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <span className="hero__clock-time">{time ?? "--:--:--"}</span>;
+}
+
 export default function Hero() {
   const { navigate } = usePageTransition();
   const [lang, setLang] = useState<Lang>("en");
-  const [time, setTime] = useState<string | null>(null);
 
   const rootRef = useRef<HTMLElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -86,39 +98,43 @@ export default function Hero() {
   const clockRef = useRef<HTMLParagraphElement>(null);
   const bioRef = useRef<HTMLDivElement>(null);
   const hasMountedRef = useRef(false);
+  const entranceTlRef = useRef<gsap.core.Timeline | null>(null);
 
   const copy = COPY[lang];
   const restWords = useMemo(() => copy.bioRaw.split(" ").filter(Boolean), [copy.bioRaw]);
   const leadWords = useMemo(() => copy.lead.split(" ").filter(Boolean), [copy.lead]);
 
-  // Live Jakarta clock interval
-  useEffect(() => {
-    const id = setInterval(() => setTime(clockFormat.format(new Date())), 1000);
-    const first = setTimeout(() => setTime(clockFormat.format(new Date())), 0);
-    return () => {
-      clearInterval(id);
-      clearTimeout(first);
-    };
-  }, []);
-
   useEffect(() => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Master Editorial Entrance Sequence
+  // 1. Master Editorial Entrance Sequence (runs once on mount)
   useGSAP(
     () => {
-      if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (prefersReducedMotion) {
+        gsap.set(panelRef.current, { opacity: 1, y: 0, scale: 1 });
+        gsap.set(portraitRef.current, { clipPath: "inset(0% 0% 0%)", opacity: 1, y: 0 });
+        gsap.set([langRef.current, clockRef.current], { opacity: 1, y: 0 });
+        gsap.set(".hero__word", { y: 0, yPercent: 0, opacity: 1, clearProps: "transform" });
+        gsap.set(".hero__nav-link", { opacity: 1, y: 0 });
         hasMountedRef.current = true;
         return;
       }
+
+      const initialScroll = typeof window !== "undefined" ? window.scrollY : 0;
 
       const tl = gsap.timeline({
         defaults: { ease: "power3.out" },
         onComplete: () => {
           hasMountedRef.current = true;
+          gsap.set(".hero__word", { y: 0, yPercent: 0, opacity: 1, clearProps: "transform" });
         },
       });
+      entranceTlRef.current = tl;
 
       // 1. Panel arrival
       tl.fromTo(
@@ -146,8 +162,8 @@ export default function Hero() {
       // 4. Bio words rise from mask
       tl.fromTo(
         ".hero__word",
-        { yPercent: 115, opacity: 0 },
-        { yPercent: 0, opacity: 1, duration: 0.85, ease: "power4.out", stagger: 0.012 },
+        { yPercent: 115, y: 0, opacity: 0 },
+        { yPercent: 0, y: 0, opacity: 1, duration: 0.85, ease: "power4.out", stagger: 0.012 },
         "-=0.55"
       );
 
@@ -159,7 +175,49 @@ export default function Hero() {
         "-=0.5"
       );
 
-      // 6. Scroll-Driven Exit: Editorial Multi-Depth Disperse & Shutter
+      // If page was already scrolled on mount (e.g. reload midway), jump straight to finished resting state
+      if (initialScroll > 80) {
+        tl.progress(1);
+        hasMountedRef.current = true;
+      }
+    },
+    { scope: rootRef }
+  );
+
+  // 2. Scroll-Driven Exit & Re-Entry Sequence (synced with language switches)
+  useGSAP(
+    () => {
+      const prefersReducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (prefersReducedMotion) return;
+
+      const resetHeroToRest = () => {
+        if (panelRef.current) {
+          gsap.set(panelRef.current, {
+            scale: 1,
+            opacity: 1,
+            borderRadius: "10px",
+            filter: "blur(0px)",
+            y: 0,
+          });
+        }
+        if (portraitRef.current) {
+          gsap.set(portraitRef.current, {
+            clipPath: "inset(0% 0% 0% 0%)",
+            y: 0,
+            scale: 1,
+            opacity: 1,
+          });
+        }
+        if (langRef.current && clockRef.current) {
+          gsap.set([langRef.current, clockRef.current], { y: 0, opacity: 1 });
+        }
+        gsap.set(".hero__word", { y: 0, yPercent: 0, opacity: 1, clearProps: "transform" });
+        gsap.set(".hero__nav-link", { y: 0, opacity: 1 });
+      };
+
       const exitTl = gsap.timeline({
         scrollTrigger: {
           trigger: rootRef.current,
@@ -167,73 +225,114 @@ export default function Hero() {
           end: "bottom top",
           scrub: 0.75,
           invalidateOnRefresh: true,
+          onUpdate: (self) => {
+            // If the user scrolls before entrance sequence completes, immediately conclude entrance
+            if (self.progress > 0 && entranceTlRef.current && entranceTlRef.current.progress() < 1) {
+              entranceTlRef.current.progress(1);
+            }
+            if (self.progress === 0) {
+              resetHeroToRest();
+            }
+          },
+          onLeaveBack: resetHeroToRest,
         },
       });
 
       exitTl
         // A. Panel spatial depth recede & curved edge contraction
-        .to(
+        .fromTo(
           panelRef.current,
           {
-            scale: 0.92,
+            scale: 1,
+            opacity: 1,
+            borderRadius: "10px",
+            filter: "blur(0px)",
+            transformOrigin: "center 25%",
+          },
+          {
+            scale: 0.96,
             opacity: 0.25,
-            borderRadius: "36px",
-            filter: "blur(1.5px)",
+            borderRadius: "20px",
             transformOrigin: "center 25%",
             ease: "none",
+            immediateRender: false,
           },
           0
         )
         // B. Portrait architectural shutter wipe & parallax lift
-        .to(
+        .fromTo(
           portraitRef.current,
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            y: 0,
+            scale: 1,
+            opacity: 1,
+          },
           {
             clipPath: "inset(0% 0% 50% 0%)",
             y: -45,
             scale: 0.96,
             opacity: 0.35,
             ease: "none",
+            immediateRender: false,
           },
-          0
+          0.04
         )
         // C. Top meta (language toggle & live clock) slide up
-        .to(
+        .fromTo(
           [langRef.current, clockRef.current],
+          {
+            y: 0,
+            opacity: 1,
+          },
           {
             y: -35,
             opacity: 0,
             stagger: 0.04,
             ease: "none",
+            immediateRender: false,
           },
-          0
+          0.06
         )
         // D. Bio words cascading shutter sink into word-masks
-        .to(
+        .fromTo(
           ".hero__word",
           {
+            yPercent: 0,
+            y: 0,
+            opacity: 1,
+          },
+          {
             yPercent: 110,
+            y: 0,
             opacity: 0.15,
             stagger: {
               each: 0.007,
               from: "start",
             },
             ease: "none",
+            immediateRender: false,
           },
-          0
+          0.1
         )
         // E. Nav links subtle downward cascade
-        .to(
+        .fromTo(
           ".hero__nav-link",
+          {
+            y: 0,
+            opacity: 1,
+          },
           {
             y: 20,
             opacity: 0,
             stagger: 0.025,
             ease: "none",
+            immediateRender: false,
           },
-          0
+          0.12
         );
     },
-    { scope: rootRef }
+    { scope: rootRef, dependencies: [lang] }
   );
 
   // Micro-crossfade on language change (after initial entrance has finished)
@@ -273,7 +372,7 @@ export default function Hero() {
           </div>
 
           <p ref={clockRef} className="hero__clock" role="timer" aria-label="Current time in Jakarta">
-            <span className="hero__clock-time">{time ?? "--:--:--"}</span>
+            <JakartaClock />
           </p>
         </div>
 

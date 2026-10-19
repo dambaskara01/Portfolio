@@ -116,6 +116,30 @@ export default function Marquee() {
         repeat: -1,
       });
 
+      // Cinematic Film Strip Entrance & Exit
+      // Focus pull (gentle lens blur to crisp sharpness) & optical breathing
+      // As it scrolls into view, it comes smoothly into visual focus without ugly layout shifting
+      gsap.fromTo(
+        track,
+        {
+          filter: "blur(10px)",
+          opacity: 0.25,
+          letterSpacing: "4px",
+        },
+        {
+          filter: "blur(0px)",
+          opacity: 1,
+          letterSpacing: "0px",
+          ease: "none",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 95%",
+            end: "top 65%",
+            scrub: 0.6,
+          },
+        }
+      );
+
       // Velocity-reactive acceleration on user scroll
       ScrollTrigger.create({
         trigger: containerRef.current,

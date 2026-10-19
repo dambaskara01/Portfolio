@@ -5,7 +5,7 @@ Portofolio pribadi satu halaman untuk menampilkan karya **Fullstack Development*
 > ⚠️ **Status: restruktur besar sedang berjalan.** Sebagian besar section component
 > (`UiUx`, `Branding`, `Skills`, `Experience`, `Contact`, `Footer`,
 > `Nav`, dan modal detail) sengaja dihapus dari working tree dan
-> akan dibangun ulang. Yang aktif sekarang: **Hero** + **Marquee** + **Development**.
+> akan dibangun ulang. Yang aktif sekarang: **Hero** + **Marquee** + **Engineering** + **UI/UX Design**.
 > Arsitektur lengkap terakhir ada di commit `HEAD`.
 
 ## Tech Stack
@@ -52,9 +52,12 @@ src/
 │   ├── ContextualBadgeCursor.tsx # Kursor custom berbadge (VIEW/LINK/...)
 │   ├── Hero.tsx                  # Section utama + bilingual copy (EN/ID)
 │   ├── Marquee.tsx               # Marquee logo tech (GSAP ScrollTrigger)
-│   └── Development.tsx           # Section karya Development (Swiss dynamic ribbon)
+│   ├── Engineering.tsx           # Full-bleed showcase section (mesh aura & project preview template panel)
+│   ├── UIUXSection.tsx           # Section UI/UX 3D kinetic showcase stage
+│   └── WorksWheel.tsx            # Spatial 3D revolving drum card deck index
 ├── data/
-│   └── portfolioData.ts          # Central data source bilingual
+│   ├── portfolioData.ts          # Central data source bilingual
+│   └── uiuxData.ts               # Dataset kurasi karya UI/UX & spesifikasi
 ├── hooks/
 │   └── useCurrentLang.ts         # Hook pendeteksi bahasa reaktif
 public/

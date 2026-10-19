@@ -62,7 +62,6 @@ export default function SmoothScrollProvider({
 
     gsap.ticker.add(updateTicker);
     gsap.ticker.lagSmoothing(0);
-    ScrollTrigger.refresh();
 
     return () => {
       gsap.ticker.remove(updateTicker);

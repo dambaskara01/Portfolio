@@ -25,7 +25,8 @@ File entry: `src/app/page.tsx`
     <main>
       <Hero />
       <Marquee />
-      <Development />
+      <Engineering />
+      <UIUXSection />
     </main>
   </PageTransitionProvider>
 </SmoothScrollProvider>
@@ -39,7 +40,8 @@ File entry: `src/app/page.tsx`
 | 4 | `main` | Kontainer semua section. |
 | 5 | `Hero` | Section cover + identitas + bilingual copy (EN/ID). |
 | 6 | `Marquee` | Infinite marquee logo tech dengan GSAP ScrollTrigger velocity. |
-| 7 | `Development` | Dynamic horizontal card reel dengan hover expansion & monumental typography anchor (`#development`). |
+| 7 | `Engineering` | Full-bleed showcase section (Silent House reference): ambient mesh aura & white project panel dengan kinetic deck pinned scroll scrub. |
+| 8 | `UIUXSection` | Spatial 3D revolving drum index (`WorksWheel`) showcase section untuk karya UI/UX & Product Design. |
 
 ## Struktur Folder
 
@@ -55,9 +57,13 @@ src/
 │   ├── ContextualBadgeCursor.tsx
 │   ├── Hero.tsx            # Section: cover + identity
 │   ├── Marquee.tsx         # Section: tech marquee
-│   └── Development.tsx     # Section: interactive development project reel
+│   ├── Engineering.tsx     # Section: engineering index & floating cursor preview
+│   ├── UIUXSection.tsx     # Section: UI/UX kinetic 3D stage
+│   └── ui/
+│       └── works-wheel.tsx # Spatial revolving drum 3D card deck (1:1 port)
 ├── data/
-│   └── portfolioData.ts    # Single source of truth untuk project data
+│   ├── portfolioData.ts    # Single source of truth untuk project data
+│   └── uiuxData.ts         # Dataset kurasi UI/UX projects & specs
 ├── hooks/
 │   └── useCurrentLang.ts   # Client hook observasi perubahan bahasa EN/ID
 public/
@@ -78,7 +84,9 @@ public/
 | `ContextualBadgeCursor.tsx` | ~77 | Ya | Badge kursor custom, event listener hover, guards reduced motion + touch. |
 | `Hero.tsx` | ~325 | Ya | Section cover, bilingual state `Lang`, copy EN/ID inline, nav anchor, photo placeholder. |
 | `Marquee.tsx` | ~191 | Ya | Marquee logo tech, SVG inline, GSAP ScrollTrigger scrub/velocity. |
-| `Development.tsx` | ~200 | Ya | Interactive horizontal ribbon showcase, hover card expansion, keyboard navigation, bilingual details. |
+| `Engineering.tsx` | ~250 | Ya | Full-bleed showcase section (Silent House reference): ambient mesh aura, edge-to-edge white project preview panel dengan pinned multi-slide kinetic scrub. |
+| `UIUXSection.tsx` | ~60 | Ya | Section UI/UX yang mengintegrasikan `works-wheel`. |
+| `ui/works-wheel.tsx` | ~400 | Ya | Spatial 3D revolving drum wheel index port 1:1 untuk navigasi karya/portfolio. |
 
 ## Data Flow
 

@@ -22,7 +22,7 @@ const SECTION_METAS: Record<
 > = {
   "#hero": { title: "Cover", tag: "Identity", type: "top-down" },
   "#development": { title: "Development", tag: "Selected Projects", type: "split-horizontal" },
-  "#engineering": { title: "Development", tag: "Selected Projects", type: "split-horizontal" },
+  "#engineering": { title: "Engineering", tag: "Selected Projects", type: "split-horizontal" },
   "#disciplines": { title: "Disciplines", tag: "Architecture", type: "split-horizontal" },
   "#uiux": { title: "UI/UX Design", tag: "Product Design", type: "split-horizontal" },
   "#branding": { title: "Graphic Identity", tag: "Brand Identity", type: "split-horizontal" },
