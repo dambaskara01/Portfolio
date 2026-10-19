@@ -293,27 +293,63 @@ export default function Engineering() {
           scrubTl.set(currentSlide, { visibility: "hidden", pointerEvents: "none" });
         }
 
-        // 2. Final Slide Exit Animation (Option 2: 3D Stage Spatial Bridge)
-        // Project 3 recedes deeply into the 3D Z-plane with subtle tilt and blur,
-        // mirroring the cylindrical 3D depth of the incoming WorksWheel UI/UX section.
+        // 2. Final Slide Exit Animation (3D Perspective Stage Spatial Bridge)
+        // Coordinated 3D spatial transformation:
+        // - Slide container tilts back into 3D depth with perspective foreshortening
+        // - White editorial panel rotates forward and slides downward like an architectural hinge
+        // - Mesh aura recedes deeper into space with atmospheric dissolution
         const lastIndex = totalSlides - 1;
         const lastSlide = slidesRef.current[lastIndex];
         if (lastSlide) {
           const exitLabel = `slide-${lastIndex}-exit`;
+          const panel = lastSlide.querySelector(".silent-panel");
+          const aura = lastSlide.querySelector(".silent-mesh-gradient");
+
+          // Whole slide tilts back into 3D horizon
           scrubTl.to(
             lastSlide,
             {
-              z: -380,
-              rotateX: 8,
-              yPercent: -10,
-              scale: 0.88,
+              z: -600,
+              rotateX: 18,
+              yPercent: -15,
               opacity: 0,
-              filter: "blur(12px)",
+              transformOrigin: "50% 100%",
               duration: 1,
               ease: "power2.inOut",
             },
             exitLabel
           );
+
+          // Panel hinges open/downwards in 3D perspective
+          if (panel) {
+            scrubTl.to(
+              panel,
+              {
+                rotateX: -24,
+                y: 80,
+                opacity: 0,
+                transformOrigin: "bottom center",
+                duration: 0.9,
+                ease: "power2.in",
+              },
+              exitLabel
+            );
+          }
+
+          // Aura sinks further back with atmospheric fade
+          if (aura) {
+            scrubTl.to(
+              aura,
+              {
+                scale: 0.7,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power1.out",
+              },
+              exitLabel
+            );
+          }
+
           scrubTl.set(lastSlide, { visibility: "hidden", pointerEvents: "none" });
         }
       }
