@@ -256,9 +256,9 @@ export function WorksWheel({
       const vw = window.innerWidth;
 
       // 1. Centering check:
-      // UI/UX section must be substantially framed in the viewport
-      // (top <= 140px and bottom >= vh - 140px) before intercepting wheel events.
-      const isCentered = rect.top <= 140 && rect.bottom >= vh - 140;
+      // UI/UX section must be in view and substantially centered in viewport
+      // (top within +/- 120px of viewport top) before intercepting wheel events.
+      const isCentered = Math.abs(rect.top) <= 120;
       if (!isCentered) {
         return;
       }

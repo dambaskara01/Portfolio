@@ -26,9 +26,9 @@ const COPY: Record<
   }
 > = {
   en: {
-    lead: "Adham Baskara, fullstack developer and UI/UX designer.",
+    lead: "Hi, I’m Adham",
     bioRaw:
-      "I'm a 7th-semester Informatics Engineering student at Polinema and a fullstack developer intern at PT. Multi Spunindo Jaya Tbk. I build web applications with Next.js, Laravel, and React, and design the interfaces they run on.",
+      "— an informatics student bridging fullstack development and visual design. Currently interning at PT Multi Spunindo Jaya Tbk, building functional web apps while designing thoughtful user interfaces and graphic systems.",
     nav: {
       "#engineering": "Engineering",
       "#uiux": "UI/UX Design",
@@ -41,9 +41,9 @@ const COPY: Record<
     langGroup: "Language",
   },
   id: {
-    lead: "Adham Baskara, fullstack developer dan UI/UX designer.",
+    lead: "Halo, saya Adham",
     bioRaw:
-      "Saya mahasiswa semester 7 Teknik Informatika di Polinema dan magang sebagai fullstack developer di PT. Multi Spunindo Jaya Tbk. Saya membangun aplikasi web dengan Next.js, Laravel, dan React, lalu merancang antarmuka yang dipakainya.",
+      "— mahasiswa teknik informatika yang menjembatani pengembangan fullstack dan desain visual. Saat ini magang di PT Multi Spunindo Jaya Tbk, membangun aplikasi web fungsional sekaligus merancang antarmuka pengguna dan sistem grafis yang matang.",
     nav: {
       "#engineering": "Engineering",
       "#uiux": "Desain UI/UX",

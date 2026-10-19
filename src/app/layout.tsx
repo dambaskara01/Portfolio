@@ -79,7 +79,7 @@ const nevanta = localFont({
 export const metadata: Metadata = {
   title: "Adham Baskara : Fullstack Developer & UI/UX Designer",
   description:
-    "Portfolio of Adham Baskara: 7th-semester Informatics Engineering student at Polinema and Fullstack Developer Intern at PT. Multi Spunindo Jaya Tbk.",
+    "Portfolio of Adham Baskara — an informatics student bridging fullstack development and visual design. Currently interning at PT Multi Spunindo Jaya Tbk.",
   keywords: [
     "Adham Baskara",
     "fullstack developer",
@@ -96,7 +96,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Adham Baskara : Fullstack Developer & UI/UX Designer",
     description:
-      "Portfolio of Adham Baskara: 7th-semester Informatics Engineering student at Polinema and Fullstack Developer Intern at PT. Multi Spunindo Jaya Tbk.",
+      "Portfolio of Adham Baskara — an informatics student bridging fullstack development and visual design. Currently interning at PT Multi Spunindo Jaya Tbk.",
     type: "website",
   },
 };

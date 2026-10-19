@@ -234,18 +234,21 @@ export default function Engineering() {
       ScrollTrigger.refresh();
 
       // Kinetic Multi-Slide Deck Scrub (Pinned ScrollTrigger)
+      // We add an exit phase for the final slide so it transitions out cleanly
+      // before the UI/UX section docks into view.
       const totalSlides = projects.length;
-      if (totalSlides > 1) {
+      if (totalSlides > 0) {
         const scrubTl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: `+=${(totalSlides - 1) * 150}%`,
+            end: `+=${totalSlides * 130}%`,
             pin: true,
             scrub: true,
           },
         });
 
+        // 1. Transitions between slides (Slide 0 -> 1 -> 2)
         for (let i = 0; i < totalSlides - 1; i++) {
           const currentSlide = slidesRef.current[i];
           const nextSlide = slidesRef.current[i + 1];
@@ -288,6 +291,30 @@ export default function Engineering() {
 
           // Deactivate previous slide interactions once fully covered
           scrubTl.set(currentSlide, { visibility: "hidden", pointerEvents: "none" });
+        }
+
+        // 2. Final Slide Exit Animation (Option 2: 3D Stage Spatial Bridge)
+        // Project 3 recedes deeply into the 3D Z-plane with subtle tilt and blur,
+        // mirroring the cylindrical 3D depth of the incoming WorksWheel UI/UX section.
+        const lastIndex = totalSlides - 1;
+        const lastSlide = slidesRef.current[lastIndex];
+        if (lastSlide) {
+          const exitLabel = `slide-${lastIndex}-exit`;
+          scrubTl.to(
+            lastSlide,
+            {
+              z: -380,
+              rotateX: 8,
+              yPercent: -10,
+              scale: 0.88,
+              opacity: 0,
+              filter: "blur(12px)",
+              duration: 1,
+              ease: "power2.inOut",
+            },
+            exitLabel
+          );
+          scrubTl.set(lastSlide, { visibility: "hidden", pointerEvents: "none" });
         }
       }
     },
