@@ -47,7 +47,7 @@ const COPY: Record<
     nav: {
       "#engineering": "Engineering",
       "#uiux": "Desain UI/UX",
-      "#branding": "Identitas Grafis",
+      "#branding": "Graphic Design",
       "#skills": "Keahlian",
       "#experience": "Pengalaman",
       "#contact": "Kontak",

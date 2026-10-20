@@ -17,8 +17,13 @@
 // through props to reach the one place that renders it.
 import * as React from "react";
 
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { useSmoothScroll } from "@/components/SmoothScroll";
 import { cn } from "@/lib/utils";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 /* ============================================================
    CONTENT
@@ -36,7 +41,11 @@ type Work = {
 const ART = (name: string) => `https://www.crafterui.com/art/${name}.jpg`;
 
 const WORKS: Work[] = [
-  { title: "Design 01", image: ART("prismatic-rift-anime"), href: "#design-01" },
+  {
+    title: "Design 01",
+    image: ART("prismatic-rift-anime"),
+    href: "#design-01",
+  },
   {
     title: "Design 02",
     image: ART("black-hole-ember-clouds"),
@@ -52,11 +61,31 @@ const WORKS: Work[] = [
     image: ART("red-ribbon-typography"),
     href: "#design-04",
   },
-  { title: "Design 05", image: ART("celestial-light-figure"), href: "#design-05" },
-  { title: "Design 06", image: ART("neon-portrait-uplight"), href: "#design-06" },
-  { title: "Design 07", image: ART("indigo-liquid-marble"), href: "#design-07" },
-  { title: "Design 08", image: ART("rocket-launch-gradient"), href: "#design-08" },
-  { title: "Design 09", image: ART("astronaut-cosmic-wave"), href: "#design-09" },
+  {
+    title: "Design 05",
+    image: ART("celestial-light-figure"),
+    href: "#design-05",
+  },
+  {
+    title: "Design 06",
+    image: ART("neon-portrait-uplight"),
+    href: "#design-06",
+  },
+  {
+    title: "Design 07",
+    image: ART("indigo-liquid-marble"),
+    href: "#design-07",
+  },
+  {
+    title: "Design 08",
+    image: ART("rocket-launch-gradient"),
+    href: "#design-08",
+  },
+  {
+    title: "Design 09",
+    image: ART("astronaut-cosmic-wave"),
+    href: "#design-09",
+  },
 ];
 
 /** Sits in the middle of the ring, and names the section for a11y. */
@@ -150,6 +179,12 @@ export default function UIUX() {
   const overscrollUp = React.useRef(0);
   const overscrollResetTimer = React.useRef<number>(0);
 
+  // Pin container + pinned-state flag. The section is locked full-screen by
+  // ScrollTrigger; the wheel handler gates on isPinned so page scroll is not
+  // intercepted until the section actually fills the viewport.
+  const pinContainerRef = React.useRef<HTMLDivElement>(null);
+  const isPinned = React.useRef(false);
+
   // The wheel's position, and where it is heading. Only `active` is state -
   // everything else is written to the DOM, so turning the wheel is not a render.
   const turn = React.useRef(0);
@@ -171,6 +206,40 @@ export default function UIUX() {
     query.addEventListener("change", read);
     return () => query.removeEventListener("change", read);
   }, []);
+
+  // Pin the section so it stays locked full-screen while the user interacts
+  // with the wheel, preventing slivers of adjacent sections from bleeding
+  // into the viewport during scroll or resize. Mirrors the Engineering deck
+  // pattern: pin container (position: relative, no fixed height) is the
+  // trigger; the 100vh inner section is the pinned element.
+  useGSAP(
+    () => {
+      if (!pinContainerRef.current) return;
+
+      ScrollTrigger.create({
+        trigger: pinContainerRef.current,
+        start: "top top",
+        end: "+=30%",
+        pin: true,
+        invalidateOnRefresh: true,
+        onEnter: () => {
+          isPinned.current = true;
+        },
+        onLeave: () => {
+          isPinned.current = false;
+        },
+        onEnterBack: () => {
+          isPinned.current = true;
+        },
+        onLeaveBack: () => {
+          isPinned.current = false;
+        },
+      });
+
+      ScrollTrigger.refresh();
+    },
+    { scope: pinContainerRef },
+  );
 
   React.useEffect(() => {
     const el = stageRef.current;
@@ -269,11 +338,11 @@ export default function UIUX() {
     [last],
   );
 
-  // Wheel listener with strict centering and central hotspot gating.
+  // Wheel listener with pin gating and central hotspot gating.
   // Wheel only takes over card rotation when:
-  // 1. The UI/UX section is centered in the viewport (rect.top within +/- 100px).
+  // 1. The UI/UX section is pinned full-screen (ScrollTrigger pin active).
   // 2. The cursor is positioned over the central 3D card stage.
-  // When scrolling down from Engineering, the page scrolls smoothly until UI/UX is centered.
+  // Before pinning, page scroll is not intercepted so the user can reach the section.
   React.useEffect(() => {
     const el = rootRef.current;
     if (!el) return;
@@ -282,14 +351,14 @@ export default function UIUX() {
       const root = rootRef.current;
       if (!root) return;
 
-      const rect = root.getBoundingClientRect();
       const vh = window.innerHeight;
       const vw = window.innerWidth;
 
-      // 1. Centering check:
-      // UI/UX section must be in view and substantially centered in viewport
-      // (top within +/- 120px of viewport top) before intercepting wheel events.
-      const isCentered = Math.abs(rect.top) <= 120;
+      // 1. Pin check:
+      // The wheel only takes over once the section is pinned full-screen.
+      // Before pinning, normal page scroll is preserved so the user can
+      // reach the section without the wheel intercepting prematurely.
+      const isCentered = isPinned.current;
       if (!isCentered) {
         return;
       }
@@ -371,136 +440,135 @@ export default function UIUX() {
   const settling = React.useRef(0);
 
   return (
-    <div id="uiux" className="works-wheel-demo-container">
-      <section
-        ref={rootRef}
-        aria-label={LABEL}
-        className="works-wheel-root"
-      >
-        <div
-          ref={stageRef}
-          tabIndex={0}
-          role="listbox"
-          aria-label={LABEL}
-          aria-activedescendant={`works-wheel-${active}`}
-          className="works-wheel-stage"
-          style={{ perspective: `${metrics.depth}px` }}
-          onPointerDown={(event) => {
-            drag.current = event.clientY;
-            event.currentTarget.setPointerCapture(event.pointerId);
-          }}
-          onPointerMove={(event) => {
-            if (drag.current === null) return;
-            to(target.current + (drag.current - event.clientY) / DRAG_UNITS);
-            drag.current = event.clientY;
-          }}
-          onPointerUp={() => {
-            // Land on an item rather than between two.
-            drag.current = null;
-            if (target.current > 1) to(Math.round(target.current));
-          }}
-          onKeyDown={(event) => {
-            if (event.key === "ArrowDown") to(Math.round(target.current) + 1);
-            else if (event.key === "ArrowUp") to(Math.round(target.current) - 1);
-            else return;
-            event.preventDefault();
-          }}
-        >
-          <div ref={wheelRef} className="works-wheel-drum">
-            {items.map((item, i) => {
-              const Tag = (item.href ? "a" : "div") as "a";
-              return (
-                <Tag
-                  key={item.title}
-                  id={`works-wheel-${i}`}
-                  role="option"
-                  aria-selected={i === active}
-                  href={item.href}
-                  onClick={(e) => {
-                    if (active !== i) {
-                      e.preventDefault();
-                      to(i + 1);
-                    }
-                  }}
-                  ref={(node: HTMLElement | null) => {
-                    cardRefs.current[i] = node;
-                  }}
-                  className="works-wheel-card"
-                  style={{
-                    width: metrics.cardW,
-                    height: metrics.cardH,
-                    marginLeft: -metrics.cardW / 2,
-                    marginTop: -metrics.cardH / 2,
-                  }}
-                >
-                  <span className="works-wheel-card-frame">
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      draggable={false}
-                      className="works-wheel-card-img"
-                    />
-                    {ACTION && item.href ? (
-                      <span className="works-wheel-card-action">
-                        <svg
-                          viewBox="0 0 12 12"
-                          className="works-wheel-action-icon"
-                          aria-hidden="true"
-                        >
-                          <path
-                            d="M3 9 9 3M4 3h5v5"
-                            fill="none"
-                            stroke="currentColor"
-                            strokeWidth="1.4"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                        {ACTION}
-                      </span>
-                    ) : null}
-                  </span>
-                </Tag>
-              );
-            })}
+    <div className="works-wheel-pin-container" ref={pinContainerRef}>
+      <div id="uiux" className="works-wheel-demo-container">
+        <section ref={rootRef} aria-label={LABEL} className="works-wheel-root">
+          <div
+            ref={stageRef}
+            tabIndex={0}
+            role="listbox"
+            aria-label={LABEL}
+            aria-activedescendant={`works-wheel-${active}`}
+            className="works-wheel-stage"
+            style={{ perspective: `${metrics.depth}px` }}
+            onPointerDown={(event) => {
+              drag.current = event.clientY;
+              event.currentTarget.setPointerCapture(event.pointerId);
+            }}
+            onPointerMove={(event) => {
+              if (drag.current === null) return;
+              to(target.current + (drag.current - event.clientY) / DRAG_UNITS);
+              drag.current = event.clientY;
+            }}
+            onPointerUp={() => {
+              // Land on an item rather than between two.
+              drag.current = null;
+              if (target.current > 1) to(Math.round(target.current));
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "ArrowDown") to(Math.round(target.current) + 1);
+              else if (event.key === "ArrowUp")
+                to(Math.round(target.current) - 1);
+              else return;
+              event.preventDefault();
+            }}
+          >
+            <div ref={wheelRef} className="works-wheel-drum">
+              {items.map((item, i) => {
+                const Tag = (item.href ? "a" : "div") as "a";
+                return (
+                  <Tag
+                    key={item.title}
+                    id={`works-wheel-${i}`}
+                    role="option"
+                    aria-selected={i === active}
+                    href={item.href}
+                    onClick={(e) => {
+                      if (active !== i) {
+                        e.preventDefault();
+                        to(i + 1);
+                      }
+                    }}
+                    ref={(node: HTMLElement | null) => {
+                      cardRefs.current[i] = node;
+                    }}
+                    className="works-wheel-card"
+                    style={{
+                      width: metrics.cardW,
+                      height: metrics.cardH,
+                      marginLeft: -metrics.cardW / 2,
+                      marginTop: -metrics.cardH / 2,
+                    }}
+                  >
+                    <span className="works-wheel-card-frame">
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        draggable={false}
+                        className="works-wheel-card-img"
+                      />
+                      {ACTION && item.href ? (
+                        <span className="works-wheel-card-action">
+                          <svg
+                            viewBox="0 0 12 12"
+                            className="works-wheel-action-icon"
+                            aria-hidden="true"
+                          >
+                            <path
+                              d="M3 9 9 3M4 3h5v5"
+                              fill="none"
+                              stroke="currentColor"
+                              strokeWidth="1.4"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                            />
+                          </svg>
+                          {ACTION}
+                        </span>
+                      ) : null}
+                    </span>
+                  </Tag>
+                );
+              })}
+            </div>
           </div>
-        </div>
 
-        {/* Ring title and front-card title trade places across the transition.
+          {/* Ring title and front-card title trade places across the transition.
             Type is sized off the measured stage, not vh, so the wheel keeps its
             proportions inside a card as well as at full bleed. */}
-        <div
-          ref={labelRef}
-          className="works-wheel-label"
-          style={{ fontSize: metrics.title }}
-        >
-          {LABEL}
-        </div>
-        <div
-          ref={titleRef}
-          className="works-wheel-title"
-          style={{ fontSize: metrics.title }}
-        >
-          {items[active >= 0 ? active : 0]?.title}
-        </div>
+          <div
+            ref={labelRef}
+            className="works-wheel-label"
+            style={{ fontSize: metrics.title }}
+          >
+            {LABEL}
+          </div>
+          <div
+            ref={titleRef}
+            className="works-wheel-title"
+            style={{ fontSize: metrics.title }}
+          >
+            {items[active >= 0 ? active : 0]?.title}
+          </div>
 
-        <ol className="works-wheel-index" style={{ fontSize: metrics.index }}>
-          {items.map((item, i) => (
-            <li key={item.title}>
-              <button
-                type="button"
-                onClick={() => to(i + 1)}
-                className={cn(
-                  "works-wheel-index-btn",
-                  i === active && "is-active",
-                )}
-              >
-                {item.title}
-              </button>
-            </li>
-          ))}
-        </ol>
-      </section>
+          <ol className="works-wheel-index" style={{ fontSize: metrics.index }}>
+            {items.map((item, i) => (
+              <li key={item.title}>
+                <button
+                  type="button"
+                  onClick={() => to(i + 1)}
+                  className={cn(
+                    "works-wheel-index-btn",
+                    i === active && "is-active",
+                  )}
+                >
+                  {item.title}
+                </button>
+              </li>
+            ))}
+          </ol>
+        </section>
+      </div>
     </div>
   );
 }

@@ -25,7 +25,7 @@ const SECTION_METAS: Record<
   "#engineering": { title: "Engineering", tag: "Selected Projects", type: "split-horizontal" },
   "#disciplines": { title: "Disciplines", tag: "Architecture", type: "split-horizontal" },
   "#uiux": { title: "UI/UX Design", tag: "Product Design", type: "split-horizontal" },
-  "#branding": { title: "Graphic Identity", tag: "Brand Identity", type: "split-horizontal" },
+  "#branding": { title: "Graphic Design", tag: "Graphic Design", type: "split-horizontal" },
   "#work": { title: "Selected Projects", tag: "Gallery", type: "bottom-up" },
   "#skills": { title: "Skills & Technologies", tag: "Technical Stack", type: "horizontal-sweep" },
   "#experience": { title: "Work History", tag: "Track Record", type: "vertical-gauge" },

@@ -128,6 +128,16 @@ Aturan yang mengikat implementasi ini:
   penuh adalah jembatan ke background terang section UI/UX — jangan diganti
   menjadi fade ke `--base` gelap, itu akan memunculkan kedipan.
 
+### UIUX — pin full-viewport
+
+Section UI/UX (`src/components/UIUX.tsx`) di-pin dengan `ScrollTrigger` (`pin: true`,
+`end: "+=30%"`, `invalidateOnRefresh: true`) supaya konten mengunci full-viewport saat
+scroll — mencegah sliver section Engineering (atas) atau GraphicDesign (bawah) terlihat
+saat resize atau transisi. Container `.works-wheel-pin-container` (`position: relative`)
+jadi trigger; `#uiux` (`100vh`/`100svh`) adalah elemen yang di-pin. Wheel handler
+gate pada `isPinned.current` (bukan `rect.top`) agar interaksi drum hanya aktif saat
+pin aktif; scroll boundary di kartu terakhir melepas pin secara natural.
+
 ## Efek Khas
 
 ### Tekstur noise
@@ -137,6 +147,32 @@ Tujuan: memberi kedalaman taktil ala cetakan, bukan gradasi warna. Jangan dihapu
 ### Radial gradient
 `body` background: `radial-gradient(ellipse 90% 50% at 50% -20%, rgba(31,29,26,0.05), transparent 75%)`.
 Memberi vignette halus dari atas.
+
+### Filmstrip Graphic Design
+Section Graphic Design disusun dari ukuran yang diukur pada referensi 353×235 lalu
+dinyatakan sebagai rasio supaya komposisinya ikut viewport — bukan angka mata.
+
+| Elemen | Ukuran di referensi | Nilai CSS |
+| ------ | ------------------- | --------- |
+| Jendela rail (inset tepi) | 15 / 353 | `--gd-inset: 4.3%` |
+| Plate | 33.5 × 44 | `--gd-card-w: 9.49vw`, `--gd-card-h: 12.47vw` |
+| Jarak antar plate | 2 | `--gd-gap: 0.57%` |
+| Plate fokus | 2.09 × 2.136 plate | `--gd-focus-w` / `--gd-focus-h` |
+| Plate pertama terpotong | 46.3% | `margin-left: calc(var(--gd-card-w) * -0.463)` |
+| Inset bar & foot | 7 / 353 | `padding-inline: 2%` |
+| Statement `(01)` + judul | 72 / 353 | `padding-inline: 20.4%` |
+
+Efek lensa pada plate fokus memakai `clip-path: url(#gd-lens)` — SVG `clipPath`
+dengan `clipPathUnits: objectBoundingBox`, sudut masuk 2% dan tepi tengah rata.
+Skalanya otomatis, jadi tidak ada angka px yang perlu diubah saat lebar berubah.
+
+Posisi istirahat rail dihitung, bukan ditulis tangan: plate fokus diletakkan pada
+30% lebar jendela (`scrollLeft = focusLeft - clientWidth * 0.3`). Di lebar desktop
+hasilnya 0 — sama dengan komposisi referensi; di layar sempit plate tetap masuk frame.
+
+Wheel horizontal milik rail; wheel vertikal tetap milik halaman. Rail **tidak**
+memakai `data-lenis-prevent-wheel`, karena itu akan mengunci scroll halaman saat
+kursor berada di atas filmstrip.
 
 ## Aksesibilitas Motion
 
