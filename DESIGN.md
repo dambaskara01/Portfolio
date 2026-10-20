@@ -98,6 +98,36 @@ CSS transition untuk hal yang lebih kompleks dari sekadar opacity/transform sede
 
 Lihat `AGENTS.md` untuk convention GSAP.
 
+### Deck Engineering — pin, dwell, dan Aperture Close
+
+Section Engineering (`src/components/Engineering.tsx`) adalah deck 3 slide yang
+di-pin selama `totalSlides * 100 + 80`% viewport. Entrance memakai aperture:
+`clipPath: inset(0% 50% 0% 50%) → inset(0%)` pada `.silent-gradient-wrapper`.
+
+Slide terakhir punya choreography keluar sendiri ("Aperture Close") yang jadi
+**bookend** dari entrance — bukan sistem animasi baru:
+
+| Urutan | Target | Perubahan | Posisi timeline |
+| --- | --- | --- | --- |
+| 1 | Copy (badge → headline → tagline → CTA → quick link → credits) | `y: -18px` (touch `-10px`), `opacity: 0`, stagger ~40ms | mulai `2.4` |
+| 2 | `.silent-gradient-wrapper` | `clipPath` menutup ke `inset(0% 49.95% 0% 49.95%)` (seam hairline), `scale: 1.08` (touch `1.03`) | `+0.08` |
+| 3 | `.silent-panel` | `scaleY: 1 → viewportHeight / panelHeight` dengan `transformOrigin: bottom center` — panel putih naik jadi bidang full-bleed | `+0.35` |
+
+Aturan yang mengikat implementasi ini:
+
+- **Satu unit timeline ≈ 120% scroll.** Dwell `0.4` + exit `0.77` dipilih supaya
+  rasio itu tetap, jadi pacing antar-slide tidak berubah saat exit ditambahkan.
+  Kalau `EXIT_SCROLL` diubah, skala durasi exit harus ikut disesuaikan.
+- **`scaleY` diukur, bukan ditebak** — fungsi `viewportHeight / panelHeight`
+  dipakai supaya panel pendek di viewport tinggi tetap menutup penuh, dengan
+  `invalidateOnRefresh: true` agar nilainya dihitung ulang saat resize.
+- **Reverse scrub harus mengembalikan kondisi awal.** Semua exit tween memakai
+  `fromTo` dengan state awal eksplisit, sehingga scroll balik memulihkan
+  `clipPath: inset(0%)`, `scale: 1`, `scaleY: 1`, dan `opacity: 1`.
+- **End state harus menyambung ke section berikutnya.** Panel putih yang menutup
+  penuh adalah jembatan ke background terang section UI/UX — jangan diganti
+  menjadi fade ke `--base` gelap, itu akan memunculkan kedipan.
+
 ## Efek Khas
 
 ### Tekstur noise

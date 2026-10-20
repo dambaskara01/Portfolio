@@ -21,6 +21,13 @@ export default function Engineering() {
         "(prefers-reduced-motion: reduce)"
       ).matches;
 
+      // Coarse pointers get the same choreography with shorter travel and a
+      // softer depth push - the shutter still has to close, but the lift and
+      // the aperture scale are pulled back so it does not read as jitter.
+      const isCoarsePointer = window.matchMedia(
+        "(hover: none) and (pointer: coarse)"
+      ).matches;
+
       if (!sectionRef.current || !containerRef.current) return;
 
       if (prefersReducedMotion) {
@@ -235,18 +242,20 @@ export default function Engineering() {
 
       // Kinetic Multi-Slide Deck Scrub (Pinned ScrollTrigger)
       // Standard Card Deck stacking pattern: each slide slides up over the previous one.
-      // Slide 3 has its own dwell duration so the user can read the content,
-      // and when the user scrolls past, the pin naturally releases so the entire section
-      // rolls upward like a standard page elevator, pushing smoothly into UI/UX.
+      // Slide 3 has its own dwell duration so the user can read the content, then the
+      // pin holds for one more segment (EXIT_SCROLL) so the section can close itself
+      // out with the aperture choreography instead of simply scrolling away.
       const totalSlides = projects.length;
+      const EXIT_SCROLL = 80; // extra pin budget, percent of viewport, for the exit
       if (totalSlides > 1) {
         const scrubTl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: `+=${totalSlides * 100}%`,
+            end: `+=${totalSlides * 100 + EXIT_SCROLL}%`,
             pin: true,
             scrub: true,
+            invalidateOnRefresh: true,
           },
         });
 
@@ -295,9 +304,83 @@ export default function Engineering() {
           scrubTl.set(currentSlide, { visibility: "hidden", pointerEvents: "none" });
         }
 
-        // Dedicated dwell duration for Slide 3 so it stays fully visible and interactive
-        // before the pin unpins and the natural page flow pushes to UI/UX
-        scrubTl.to({}, { duration: 0.5 });
+        // Dwell so Slide 3 stays readable and interactive before the exit begins
+        scrubTl.to({}, { duration: 0.4 });
+
+        // ==========================================
+        // APERTURE CLOSE - exit choreography for the final slide
+        // Bookends the entrance: the mesh aperture shuts back down to a vertical
+        // hairline, the copy lifts away in reading order, and the white panel
+        // rises off its own baseline into a full-bleed plane that hands the
+        // viewport over to the UI/UX section. The two dwell-free durations are
+        // tuned so one timeline unit still maps to ~120% of scroll, keeping the
+        // slide-to-slide pacing identical to before the exit segment existed.
+        // ==========================================
+        const lastSlide = slidesRef.current[totalSlides - 1];
+        if (lastSlide) {
+          const EXIT_AT = 2.4; // absolute timeline position where the exit starts
+          const EXIT_LEN = 0.77; // total exit length, in the same units
+
+          const exitGradient = lastSlide.querySelector<HTMLElement>(
+            ".silent-gradient-wrapper"
+          );
+          const exitPanel = lastSlide.querySelector<HTMLElement>(".silent-panel");
+          const exitCopy = lastSlide.querySelectorAll(
+            ".silent-project-badge, .silent-headline, .silent-tagline, .silent-action-link, .silent-quick-link, .silent-credits"
+          );
+
+          // 1. Copy leaves first, in reading order: badge through credits
+          if (exitCopy.length > 0) {
+            scrubTl.fromTo(
+              exitCopy,
+              { y: 0, opacity: 1 },
+              {
+                y: isCoarsePointer ? -10 : -18,
+                opacity: 0,
+                duration: EXIT_LEN * 0.45,
+                stagger: EXIT_LEN * 0.055,
+                ease: "power2.out",
+              },
+              EXIT_AT
+            );
+          }
+
+          // 2. Aperture shuts to a vertical hairline while easing forward in Z
+          if (exitGradient) {
+            scrubTl.fromTo(
+              exitGradient,
+              { clipPath: "inset(0% 0% 0% 0%)", scale: 1 },
+              {
+                clipPath: "inset(0% 49.95% 0% 49.95%)",
+                scale: isCoarsePointer ? 1.03 : 1.08,
+                duration: EXIT_LEN * 0.65,
+                ease: "power2.inOut",
+              },
+              EXIT_AT + EXIT_LEN * 0.1
+            );
+          }
+
+          // 3. White panel rises from its own baseline into a full-bleed plane.
+          //    The scale factor is measured, not guessed: the panel only has to
+          //    cover the section, so a short panel on a tall viewport simply
+          //    travels further.
+          if (exitPanel) {
+            gsap.set(exitPanel, { transformOrigin: "bottom center" });
+            scrubTl.fromTo(
+              exitPanel,
+              { scaleY: 1 },
+              {
+                scaleY: () =>
+                  (sectionRef.current?.clientHeight ?? window.innerHeight) /
+                    Math.max(exitPanel.offsetHeight, 1) +
+                  0.02,
+                duration: EXIT_LEN * 0.55,
+                ease: "power2.inOut",
+              },
+              EXIT_AT + EXIT_LEN * 0.45
+            );
+          }
+        }
       }
     },
     { scope: containerRef }
