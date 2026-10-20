@@ -32,7 +32,7 @@ const COPY: Record<
     nav: {
       "#engineering": "Engineering",
       "#uiux": "UI/UX Design",
-      "#branding": "Graphic Identity",
+      "#branding": "Graphic Design",
       "#skills": "Skills",
       "#experience": "Experience",
       "#contact": "Contact",
@@ -60,7 +60,7 @@ const COPY: Record<
 const NAV_TITLES: Record<string, string> = {
   "#engineering": "Engineering",
   "#uiux": "UI/UX Design",
-  "#branding": "Graphic Identity",
+  "#branding": "Graphic Design",
   "#skills": "Skills & Technologies",
   "#experience": "Experience",
   "#contact": "Contact",
