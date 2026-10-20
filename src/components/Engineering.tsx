@@ -63,21 +63,6 @@ export default function Engineering() {
       // Recalculate triggers after initial DOM layout settle
       ScrollTrigger.refresh();
 
-      // Subtle ambient aura drift for all slides
-      const meshGradients = containerRef.current?.querySelectorAll(
-        ".silent-mesh-gradient",
-      );
-      meshGradients?.forEach((mesh, idx) => {
-        gsap.to(mesh, {
-          scale: 1.05,
-          rotation: idx % 2 === 0 ? 1.5 : -1.5,
-          duration: 8 + idx * 1.5,
-          repeat: -1,
-          yoyo: true,
-          ease: "sine.inOut",
-        });
-      });
-
       // ==========================================
       // ARCHITECTURAL CINEMA ENTRANCE & EXIT (Project 1 Only)
       // Direct scrub linked to scroll position between Marquee & Engineering pin
@@ -85,7 +70,7 @@ export default function Engineering() {
       // ==========================================
       const firstSlide = slidesRef.current[0];
       if (firstSlide) {
-        const gradientEl = firstSlide.querySelector(".silent-gradient-wrapper");
+        const photoEl = firstSlide.querySelector(".silent-photo-placeholder");
         const panelEl = firstSlide.querySelector(".silent-panel");
         const badgeEl = firstSlide.querySelector(".silent-project-badge");
         const headlineEl = firstSlide.querySelector(".silent-headline");
@@ -103,10 +88,10 @@ export default function Engineering() {
           },
         });
 
-        // 1. Mesh Gradient: Split aperture curtain reveal from center horizontal
-        if (gradientEl) {
+        // 1. Photo Placeholder: Split aperture curtain reveal from center horizontal
+        if (photoEl) {
           entranceTl.fromTo(
-            gradientEl,
+            photoEl,
             {
               clipPath: "inset(0% 50% 0% 50%)",
               scale: 1.1,
@@ -354,8 +339,8 @@ export default function Engineering() {
           const EXIT_AT = totalSlides * DWELL + (totalSlides - 1); // timeline position where the exit starts
           const EXIT_LEN = 0.77; // total exit length, in the same units
 
-          const exitGradient = lastSlide.querySelector<HTMLElement>(
-            ".silent-gradient-wrapper",
+          const exitPhoto = lastSlide.querySelector<HTMLElement>(
+            ".silent-photo-placeholder",
           );
           const exitPanel =
             lastSlide.querySelector<HTMLElement>(".silent-panel");
@@ -380,9 +365,9 @@ export default function Engineering() {
           }
 
           // 2. Aperture shuts to a vertical hairline while easing forward in Z
-          if (exitGradient) {
+          if (exitPhoto) {
             scrubTl.fromTo(
-              exitGradient,
+              exitPhoto,
               { clipPath: "inset(0% 0% 0% 0%)", scale: 1 },
               {
                 clipPath: "inset(0% 49.95% 0% 49.95%)",
@@ -437,21 +422,13 @@ export default function Engineering() {
               }}
               style={{ zIndex: index + 1 }}
             >
-              {/* Full-Bleed Mesh Gradient Background */}
-              <div className="silent-gradient-wrapper" aria-hidden="true">
-                <div
-                  className="silent-mesh-gradient"
-                  style={{
-                    backgroundColor: data.visual.baseColor,
-                    background: `
-                      radial-gradient(ellipse 48% 48% at 85% 24%, ${data.visual.auraColors[0]} 0%, transparent 60%),
-                      radial-gradient(ellipse 50% 50% at 65% 30%, ${data.visual.auraColors[1]} 0%, transparent 60%),
-                      radial-gradient(ellipse 52% 52% at 40% 36%, ${data.visual.auraColors[2]} 0%, transparent 65%),
-                      radial-gradient(ellipse 48% 48% at 16% 26%, ${data.visual.auraColors[3]} 0%, transparent 60%),
-                      radial-gradient(ellipse 52% 52% at 50% 12%, ${data.visual.auraColors[4]} 0%, transparent 65%)
-                    `,
-                  }}
-                />
+              {/* Full-Bleed Photo Placeholder (matches Hero portrait style) */}
+              <div
+                className="silent-photo-placeholder"
+                role="img"
+                aria-label={`${data.title} photo placeholder`}
+              >
+                <span className="silent-photo-label">[PHOTO]</span>
               </div>
 
               {/* Bottom White Editorial Panel (Full Width) */}

@@ -41,7 +41,7 @@ File entry: `src/app/page.tsx`
 | 4 | `main` | Kontainer semua section. |
 | 5 | `Hero` | Section cover + identitas + bilingual copy (EN/ID). |
 | 6 | `Marquee` | Infinite marquee logo tech dengan GSAP ScrollTrigger velocity. |
-| 7 | `Engineering` | Full-bleed showcase section (Silent House reference): ambient mesh aura & white project panel dengan kinetic deck pinned scroll scrub. |
+| 7 | `Engineering` | Full-bleed showcase section (Silent House reference): photo placeholder & white project panel dengan kinetic deck pinned scroll scrub. |
 | 8 | `UIUX` | Section UI/UX & Product Design: data karya, geometri wheel, dan spatial 3D revolving drum index dalam satu file. |
 | 9 | `GraphicDesign` | Section Graphic Design: tepat satu viewport (`min-height: 100svh`, grid 4 baris: bar · statement · rail · foot). Baris atas = wordmark kiri · label tengah · nav kanan, inset 2%. Statement `(01)` + 3 baris uppercase 11px mulai di 20.4% lebar. Rail = filmstrip 12 plate `--rule` (9.49vw × 12.47vw), plate ke-3 (indeks 2) diperbesar 2.09×2.136 dengan `clip-path: url(#gd-lens)`, kartu pertama terpotong 46.3% di tepi kiri sehingga komposisi awal = sliver · plate fokus · sliver. Drag pointer + wheel horizontal; wheel vertikal tetap milik halaman (Lenis). Baris bawah = wordmark · (2025) · kolom 3 baris · ↗ pada grid 1fr 1fr 1fr. Client component. |
 
@@ -80,7 +80,7 @@ public/
 | `ContextualBadgeCursor.tsx` | ~77 | Ya | Badge kursor custom, event listener hover, guards reduced motion + touch. |
 | `Hero.tsx` | ~325 | Ya | Section cover, bilingual state `Lang`, copy EN/ID inline, nav anchor, photo placeholder. |
 | `Marquee.tsx` | ~191 | Ya | Marquee logo tech, SVG inline, GSAP ScrollTrigger scrub/velocity. |
-| `Engineering.tsx` | ~250 | Ya | Full-bleed showcase section (Silent House reference): ambient mesh aura, edge-to-edge white project preview panel dengan pinned multi-slide kinetic scrub. |
+| `Engineering.tsx` | ~250 | Ya | Full-bleed showcase section (Silent House reference): photo placeholder, edge-to-edge white project preview panel dengan pinned multi-slide kinetic scrub. |
 | `UIUX.tsx` | ~560 | Ya | Section UI/UX mandiri: dataset `WORKS`, konstanta geometri drum, `place()`/`bowAt()`, rAF transform pass, wheel/drag/keyboard handling, dan render kartu + index. Di-pin dengan ScrollTrigger (`pin: true`, `end: "+=30%"`, `invalidateOnRefresh: true`) via `.works-wheel-pin-container` supaya full-viewport — mencegah sliver Engineering/GraphicDesign saat resize atau transisi. |
 | `GraphicDesign.tsx` | ~150 | Ya | Section Graphic Design: array 12 plate `gd-01..gd-12`, konstanta `CARD_COUNT`/`FOCUS`, `railRef` + `drag` ref. Rail di-scroll via pointer drag (`setPointerCapture`) dan wheel horizontal (listener non-passive), wheel vertikal dibiarkan ke halaman. Posisi istirahat menempatkan plate fokus di 30% lebar jendela (0 di desktop). Plate fokus memakai `clip-path: url(#gd-lens)` (SVG `objectBoundingBox`) sebagai efek lensa. Plate solid `--rule`/`--border-strong`, tanpa artwork. |
 

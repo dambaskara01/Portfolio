@@ -777,24 +777,24 @@ ul, ol {
   visibility: visible;
 }
 
-.silent-gradient-wrapper {
-  position: absolute;
-  inset: 0;
+.silent-photo-placeholder {
+  position: relative;
+  flex: 1 1 0;
   width: 100%;
-  height: 100%;
+  min-height: 0;
+  display: grid;
+  place-items: center;
+  background-color: #dcdcdc;
   overflow: hidden;
   pointer-events: none;
   z-index: 1;
+  will-change: clip-path, transform;
 }
 
-.silent-mesh-gradient {
-  position: absolute;
-  inset: -15%;
-  width: 130%;
-  height: 130%;
-  filter: blur(52px);
-  transform: translate3d(0, 0, 0);
-  will-change: transform;
+.silent-photo-label {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: #4a4a4a;
 }
 
 .silent-panel {

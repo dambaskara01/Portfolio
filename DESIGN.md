@@ -102,7 +102,7 @@ Lihat `AGENTS.md` untuk convention GSAP.
 
 Section Engineering (`src/components/Engineering.tsx`) adalah deck 3 slide yang
 di-pin selama `totalSlides * 100 + 80`% viewport. Entrance memakai aperture:
-`clipPath: inset(0% 50% 0% 50%) → inset(0%)` pada `.silent-gradient-wrapper`.
+`clipPath: inset(0% 50% 0% 50%) → inset(0%)` pada `.silent-photo-placeholder`.
 
 Slide terakhir punya choreography keluar sendiri ("Aperture Close") yang jadi
 **bookend** dari entrance — bukan sistem animasi baru:
@@ -110,7 +110,7 @@ Slide terakhir punya choreography keluar sendiri ("Aperture Close") yang jadi
 | Urutan | Target | Perubahan | Posisi timeline |
 | --- | --- | --- | --- |
 | 1 | Copy (badge → headline → tagline → CTA → quick link → credits) | `y: -18px` (touch `-10px`), `opacity: 0`, stagger ~40ms | mulai `2.4` |
-| 2 | `.silent-gradient-wrapper` | `clipPath` menutup ke `inset(0% 49.95% 0% 49.95%)` (seam hairline), `scale: 1.08` (touch `1.03`) | `+0.08` |
+| 2 | `.silent-photo-placeholder` | `clipPath` menutup ke `inset(0% 49.95% 0% 49.95%)` (seam hairline), `scale: 1.08` (touch `1.03`) | `+0.08` |
 | 3 | `.silent-panel` | `scaleY: 1 → viewportHeight / panelHeight` dengan `transformOrigin: bottom center` — panel putih naik jadi bidang full-bleed | `+0.35` |
 
 Aturan yang mengikat implementasi ini:

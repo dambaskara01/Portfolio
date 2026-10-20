@@ -52,7 +52,7 @@ src/
 │   ├── ContextualBadgeCursor.tsx # Kursor custom berbadge (VIEW/LINK/...)
 │   ├── Hero.tsx                  # Section utama + bilingual copy (EN/ID)
 │   ├── Marquee.tsx               # Marquee logo tech (GSAP ScrollTrigger)
-│   ├── Engineering.tsx           # Full-bleed showcase section (mesh aura & project preview template panel)
+│   ├── Engineering.tsx           # Full-bleed showcase section (photo placeholder & project preview template panel)
 │   ├── UIUX.tsx                  # Section UI/UX: data + spatial 3D revolving drum index (single file)
 │   └── GraphicDesign.tsx         # Section Graphic Design: filmstrip 12 plate, drag + wheel horizontal, edge-bleed
 ├── data/
