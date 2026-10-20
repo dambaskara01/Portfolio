@@ -18,14 +18,14 @@ export default function Engineering() {
   useGSAP(
     () => {
       const prefersReducedMotion = window.matchMedia(
-        "(prefers-reduced-motion: reduce)"
+        "(prefers-reduced-motion: reduce)",
       ).matches;
 
       // Coarse pointers get the same choreography with shorter travel and a
       // softer depth push - the shutter still has to close, but the lift and
       // the aperture scale are pulled back so it does not read as jitter.
       const isCoarsePointer = window.matchMedia(
-        "(hover: none) and (pointer: coarse)"
+        "(hover: none) and (pointer: coarse)",
       ).matches;
 
       if (!sectionRef.current || !containerRef.current) return;
@@ -44,9 +44,19 @@ export default function Engineering() {
       slidesRef.current.forEach((slide, idx) => {
         if (!slide) return;
         if (idx === 0) {
-          gsap.set(slide, { visibility: "visible", opacity: 1, yPercent: 0, pointerEvents: "auto" });
+          gsap.set(slide, {
+            visibility: "visible",
+            opacity: 1,
+            yPercent: 0,
+            pointerEvents: "auto",
+          });
         } else {
-          gsap.set(slide, { visibility: "hidden", opacity: 0, yPercent: 100, pointerEvents: "none" });
+          gsap.set(slide, {
+            visibility: "hidden",
+            opacity: 0,
+            yPercent: 100,
+            pointerEvents: "none",
+          });
         }
       });
 
@@ -54,7 +64,9 @@ export default function Engineering() {
       ScrollTrigger.refresh();
 
       // Subtle ambient aura drift for all slides
-      const meshGradients = containerRef.current?.querySelectorAll(".silent-mesh-gradient");
+      const meshGradients = containerRef.current?.querySelectorAll(
+        ".silent-mesh-gradient",
+      );
       meshGradients?.forEach((mesh, idx) => {
         gsap.to(mesh, {
           scale: 1.05,
@@ -104,7 +116,7 @@ export default function Engineering() {
               scale: 1,
               ease: "none",
             },
-            0
+            0,
           );
         }
 
@@ -121,7 +133,7 @@ export default function Engineering() {
               opacity: 1,
               ease: "none",
             },
-            0.08
+            0.08,
           );
         }
 
@@ -140,7 +152,7 @@ export default function Engineering() {
               letterSpacing: "-0.01em",
               ease: "none",
             },
-            0.15
+            0.15,
           );
         }
 
@@ -159,7 +171,7 @@ export default function Engineering() {
               skewY: 0,
               ease: "none",
             },
-            0.22
+            0.22,
           );
         }
 
@@ -176,7 +188,7 @@ export default function Engineering() {
               x: 0,
               ease: "none",
             },
-            0.3
+            0.3,
           );
         }
 
@@ -197,7 +209,7 @@ export default function Engineering() {
               y: 0,
               ease: "none",
             },
-            0.38
+            0.38,
           );
         }
 
@@ -215,7 +227,7 @@ export default function Engineering() {
               stagger: 0.04,
               ease: "none",
             },
-            0.46
+            0.46,
           );
         }
 
@@ -232,7 +244,7 @@ export default function Engineering() {
               x: 0,
               ease: "none",
             },
-            0.5
+            0.5,
           );
         }
       }
@@ -242,22 +254,33 @@ export default function Engineering() {
 
       // Kinetic Multi-Slide Deck Scrub (Pinned ScrollTrigger)
       // Standard Card Deck stacking pattern: each slide slides up over the previous one.
-      // Slide 3 has its own dwell duration so the user can read the content, then the
-      // pin holds for one more segment (EXIT_SCROLL) so the section can close itself
-      // out with the aperture choreography instead of simply scrolling away.
+      // A DWELL segment precedes every slide so the viewer can rest on it before the
+      // next transition begins. After the final dwell the pin holds for one more
+      // segment (EXIT_SCROLL) so the section can close itself out with the aperture
+      // choreography instead of simply scrolling away.
       const totalSlides = projects.length;
-      const EXIT_SCROLL = 80; // extra pin budget, percent of viewport, for the exit
+      const DWELL = 0.5; // timeline units the viewer rests on each slide
+      const TRANSITION_SCROLL = 100; // viewport per slide-to-slide transition
+      const DWELL_SCROLL = 50; // viewport of rest on each slide before the next transition
+      const EXIT_SCROLL = 80; // viewport for the exit choreography
       if (totalSlides > 1) {
         const scrubTl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: `+=${totalSlides * 100 + EXIT_SCROLL}%`,
+            end: `+=${
+              (totalSlides - 1) * TRANSITION_SCROLL +
+              totalSlides * DWELL_SCROLL +
+              EXIT_SCROLL
+            }%`,
             pin: true,
             scrub: true,
             invalidateOnRefresh: true,
           },
         });
+
+        // Dwell: let the viewer rest on slide 0 before the first transition
+        scrubTl.to({}, { duration: DWELL });
 
         // Transitions between slides (Slide 0 -> 1 -> 2)
         for (let i = 0; i < totalSlides - 1; i++) {
@@ -271,8 +294,15 @@ export default function Engineering() {
           // Prepare next slide position
           scrubTl.set(
             nextSlide,
-            { visibility: "visible", pointerEvents: "auto", opacity: 1, filter: "blur(0px)", scale: 1, yPercent: 100 },
-            label
+            {
+              visibility: "visible",
+              pointerEvents: "auto",
+              opacity: 1,
+              filter: "blur(0px)",
+              scale: 1,
+              yPercent: 100,
+            },
+            label,
           );
 
           // Card Deck physical overlap:
@@ -284,7 +314,7 @@ export default function Engineering() {
               duration: 1,
               ease: "none",
             },
-            label
+            label,
           );
 
           // Previous slide recedes with cinematic depth: smooth blur, deep fade, and scale down
@@ -297,36 +327,40 @@ export default function Engineering() {
               duration: 1,
               ease: "power1.inOut",
             },
-            label
+            label,
           );
 
           // Deactivate previous slide interactions once fully covered
-          scrubTl.set(currentSlide, { visibility: "hidden", pointerEvents: "none" });
-        }
+          scrubTl.set(currentSlide, {
+            visibility: "hidden",
+            pointerEvents: "none",
+          });
 
-        // Dwell so Slide 3 stays readable and interactive before the exit begins
-        scrubTl.to({}, { duration: 0.4 });
+          // Dwell: let the viewer rest on the new slide before the next transition
+          scrubTl.to({}, { duration: DWELL });
+        }
 
         // ==========================================
         // APERTURE CLOSE - exit choreography for the final slide
         // Bookends the entrance: the mesh aperture shuts back down to a vertical
         // hairline, the copy lifts away in reading order, and the white panel
         // rises off its own baseline into a full-bleed plane that hands the
-        // viewport over to the UI/UX section. The two dwell-free durations are
-        // tuned so one timeline unit still maps to ~120% of scroll, keeping the
-        // slide-to-slide pacing identical to before the exit segment existed.
-        // ==========================================
+        // viewport over to the UI/UX section. With DWELL segments the timeline
+        // expands but the slide-to-slide transition duration stays at 1.0, so
+        // each transition still maps to ~100% of viewport scroll.
+        // ============================================
         const lastSlide = slidesRef.current[totalSlides - 1];
         if (lastSlide) {
-          const EXIT_AT = 2.4; // absolute timeline position where the exit starts
+          const EXIT_AT = totalSlides * DWELL + (totalSlides - 1); // timeline position where the exit starts
           const EXIT_LEN = 0.77; // total exit length, in the same units
 
           const exitGradient = lastSlide.querySelector<HTMLElement>(
-            ".silent-gradient-wrapper"
+            ".silent-gradient-wrapper",
           );
-          const exitPanel = lastSlide.querySelector<HTMLElement>(".silent-panel");
+          const exitPanel =
+            lastSlide.querySelector<HTMLElement>(".silent-panel");
           const exitCopy = lastSlide.querySelectorAll(
-            ".silent-project-badge, .silent-headline, .silent-tagline, .silent-action-link, .silent-quick-link, .silent-credits"
+            ".silent-project-badge, .silent-headline, .silent-tagline, .silent-action-link, .silent-quick-link, .silent-credits",
           );
 
           // 1. Copy leaves first, in reading order: badge through credits
@@ -341,7 +375,7 @@ export default function Engineering() {
                 stagger: EXIT_LEN * 0.055,
                 ease: "power2.out",
               },
-              EXIT_AT
+              EXIT_AT,
             );
           }
 
@@ -356,7 +390,7 @@ export default function Engineering() {
                 duration: EXIT_LEN * 0.65,
                 ease: "power2.inOut",
               },
-              EXIT_AT + EXIT_LEN * 0.1
+              EXIT_AT + EXIT_LEN * 0.1,
             );
           }
 
@@ -377,18 +411,22 @@ export default function Engineering() {
                 duration: EXIT_LEN * 0.55,
                 ease: "power2.inOut",
               },
-              EXIT_AT + EXIT_LEN * 0.45
+              EXIT_AT + EXIT_LEN * 0.45,
             );
           }
         }
       }
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
     <div className="silent-showcase-pin-container" ref={containerRef}>
-      <section id="engineering" className="silent-showcase-section" ref={sectionRef}>
+      <section
+        id="engineering"
+        className="silent-showcase-section"
+        ref={sectionRef}
+      >
         <div className="silent-slides-viewport">
           {projects.map((data, index) => (
             <div
@@ -422,7 +460,9 @@ export default function Engineering() {
                   {/* Top Row: Category / Tagline, Title, and Primary Action */}
                   <div className="silent-panel-header">
                     <div className="silent-header-copy">
-                      <span className="silent-project-badge">{data.category}</span>
+                      <span className="silent-project-badge">
+                        {data.category}
+                      </span>
                       <h2 className="silent-headline">{data.title}</h2>
                       <p className="silent-tagline">{data.tagline}</p>
                     </div>
@@ -434,8 +474,13 @@ export default function Engineering() {
                       className="silent-action-link"
                       data-cursor="explore"
                     >
-                      <span className="silent-action-text">{data.cta.label}</span>
-                      <span className="silent-action-arrow-track" aria-hidden="true">
+                      <span className="silent-action-text">
+                        {data.cta.label}
+                      </span>
+                      <span
+                        className="silent-action-arrow-track"
+                        aria-hidden="true"
+                      >
                         <span className="silent-action-arrow">↗</span>
                       </span>
                     </a>
@@ -444,7 +489,10 @@ export default function Engineering() {
                   {/* Bottom Bar: Quick Project Links & Meta Status */}
                   <footer className="silent-bottom-bar">
                     {/* Project Quick Links */}
-                    <div className="silent-quick-links" aria-label="Project resources">
+                    <div
+                      className="silent-quick-links"
+                      aria-label="Project resources"
+                    >
                       {data.links.map((link, idx) => (
                         <a
                           key={idx}
@@ -461,7 +509,9 @@ export default function Engineering() {
                     {/* Meta Information (Year & Status) */}
                     <div className="silent-credits">
                       <span className="silent-meta-year">{data.meta.year}</span>
-                      <span className="silent-meta-status">{data.meta.status}</span>
+                      <span className="silent-meta-status">
+                        {data.meta.status}
+                      </span>
                     </div>
                   </footer>
                 </div>
