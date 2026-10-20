@@ -234,21 +234,23 @@ export default function Engineering() {
       ScrollTrigger.refresh();
 
       // Kinetic Multi-Slide Deck Scrub (Pinned ScrollTrigger)
-      // We add an exit phase for the final slide so it transitions out cleanly
-      // before the UI/UX section docks into view.
+      // Standard Card Deck stacking pattern: each slide slides up over the previous one.
+      // Slide 3 has its own dwell duration so the user can read the content,
+      // and when the user scrolls past, the pin naturally releases so the entire section
+      // rolls upward like a standard page elevator, pushing smoothly into UI/UX.
       const totalSlides = projects.length;
-      if (totalSlides > 0) {
+      if (totalSlides > 1) {
         const scrubTl = gsap.timeline({
           scrollTrigger: {
             trigger: containerRef.current,
             start: "top top",
-            end: `+=${totalSlides * 130}%`,
+            end: `+=${totalSlides * 100}%`,
             pin: true,
             scrub: true,
           },
         });
 
-        // 1. Transitions between slides (Slide 0 -> 1 -> 2)
+        // Transitions between slides (Slide 0 -> 1 -> 2)
         for (let i = 0; i < totalSlides - 1; i++) {
           const currentSlide = slidesRef.current[i];
           const nextSlide = slidesRef.current[i + 1];
@@ -293,65 +295,9 @@ export default function Engineering() {
           scrubTl.set(currentSlide, { visibility: "hidden", pointerEvents: "none" });
         }
 
-        // 2. Final Slide Exit Animation (3D Perspective Stage Spatial Bridge)
-        // Coordinated 3D spatial transformation:
-        // - Slide container tilts back into 3D depth with perspective foreshortening
-        // - White editorial panel rotates forward and slides downward like an architectural hinge
-        // - Mesh aura recedes deeper into space with atmospheric dissolution
-        const lastIndex = totalSlides - 1;
-        const lastSlide = slidesRef.current[lastIndex];
-        if (lastSlide) {
-          const exitLabel = `slide-${lastIndex}-exit`;
-          const panel = lastSlide.querySelector(".silent-panel");
-          const aura = lastSlide.querySelector(".silent-mesh-gradient");
-
-          // Whole slide tilts back into 3D horizon
-          scrubTl.to(
-            lastSlide,
-            {
-              z: -600,
-              rotateX: 18,
-              yPercent: -15,
-              opacity: 0,
-              transformOrigin: "50% 100%",
-              duration: 1,
-              ease: "power2.inOut",
-            },
-            exitLabel
-          );
-
-          // Panel hinges open/downwards in 3D perspective
-          if (panel) {
-            scrubTl.to(
-              panel,
-              {
-                rotateX: -24,
-                y: 80,
-                opacity: 0,
-                transformOrigin: "bottom center",
-                duration: 0.9,
-                ease: "power2.in",
-              },
-              exitLabel
-            );
-          }
-
-          // Aura sinks further back with atmospheric fade
-          if (aura) {
-            scrubTl.to(
-              aura,
-              {
-                scale: 0.7,
-                opacity: 0,
-                duration: 0.8,
-                ease: "power1.out",
-              },
-              exitLabel
-            );
-          }
-
-          scrubTl.set(lastSlide, { visibility: "hidden", pointerEvents: "none" });
-        }
+        // Dedicated dwell duration for Slide 3 so it stays fully visible and interactive
+        // before the pin unpins and the natural page flow pushes to UI/UX
+        scrubTl.to({}, { duration: 0.5 });
       }
     },
     { scope: containerRef }

@@ -1,7 +1,7 @@
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Engineering from "@/components/Engineering";
-import UIUXSection from "@/components/UIUXSection";
+import UIUX from "@/components/UIUX";
 import SmoothScrollProvider from "@/components/SmoothScroll";
 import PageTransitionProvider from "@/components/PageTransition";
 import ContextualBadgeCursor from "@/components/ContextualBadgeCursor";
@@ -17,7 +17,7 @@ export default function HomePage() {
           <Hero />
           <Marquee />
           <Engineering />
-          <UIUXSection />
+          <UIUX />
         </main>
       </PageTransitionProvider>
     </SmoothScrollProvider>

@@ -53,11 +53,9 @@ src/
 │   ├── Hero.tsx                  # Section utama + bilingual copy (EN/ID)
 │   ├── Marquee.tsx               # Marquee logo tech (GSAP ScrollTrigger)
 │   ├── Engineering.tsx           # Full-bleed showcase section (mesh aura & project preview template panel)
-│   ├── UIUXSection.tsx           # Section UI/UX 3D kinetic showcase stage
-│   └── WorksWheel.tsx            # Spatial 3D revolving drum card deck index
+│   └── UIUX.tsx                  # Section UI/UX: data + spatial 3D revolving drum index (single file)
 ├── data/
-│   ├── portfolioData.ts          # Central data source bilingual
-│   └── uiuxData.ts               # Dataset kurasi karya UI/UX & spesifikasi
+│   └── portfolioData.ts          # Central data source bilingual
 ├── hooks/
 │   └── useCurrentLang.ts         # Hook pendeteksi bahasa reaktif
 public/
