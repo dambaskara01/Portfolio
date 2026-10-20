@@ -103,7 +103,7 @@ Lihat referensi implementasi di `src/components/SmoothScroll.tsx` dan `Contextua
 
 ### 7. Data layer
 
-Saat ini data layer dihapus. Pattern target ketika section kembali:
+Data layer saat ini hanya berisi `engineeringShowcaseProjects`. Pattern target ketika section lain kembali:
 
 ```ts
 // src/data/portfolioData.ts

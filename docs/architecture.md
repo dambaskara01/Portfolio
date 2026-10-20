@@ -63,16 +63,12 @@ src/
 │   ├── UIUX.tsx            # Section: UI/UX 3D drum index + data (single file)
 │   └── GraphicDesign.tsx   # Section: filmstrip index Graphic Design (12 plate, drag/wheel)
 ├── data/
-│   └── portfolioData.ts    # Single source of truth untuk project data
-├── hooks/
-│   └── useCurrentLang.ts   # Client hook observasi perubahan bahasa EN/ID
+│   └── portfolioData.ts    # Engineering showcase data (EngineeringShowcaseData)
 public/
 ├── fonts/
 │   ├── sf-ui-display/      # Font utama (aktif)
 │   ├── cabinet-grotesk/    # Font cadangan (belum dipakai)
 │   └── nevanta/            # Font serif display (aktif via --font-nevanta)
-└── images/
-    └── engineering/        # Tangkapan layar antarmuka asli / real software showcase assets
 ```
 
 ## Inventory Komponen

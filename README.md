@@ -56,13 +56,9 @@ src/
 │   ├── UIUX.tsx                  # Section UI/UX: data + spatial 3D revolving drum index (single file)
 │   └── GraphicDesign.tsx         # Section Graphic Design: filmstrip 12 plate, drag + wheel horizontal, edge-bleed
 ├── data/
-│   └── portfolioData.ts          # Central data source bilingual
-├── hooks/
-│   └── useCurrentLang.ts         # Hook pendeteksi bahasa reaktif
+│   └── portfolioData.ts          # Engineering showcase data (EngineeringShowcaseData)
 public/
 ├── fonts/                  # sf-ui-display (aktif), cabinet-grotesk, nevanta
-└── images/
-    └── development/        # Visual wireframe assets development projects
 ```
 
 ## Dokumentasi
